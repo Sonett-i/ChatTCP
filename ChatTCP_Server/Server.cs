@@ -2,6 +2,9 @@
 using System.Net.Sockets;
 using Libs.Terminal;
 using ChatTCP.Data.Formatting;
+using ChatTCP.Connection;
+using ChatTCP.Config;
+using ChatTCP.Logging;
 
 namespace ChatTCP
 {
@@ -16,7 +19,7 @@ namespace ChatTCP
 		// Server Config 
 		public int port;
 		
-		private Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		public Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 		// Program Flow
 		public bool initialized = false;
@@ -26,6 +29,7 @@ namespace ChatTCP
 		#region Classes
 
 		// Classes
+
 
 		// Connected Clients
 
@@ -37,13 +41,27 @@ namespace ChatTCP
 
 		public async Task Setup(CancellationToken cancellationToken)
 		{
-			
+			serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
+			Log.Event(Log.LogType.LOG_EVENT, $"Binding IP {IPAddress.Any}");
+
+			serverSocket.Listen();
+			Log.Event(Log.LogType.LOG_EVENT, $"Listening...");
+
+			await Listen(cancellationToken);
+		}
+
+		private async Task Listen(CancellationToken cancellationToken)
+		{
+			while (!cancellationToken.IsCancellationRequested)
+			{
+				Socket joiningSocket = await Aurora.AcceptConnection(this, cancellationToken);
+			}
 		}
 
 		// Static Methods
-		public static Server? Instance(int port)
+		public static Server Instance(int port)
 		{
-			return (ValidPort(port)) ? new Server(port) : null;
+			return (ValidPort(port)) ? new Server(port) : new Server(Config.ServerConfig.defaultPort);
 		}
 
 		static bool ValidPort(int port)
