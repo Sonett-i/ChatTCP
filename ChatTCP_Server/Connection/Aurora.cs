@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using ChatTCP.Data.Client;
 
 namespace ChatTCP.Connection
 {
@@ -47,6 +48,34 @@ namespace ChatTCP.Connection
 			}, null);
 
 			return tcs.Task;
+		}
+
+		public static Task<Client> AuthorizeConnection(Socket socket, CancellationToken cancellationToken)
+		{
+			TaskCompletionSource<Client> tcs = new TaskCompletionSource<Client>();
+
+			bool authorized = false;
+			cancellationToken.Register(() =>
+			{
+				tcs.TrySetCanceled();
+			});
+
+			// to-do: Handshake between server and client.
+
+			while (!authorized)
+			{
+				
+			}
+			return tcs.Task;
+		}
+
+		private void Authorization(IAsyncResult AR)
+		{
+			bool authorized = false;
+			ClientSocket? currentClientSocket = (ClientSocket)AR.AsyncState;
+			int received = ClientSocket.BUFFER_SIZE;
+
+
 		}
 	}
 }

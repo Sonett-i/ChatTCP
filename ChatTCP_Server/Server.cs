@@ -5,6 +5,7 @@ using ChatTCP.Data.Formatting;
 using ChatTCP.Connection;
 using ChatTCP.Config;
 using ChatTCP.Logging;
+using ChatTCP.Data.Client;
 
 namespace ChatTCP
 {
@@ -55,6 +56,8 @@ namespace ChatTCP
 			while (!cancellationToken.IsCancellationRequested)
 			{
 				Socket joiningSocket = await Aurora.AcceptConnection(this, cancellationToken);
+
+				Client newClient = await Aurora.AuthorizeConnection(joiningSocket, cancellationToken);
 			}
 		}
 
