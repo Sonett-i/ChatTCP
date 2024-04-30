@@ -19,4 +19,8 @@
     <Resource Include="ChatTCP_Logo.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

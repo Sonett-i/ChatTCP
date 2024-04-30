@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChatTCP.Data.Client;
 using System.Net.Sockets;
+using TCPClient.Data.Sockets;
 
-namespace ChatTCP.Data.Packets
+namespace TCPClient.Data
 {
-	public class Packet
+	internal class Packet
 	{
 		public static Encoding encoding = Encoding.UTF8;
 		string sender;
@@ -26,11 +26,6 @@ namespace ChatTCP.Data.Packets
 		public void Send()
 		{
 			this.socket.Send(data, 0, data.Length, SocketFlags.None);
-		}
-
-		public static Packet Receive(byte[] data)
-		{
-			return null;
 		}
 	}
 }

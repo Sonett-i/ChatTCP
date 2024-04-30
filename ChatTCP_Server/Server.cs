@@ -43,7 +43,7 @@ namespace ChatTCP
 		public async Task Setup(CancellationToken cancellationToken)
 		{
 			serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-			Log.Event(Log.LogType.LOG_EVENT, $"Binding IP {IPAddress.Any}");
+			Log.Event(Log.LogType.LOG_EVENT, $"Binding IP {IPAddress.Any}:{port}");
 
 			serverSocket.Listen();
 			Log.Event(Log.LogType.LOG_EVENT, $"Listening...");
@@ -57,7 +57,10 @@ namespace ChatTCP
 			{
 				Socket joiningSocket = await Aurora.AcceptConnection(this, cancellationToken);
 
-				Client newClient = await Aurora.AuthorizeConnection(joiningSocket, cancellationToken);
+				Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
+
+				Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint.ToString()} connecting");
+				newClient = await Aurora.AuthorizeConnection(newClient, cancellationToken);
 			}
 		}
 

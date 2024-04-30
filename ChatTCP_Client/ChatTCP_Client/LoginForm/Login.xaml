@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatTCP_Client.LoginForm"
         mc:Ignorable="d"
-        Title="Login" Height="180" Width="300
+        Title="Login" Height="200" Width="300
         
         " ResizeMode="NoResize">
     <Grid>
@@ -16,13 +16,13 @@
         <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Margin="0,19,0,0">
                 <Label Content="Username" Width="70" />
-                <TextBox x:Name="usernameInput" Width="200" Margin="15,0,0,0" />
+                <TextBox x:Name="usernameInput" Text="username" Width="180" Margin="15,0,0,0" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Password" Width="70"/>
-                <TextBox x:Name="passwordInput" Width="200" Margin="15,0,0,0" />
+                <TextBox x:Name="passwordInput" Width="180" Text="password123" Margin="15,0,0,0" />
             </StackPanel>
-            <Label x:Name="loginResult" HorizontalAlignment="Center" Content="abc" />
+            <Label Name="loginResult" HorizontalAlignment="Center" Content="" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                 <Button x:Name="loginButton" Content="Login" Width="80" Margin="0,0,40,0" Click="loginButton_Click" />
                 <Button x:Name="registerButton" Content="Register" Width="80" Click="registerButton_Click" />

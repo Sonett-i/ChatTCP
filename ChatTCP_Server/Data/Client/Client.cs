@@ -12,9 +12,6 @@ namespace ChatTCP.Data.Client
 		int ID;
 		string username;
 
-		string IP;
-		ClientSocket socket;
-
-
+		public ClientSocket clientSocket;
 	}
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using ChatTCP.Data.Client;
+using ChatTCP.Logging;
 
 namespace ChatTCP.Connection
 {
@@ -50,7 +51,7 @@ namespace ChatTCP.Connection
 			return tcs.Task;
 		}
 
-		public static Task<Client> AuthorizeConnection(Socket socket, CancellationToken cancellationToken)
+		public static Task<Client> AuthorizeConnection(Client newClient, CancellationToken cancellationToken)
 		{
 			TaskCompletionSource<Client> tcs = new TaskCompletionSource<Client>();
 
@@ -62,20 +63,39 @@ namespace ChatTCP.Connection
 
 			// to-do: Handshake between server and client.
 
-			while (!authorized)
-			{
-				
-			}
+			newClient.clientSocket.socket.BeginReceive(newClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, newClient);
+
 			return tcs.Task;
 		}
 
-		private void Authorization(IAsyncResult AR)
+		private static void AuthorizationCallback(IAsyncResult AR)
 		{
-			bool authorized = false;
-			ClientSocket? currentClientSocket = (ClientSocket)AR.AsyncState;
+			Client? currentClient = (Client)AR.AsyncState;
 			int received = ClientSocket.BUFFER_SIZE;
 
+			try
+			{
+				received = currentClient.clientSocket.socket.EndReceive(AR);
+			}
+			catch (SocketException)
+			{
+				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint.ToString()} disconnected");
+				currentClient.clientSocket.socket.Close();
+				return;
+			}
 
+			byte[] buffer = new byte[received];
+			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
+
+			
+			Log.Event(Log.LogType.LOG_EVENT, $"AURORA: CALLBACK");
+
+			//Message message = Message.Receive(buffer, currentClientSocket);
+			if (!currentClient.clientSocket.authorized)
+			{
+				currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, currentClient);
+			}
+			
 		}
 	}
 }

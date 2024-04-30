@@ -34,9 +34,9 @@ namespace Program
 			cts = new CancellationTokenSource();
 			CancellationToken ct = cts.Token;
 
-			//await Initialize(ct);
+			await Initialize(ct);
 
-			ChatTCP.Data.Debugging.Debugging.Debug();
+			//ChatTCP.Data.Debugging.Debugging.Debug();
 
 			return;
 		}
