@@ -14,7 +14,7 @@ namespace ChatTCP.Data.Debugging
 	{
 		public static void Debug()
 		{
-			Terminal.Print(Formatting.Format.String("Hi, my name is %s and I am %i years old.", "Sam", 28));
+			//Terminal.Print(Formatting.Format.String("Hi, my name is %s and I am %i years old.", "Sam", 28));
 
 			Database.Database db = Database.Database.Create("localhost", "chatTCP", "", "chatTCP");
 
