@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatTCP_Client", "ChatTCP_Client.csproj", "{C51903ED-450A-4A26-94E2-1A648D8C48CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClient", "..\TCPClient\TCPClient.csproj", "{2FBADD82-DA45-4D58-936A-76A94439070A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C51903ED-450A-4A26-94E2-1A648D8C48CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C51903ED-450A-4A26-94E2-1A648D8C48CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C51903ED-450A-4A26-94E2-1A648D8C48CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FBADD82-DA45-4D58-936A-76A94439070A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FBADD82-DA45-4D58-936A-76A94439070A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FBADD82-DA45-4D58-936A-76A94439070A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FBADD82-DA45-4D58-936A-76A94439070A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
