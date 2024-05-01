@@ -12,7 +12,7 @@ using ChatTCP.Logging;
 
 namespace ChatTCP.Connection
 {
-	internal class Aurora
+	public class Aurora
 	{
 		public enum ConnectionState
 		{
@@ -57,7 +57,8 @@ namespace ChatTCP.Connection
 		{
 			TaskCompletionSource<Client> tcs = new TaskCompletionSource<Client>();
 
-			bool authorized = false;
+			newClient.clientSocket.connectionState = Aurora.ConnectionState.STATE_AUTHORIZING;
+
 			cancellationToken.Register(() =>
 			{
 				tcs.TrySetCanceled();
@@ -89,7 +90,7 @@ namespace ChatTCP.Connection
 			byte[] buffer = new byte[received];
 			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
 
-			Packet authPacket = Packet.Receive(buffer);
+			Packet authPacket = Packet.Receive(currentClient, buffer);
 
 			Log.Event(Log.LogType.LOG_EVENT, $"AURORA: CALLBACK");
 

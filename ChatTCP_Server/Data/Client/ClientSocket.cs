@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using ChatTCP.Connection;
 
 namespace ChatTCP.Data.Client
 {
@@ -14,6 +15,7 @@ namespace ChatTCP.Data.Client
 
 		public IPAddress? IP;
 		public bool authorized = false;
+		public Aurora.ConnectionState connectionState = Aurora.ConnectionState.STATE_CONNECTING;
 
 		public EndPoint GetIP()
 		{

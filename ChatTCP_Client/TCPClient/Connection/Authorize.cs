@@ -43,7 +43,7 @@ namespace TCPClient
 				{
 					string hashedPassword = Hash(password);
 
-					Packet authPacket = new Packet(parent.socket, "guest", Format.String(Message.AuthMessages[Message.AuthMessage.MESSAGE_REGISTER], (int)Message.AuthMessage.MESSAGE_REGISTER, username, hashedPassword));
+					AuthPacket authPacket = new AuthPacket(parent.socket, (int)PacketStructure.PacketSubType.AUTH_REGISTER, -1, username, hashedPassword);
 					authPacket.Send();
 				}
 				result = "new acc";

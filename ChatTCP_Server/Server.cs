@@ -23,7 +23,7 @@ namespace ChatTCP
 		
 		public Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-		Database db = null;
+		public static Database database = null;
 
 		// Program Flow
 		public bool initialized = false;
@@ -47,8 +47,9 @@ namespace ChatTCP
 			bool connectionValid = false;
 			try
 			{
-				Log.Event(Log.LogType.LOG_EVENT, $"Connecting to database: {ServerConfig.dbHost}; uid:{ServerConfig.dbUser}...");
-				db = Database.Create(ServerConfig.dbHost, ServerConfig.dbUser, ServerConfig.dbPwd, ServerConfig.defaultDatabase);
+
+				database = Database.Create(DatabaseConfig.Host, DatabaseConfig.User, DatabaseConfig.Pwd, DatabaseConfig.Database);
+				Log.Event(Log.LogType.LOG_EVENT, $"Connecting to database: {database.host}; uid:{database.uid}...");
 			}
 			catch (Exception ex)
 			{
@@ -59,7 +60,7 @@ namespace ChatTCP
 
 			try
 			{
-				connectionValid = db.Test("SELECT TOP 1 * FROM users");
+				connectionValid = database.Test("SHOW INDEX FROM users;");
 			}
 			catch (Exception ex)
 			{

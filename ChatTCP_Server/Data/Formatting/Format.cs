@@ -20,7 +20,8 @@ namespace ChatTCP.Data.Formatting
         public static Dictionary<string, Type> FormatTypes = new Dictionary<string, Type>()
         {
             ["%s"] = typeof(string),
-            ["%i"] = typeof(int),
+            ["%i"] = typeof(int), //int32
+			["%b"] = typeof(Int64), // int64 (BigInt)
             ["%f"] = typeof(float),
         };
 

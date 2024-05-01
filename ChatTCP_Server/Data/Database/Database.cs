@@ -9,25 +9,25 @@ using Libs.Terminal;
 
 namespace ChatTCP.Data.Database
 {
-	internal class Database
+	public class Database
 	{
 		public string connectionString = "";
 
 		MySqlConnection connection = new MySqlConnection();
 
-		string server;
-		string uid;
-		string password;
-		string database;
+		public string host;
+		public string uid;
+		public string password;
+		public string database;
 		public Database(string server, string uid, string password, string database)
 		{
-			this.server = server;
+			this.host = server;
 			this.uid = uid;
 			this.password = password;
 			this.database = database;
 
 			connection = new MySqlConnection();
-			connection.ConnectionString = Data.Formatting.Format.String("server=%s;uid=%s;pwd=%s;database=%s", this.server, this.uid, this.password, this.database);
+			connection.ConnectionString = Data.Formatting.Format.String("server=%s;uid=%s;pwd=%s;database=%s", this.host, this.uid, this.password, this.database);
 			this.Connect();
 		}
 
@@ -51,26 +51,63 @@ namespace ChatTCP.Data.Database
 
 		public void Query(string query)
 		{
-			string sqlQuery = "SELECT * FROM users;";
-
-			MySqlCommand command = new MySqlCommand(sqlQuery, this.connection);
-			MySqlDataReader reader = command.ExecuteReader();
-
-			while (reader.Read())
+			using (MySqlCommand command = new MySqlCommand(query, this.connection))
 			{
-				Terminal.Print(reader[0] + " " + reader[1]);
+				using (MySqlDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+
+					}
+				}
 			}
 		}
 
+		public object[][] Query(Query query)
+		{
+			List<object[]> results = new List<object[]>();
+
+			using (MySqlCommand command = new MySqlCommand(query.command, this.connection))
+			{
+				using (MySqlDataReader reader = command.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						object[] record = new object[reader.FieldCount];
+
+						for (int i = 0; i < reader.FieldCount; i++)
+						{
+							record[i] = reader[i];
+						}
+
+						results.Add(record);
+					}
+				}
+			}
+
+			return results.ToArray();
+		}
+
+
 		public bool Test(string query)
 		{
-			string sqlQuery = "SELECT * FROM users;";
+			using (MySqlCommand command = new MySqlCommand(query, this.connection))
+			{
+				try
+				{
+					using (MySqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.HasRows)
+							return true;
 
-			MySqlCommand command = new MySqlCommand(sqlQuery, this.connection);
-			MySqlDataReader reader = command.ExecuteReader();
+					}
+				}
+				catch (Exception ex)
+				{
 
-			if (reader.HasRows)
-				return true;
+				}
+
+			}
 
 			return false;
 		}

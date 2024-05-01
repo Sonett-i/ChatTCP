@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 
 namespace TCPClient.Data.Packets
 {
@@ -17,9 +18,84 @@ namespace TCPClient.Data.Packets
 			PACKET_MESSAGE
 		}
 
-		public static Dictionary<PacketType, string> packetStruct = new Dictionary<PacketType, string>()
+		public enum PacketSubType
 		{
-			[PacketType.PACKET_AUTH] = $"%i{Packet.field}%s{Packet.field}%s{Packet.record}",
+			AUTH_AUTHORIZE,
+			AUTH_REGISTER,
+			ACK_ACK,
+			ACK_NAK,
+			MESSAGE_MESAGE,
+			MESSAGE_BROADCAST,
+			MESSAGE_WHISPER,
+			MESSAGE_COMMAND
+		}
+
+		public static Dictionary<PacketType, Dictionary<PacketSubType, string>> PacketFormat = new Dictionary<PacketType, Dictionary<PacketSubType, string>>()
+		{
+			{ PacketType.PACKET_AUTH, new Dictionary<PacketSubType, string>
+				{
+					{ PacketSubType.AUTH_AUTHORIZE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ PacketSubType.AUTH_REGISTER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
+				}
+			},
+			{ PacketType.PACKET_ACK, new Dictionary<PacketSubType, string>
+				{
+					{ PacketSubType.ACK_ACK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ PacketSubType.ACK_NAK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
+				}
+			},
+			{ PacketType.PACKET_MESSAGE, new Dictionary<PacketSubType, string>
+				{									// type				subtype			sender
+					{ PacketSubType.MESSAGE_MESAGE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ PacketSubType.MESSAGE_BROADCAST, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+																										// commandID
+					{ PacketSubType.MESSAGE_COMMAND, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+																										// recipientID
+					{ PacketSubType.MESSAGE_WHISPER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+
+
+				}
+			},
 		};
+
+		public static Packet GetPacket(Socket socket, byte[] buffer)
+		{
+			Packet packet = null;
+			object[] blob = Packet.encoding.GetString(buffer).Split(Packet.field);
+
+			if ((PacketType)blob[0] == PacketType.PACKET_AUTH)
+			{
+				packet = GetAuthPacket(socket, blob);
+			}
+
+			if ((PacketType)blob[0] == PacketType.PACKET_MESSAGE)
+			{
+				packet = GetMessagePacket(socket, blob);
+			}
+
+			return packet;
+		}
+
+		public static AuthPacket GetAuthPacket(Socket socket, object[] blob)
+		{
+			AuthPacket authPacket = new AuthPacket(socket, (int)blob[1], (int)blob[2], (string)blob[3], (string)blob[4]);
+
+			return authPacket;
+		}
+
+		public static MessagePacket GetMessagePacket(Socket socket, object[] blob)
+		{
+			return null;
+		}
+
+		/* Packet Structure
+		 * index	datatype	desc
+		 * 0		int			packetType: auth, ACK, NAK, message etc.
+		 * 1		int			packetSubType: auth_register, auth_login etc.
+		 * 2		int			senderID: aligns with userID who sent, -1 for guest.
+		 * 3		string		message string being sent.
+		 */
+
+
 	}
 }

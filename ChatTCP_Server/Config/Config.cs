@@ -12,11 +12,6 @@ namespace ChatTCP.Config
 
 		public static string defaultMOTD = "Welcome to ChatTCP";
 
-		public static string dbHost = "localhost";
-		public static string dbUser = "server";
-		public static string dbPwd = "";
-		public static string defaultDatabase = "chatTCP";
-
 
 		// About
 		public static string[] asciiart = 

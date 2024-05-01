@@ -19,8 +19,8 @@ namespace TCPClient.Messaging
 
 		public static Dictionary<AuthMessage, string> AuthMessages = new Dictionary<AuthMessage, string>() 
 		{
-			[AuthMessage.MESSAGE_LOGIN] = $"%i{field}%s{field}%s{record}",
-			[AuthMessage.MESSAGE_REGISTER] = $"%i{field}%s{field}%s{record}",
+			[AuthMessage.MESSAGE_LOGIN] = $"%i{field}%i{field}%s{field}%s{record}",
+			[AuthMessage.MESSAGE_REGISTER] = $"%i{field}%i{field}%s{field}%s{record}",
 
 		};
 
