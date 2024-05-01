@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TCPClient.Data;
+using TCPClient.Data.Packets;
 using TCPClient.Messaging;
 
 namespace TCPClient

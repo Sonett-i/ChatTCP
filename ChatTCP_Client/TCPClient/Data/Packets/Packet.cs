@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using TCPClient.Data.Sockets;
 
-namespace TCPClient.Data
+namespace TCPClient.Data.Packets
 {
 	internal class Packet
 	{
+		public static char field = (char)30;
+		public static char record = (char)31;
+
 		public static Encoding encoding = Encoding.UTF8;
 		string sender;
 		byte[] data;
@@ -25,7 +28,13 @@ namespace TCPClient.Data
 
 		public void Send()
 		{
-			this.socket.Send(data, 0, data.Length, SocketFlags.None);
+			socket.Send(data, 0, data.Length, SocketFlags.None);
+		}
+
+		public static Packet Receive(byte[] data)
+		{
+			object decoded = Encoding.UTF8.GetString(data);
+			return null;
 		}
 	}
 }
