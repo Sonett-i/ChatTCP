@@ -30,7 +30,7 @@ namespace ChatTCP_Client.LoginForm
 
 		void Connect()
 		{
-			App.tcpClient = TCPClient.Client.CreateInstance(TCPClient.ClientConfig.defaultPort, TCPClient.ClientConfig.defaultPort, TCPClient.ClientConfig.defaultServer);
+			//App.tcpClient = TCPClient.Client.CreateInstance(TCPClient.ClientConfig.defaultPort, TCPClient.ClientConfig.defaultPort, TCPClient.ClientConfig.defaultServer);
 
 			loginResult.Content = "Connecting...";
 			try

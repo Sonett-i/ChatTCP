@@ -19,7 +19,10 @@ namespace ChatTCP_Client
 	{
 		public static User currentUser;
 		public static ClientSocket currentClient;
-		public static Client tcpClient;
+		public static Client tcpClient = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
 		public static Output output = new Output();
+
+
+
 	}
 }

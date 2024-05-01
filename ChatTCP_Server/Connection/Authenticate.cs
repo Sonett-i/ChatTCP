@@ -7,6 +7,7 @@ using ChatTCP.Data.Database;
 using ChatTCP.Data.Client;
 using ChatTCP.Data.Packets;
 using ChatTCP.Data.Formatting;
+using ChatTCP.Logging;
 
 namespace ChatTCP.Connection
 {
@@ -53,6 +54,7 @@ namespace ChatTCP.Connection
 
 			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, (Int64)1));
 
+			Log.Event(Log.LogType.LOG_EVENT, $"{client.clientSocket.socket.RemoteEndPoint.ToString()} registered as new user: {packet.username}");
 			object[] insertResult = Server.database.Query(insertQuery);
 
 			result = "user not exist";
@@ -61,13 +63,12 @@ namespace ChatTCP.Connection
 		}
 		public static Client Client(Client client, AuthPacket packet, out string result)
 		{
+			result = "";
 			if (packet.packetSubType == PacketStructure.PacketSubType.AUTH_REGISTER)
 			{
 				RegisterNewUser(client, packet, out string registerResult);
 				result = registerResult;
 			}
-
-			result = "";
 
 			return client;
 		}

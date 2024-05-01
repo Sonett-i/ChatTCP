@@ -6,6 +6,8 @@ using System.Text;
 using TCPClient.Data.Sockets;
 using TCPClient.Connection;
 using TCPClient.Messaging;
+using TCPClient.Data.Packets;
+
 
 namespace TCPClient
 {
@@ -36,7 +38,6 @@ namespace TCPClient
 				tcp.Authenticator.parent = tcp;
 			}
 
-
 			return tcp;
 		}
 
@@ -44,11 +45,13 @@ namespace TCPClient
 		{
 			int attempt = 0;
 
+
 			while (!socket.Connected && attempt < 3)
 			{
 				try
 				{
 					attempt++;
+					
 					clientSocket.socket.Connect(serverIP, serverPort);
 				}
 				catch (SocketException)
@@ -64,7 +67,15 @@ namespace TCPClient
 			else
 			{
 				this.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_AUTHORIZING;
-				socket.BeginReceive(clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, ReceiveCallback, clientSocket);
+
+				try
+				{
+					clientSocket.socket.BeginReceive(clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, ReceiveCallback, clientSocket);
+				}
+				catch (Exception ex)
+				{
+					this.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_DISCONNECTED;
+				}
 			}
 		}
 
@@ -92,7 +103,8 @@ namespace TCPClient
 			byte[] recBuffer = new byte[received];
 			Array.Copy(currentClientSocket.buffer, recBuffer, received);
 
-			Message.Receive(recBuffer, currentClientSocket);
+			Packet.Receive(currentClientSocket.socket, recBuffer);
+
 
 			//text is from server but could have been broadcast from the other clients
 			//AddToChat(message.Format());

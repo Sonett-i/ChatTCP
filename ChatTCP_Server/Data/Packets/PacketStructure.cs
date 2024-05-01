@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using ChatTCP.Data.Client;
 
 namespace ChatTCP.Data.Packets
 {
@@ -58,7 +59,7 @@ namespace ChatTCP.Data.Packets
 			},
 		};
 
-		public static Packet GetPacket(Socket socket, byte[] buffer)
+		public static Packet GetPacket(ClientSocket clientSocket, byte[] buffer)
 		{
 			Packet packet = null;
 			string[] blob = Packet.encoding.GetString(buffer).Replace(Packet.record.ToString(), "").Split(Packet.field);
@@ -66,20 +67,20 @@ namespace ChatTCP.Data.Packets
 			PacketType packetType = (PacketType) int.Parse(blob[0]);
 			if (packetType == PacketType.PACKET_AUTH)
 			{
-				packet = GetAuthPacket(socket, blob);
+				packet = GetAuthPacket(clientSocket, blob);
 			}
 
 			if (packetType == PacketType.PACKET_MESSAGE)
 			{
-				packet = GetMessagePacket(socket, blob);
+				packet = GetMessagePacket(clientSocket.socket, blob);
 			}
 
 			return packet;
 		}
 
-		public static AuthPacket GetAuthPacket(Socket socket, string[] blob)
+		public static AuthPacket GetAuthPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AuthPacket authPacket = new AuthPacket(socket, int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
+			AuthPacket authPacket = new AuthPacket(clientSocket, int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
 
 			return authPacket;
 		}

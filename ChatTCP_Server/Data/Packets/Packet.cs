@@ -18,15 +18,17 @@ namespace ChatTCP.Data.Packets
 		int sender;
 		byte[] data;
 		Socket socket;
+		ClientSocket clientSocket;
 
 		public PacketStructure.PacketType packetType;
 		public PacketStructure.PacketSubType packetSubType;
 
 		string content;
 
-		public Packet(Socket socket, int sender)
+		public Packet(ClientSocket clientSocket, int sender)
 		{
-			this.socket = socket;
+			this.clientSocket = clientSocket;
+			this.socket = clientSocket.socket;
 			this.sender = sender;
 			//data = encoding.GetBytes(message);
 		}
@@ -40,16 +42,20 @@ namespace ChatTCP.Data.Packets
 		public static Packet Receive(Client.Client sender, byte[] data)
 		{
 			Packet packet = null;
-			packet = PacketStructure.GetPacket(sender.clientSocket.socket, data);
+			packet = PacketStructure.GetPacket(sender.clientSocket, data);
+
+
+			Packet response = new Packet(sender.clientSocket, 0) { data = encoding.GetBytes("AAAAAA") };
+			
 
 			if (sender.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
 			{
 				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
 
-				Packet badPacket = new Packet(sender.clientSocket.socket, 0) { data = encoding.GetBytes(result) };
-				badPacket.Send();
+				response = new Packet(sender.clientSocket, 0) { data = encoding.GetBytes(result) };
 			}
 
+			response.Send();
 			return packet;
 		}
 	}
@@ -60,7 +66,7 @@ namespace ChatTCP.Data.Packets
 		public string username { get; }
 		public string password { get; }
 
-		public AuthPacket(Socket socket, int subType, int sender, string username, string password) : base (socket, sender)
+		public AuthPacket(ClientSocket clientSocket, int subType, int sender, string username, string password) : base (clientSocket, sender)
 		{
 			base.packetType = PacketStructure.PacketType.PACKET_AUTH;
 			base.packetSubType = (PacketStructure.PacketSubType) subType;
@@ -73,7 +79,7 @@ namespace ChatTCP.Data.Packets
 
 	public partial class MessagePacket : Packet
 	{
-		public MessagePacket(Socket socket, int sender, string message) : base(socket, sender)
+		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 
 		}
