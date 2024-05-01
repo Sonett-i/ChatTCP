@@ -24,8 +24,12 @@ namespace ChatTCP_Client.LoginForm
 		public Login()
 		{
 			InitializeComponent();
+			App.currentScreen = App.screen.SCREEN_LOGIN;
 			App.output.loginOutput = loginResult;
+
 			Connect();
+
+			App.tcpClient.MessageReceived += Output.RegisterMessage;
 		}
 
 		void Connect()

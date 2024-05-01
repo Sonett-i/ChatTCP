@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChatTCP.Data.Client;
 using System.Net.Sockets;
 using ChatTCP.Connection;
+using ChatTCP.Data.Formatting;
 
 namespace ChatTCP.Data.Packets
 {
@@ -35,9 +36,21 @@ namespace ChatTCP.Data.Packets
 
 		public void Send()
 		{
+			this.Serialize();
+			this.data = encoding.GetBytes(content);
 			this.socket.Send(data, 0, data.Length, SocketFlags.None);
 		}
 
+		public void Serialize()
+		{
+			string serialized = Format.String(PacketStructure.PacketFormat[packetType][packetSubType],
+				(int)packetType,
+				(int)packetSubType,
+				sender, 
+				content);
+
+			content = serialized;
+		}
 
 		public static Packet Receive(Client.Client sender, byte[] data)
 		{
@@ -45,14 +58,15 @@ namespace ChatTCP.Data.Packets
 			packet = PacketStructure.GetPacket(sender.clientSocket, data);
 
 
-			Packet response = new Packet(sender.clientSocket, 0) { data = encoding.GetBytes("AAAAAA") };
+
+			Packet response = null;  new Packet(sender.clientSocket, 0) { packetType = PacketStructure.PacketType.PACKET_ACK, packetSubType = PacketStructure.PacketSubType.ACK_ACK, content = "null" };
 			
 
 			if (sender.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
 			{
 				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
 
-				response = new Packet(sender.clientSocket, 0) { data = encoding.GetBytes(result) };
+				response = new Packet(sender.clientSocket, 0) { packetType = PacketStructure.PacketType.PACKET_ACK, packetSubType = PacketStructure.PacketSubType.ACK_ACK, content = result };
 			}
 
 			response.Send();

@@ -20,9 +20,17 @@ namespace ChatTCP_Client
 		public static User currentUser;
 		public static ClientSocket currentClient;
 		public static Client tcpClient = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
+
+		
 		public static Output output = new Output();
 
+		public enum screen
+		{
+			SCREEN_LOGIN,
+			SCREEN_MAIN
+		}
 
+		public static screen currentScreen = screen.SCREEN_LOGIN;
 
 	}
 }

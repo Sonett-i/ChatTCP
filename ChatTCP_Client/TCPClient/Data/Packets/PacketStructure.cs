@@ -61,14 +61,21 @@ namespace TCPClient.Data.Packets
 		public static Packet GetPacket(Socket socket, byte[] buffer)
 		{
 			Packet packet = null;
-			object[] blob = Packet.encoding.GetString(buffer).Split(Packet.field);
+			string[] blob = Packet.encoding.GetString(buffer).Split(Packet.field);
 
-			if ((PacketType)blob[0] == PacketType.PACKET_AUTH)
+			PacketType packetType = (PacketType) int.Parse(blob[0]);
+
+			if (packetType == PacketType.PACKET_AUTH)
 			{
 				packet = GetAuthPacket(socket, blob);
 			}
 
-			if ((PacketType)blob[0] == PacketType.PACKET_MESSAGE)
+			if (packetType == PacketType.PACKET_MESSAGE)
+			{
+				packet = GetMessagePacket(socket, blob);
+			}
+
+			if (packetType == PacketType.PACKET_ACK)
 			{
 				packet = GetMessagePacket(socket, blob);
 			}

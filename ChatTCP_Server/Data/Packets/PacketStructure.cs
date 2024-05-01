@@ -98,6 +98,5 @@ namespace ChatTCP.Data.Packets
 		 * 3		string		message string being sent.
 		 */
 
-		
 	}
 }
