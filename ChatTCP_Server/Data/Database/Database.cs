@@ -61,5 +61,18 @@ namespace ChatTCP.Data.Database
 				Terminal.Print(reader[0] + " " + reader[1]);
 			}
 		}
+
+		public bool Test(string query)
+		{
+			string sqlQuery = "SELECT * FROM users;";
+
+			MySqlCommand command = new MySqlCommand(sqlQuery, this.connection);
+			MySqlDataReader reader = command.ExecuteReader();
+
+			if (reader.HasRows)
+				return true;
+
+			return false;
+		}
 	}
 }

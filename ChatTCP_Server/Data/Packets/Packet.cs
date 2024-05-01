@@ -8,11 +8,15 @@ using System.Net.Sockets;
 
 namespace ChatTCP.Data.Packets
 {
-	public class Packet
+	public partial class Packet
 	{
+		public static char field = (char)30;
+		public static char record = (char)31;
+
 		public static Encoding encoding = Encoding.UTF8;
 		string sender;
 		byte[] data;
+		object[] decoded;
 		Socket socket;
 
 
@@ -30,6 +34,7 @@ namespace ChatTCP.Data.Packets
 
 		public static Packet Receive(byte[] data)
 		{
+			object decoded = Encoding.UTF8.GetString(data);
 			return null;
 		}
 	}

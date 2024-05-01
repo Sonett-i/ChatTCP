@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using ChatTCP.Data.Client;
+using ChatTCP.Data.Packets;
 using ChatTCP.Logging;
+
 
 namespace ChatTCP.Connection
 {
@@ -87,7 +89,8 @@ namespace ChatTCP.Connection
 			byte[] buffer = new byte[received];
 			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
 
-			
+			Packet authPacket = Packet.Receive(buffer);
+
 			Log.Event(Log.LogType.LOG_EVENT, $"AURORA: CALLBACK");
 
 			//Message message = Message.Receive(buffer, currentClientSocket);
