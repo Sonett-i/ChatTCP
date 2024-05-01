@@ -46,6 +46,8 @@ namespace ChatTCP.Data.Packets
 			{
 				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
 
+				Packet badPacket = new Packet(sender.clientSocket.socket, 0) { data = encoding.GetBytes(result) };
+				badPacket.Send();
 			}
 
 			return packet;
