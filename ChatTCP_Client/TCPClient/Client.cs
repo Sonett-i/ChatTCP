@@ -105,7 +105,7 @@ namespace TCPClient
 			byte[] recBuffer = new byte[received];
 			Array.Copy(currentClientSocket.buffer, recBuffer, received);
 
-			Packet.Receive(currentClientSocket.socket, recBuffer);
+			Packet.Receive(currentClientSocket, recBuffer);
 
 			MessageReceived?.Invoke(this, "aaaaa");
 

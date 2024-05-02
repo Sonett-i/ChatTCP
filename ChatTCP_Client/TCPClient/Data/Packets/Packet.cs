@@ -5,42 +5,60 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using TCPClient.Data.Sockets;
+using TCPClient.Messaging;
 
 namespace TCPClient.Data.Packets
 {
 	public partial class Packet
 	{
+
 		public static char field = (char)30;
 		public static char record = (char)31;
 
 		public static Encoding encoding = Encoding.UTF8;
-		public int sender;
-		public byte[] data;
+		int sender;
+		byte[] data;
 		Socket socket;
+		ClientSocket clientSocket;
+		public string content;
 
-		public PacketStructure.PacketType packetType;
-		public PacketStructure.PacketSubType packetSubType;
+		public PacketType packetType;
+		public PacketSubType packetSubType;
 
-		string content;
 
-		public Packet(Socket socket, int sender)
+
+		public Packet(ClientSocket clientSocket, int sender)
 		{
-			this.socket = socket;
+			this.clientSocket = clientSocket;
+			this.socket = clientSocket.socket;
 			this.sender = sender;
 			//data = encoding.GetBytes(message);
 		}
 
 		public void Send()
 		{
+			this.Serialize();
+			this.data = encoding.GetBytes(content);
 			this.socket.Send(data, 0, data.Length, SocketFlags.None);
 		}
 
-
-		public static Packet Receive(Socket sender, byte[] data)
+		public void Serialize()
 		{
-			Packet packet = null;
-			packet = PacketStructure.GetPacket(sender, data);
+			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
+				(int)packetType,
+				(int)packetSubType,
+				sender,
+				content);
 
+			content = serialized;
+		}
+
+		public static Packet Receive(ClientSocket sender, byte[] data)
+		{
+			Packet packet = PacketHandler.FromBytes(sender, data);
+
+
+			
 			return packet;
 		}
 	}
@@ -48,44 +66,35 @@ namespace TCPClient.Data.Packets
 	public partial class AuthPacket : Packet
 	{
 		int userID;
-		string username;
-		string password;
-		public AuthPacket(Socket socket, int subType, int sender, string username, string password) : base(socket, sender)
-		{
-			base.packetType = PacketStructure.PacketType.PACKET_AUTH;
-			base.packetSubType = (PacketStructure.PacketSubType)subType;
+		public string username { get; }
+		public string password { get; }
 
-			userID = sender;
+		public AuthPacket(ClientSocket clientSocket, int subType, int sender, string username, string password) : base(clientSocket, sender)
+		{
+			base.packetType = PacketType.PACKET_AUTH;
+			base.packetSubType = (PacketSubType)subType;
+
+			this.userID = sender;
 			this.username = username;
 			this.password = password;
-		}
-
-		private string Serialize()
-		{
-			string output = Messaging.Format.String(PacketStructure.PacketFormat[base.packetType][this.packetSubType], 
-				(int)base.packetType, 
-				(int)base.packetSubType,
-				this.userID, 
-				$"{this.username}{Packet.field}{this.password}");
-
-			return output;
-		}
-
-		public new void Send()
-		{
-			string serialized = Serialize();
-
-			base.data = encoding.GetBytes(serialized);
-
-			base.Send();
 		}
 	}
 
 	public partial class MessagePacket : Packet
 	{
-		public MessagePacket(Socket socket, int sender, string message) : base(socket, sender)
+		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 
+		}
+	}
+
+	public partial class AckPacket : Packet
+	{
+		public AckPacket(ClientSocket clientSocket, int subType, string content) : base(clientSocket, 0)
+		{
+			base.packetType = PacketType.PACKET_ACK;
+			base.packetSubType = PacketSubType.ACK_ACK;
+			base.content = content;
 		}
 	}
 }
