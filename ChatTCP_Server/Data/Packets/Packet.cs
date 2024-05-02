@@ -26,8 +26,6 @@ namespace ChatTCP.Data.Packets
 		public PacketType packetType;
 		public PacketSubType packetSubType;
 
-		
-
 		public Packet(ClientSocket clientSocket, int sender)
 		{
 			this.clientSocket = clientSocket;
@@ -61,7 +59,7 @@ namespace ChatTCP.Data.Packets
 
 			Packet response = null; 
 			
-			
+			/*
 			if (sender.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
 			{
 				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
@@ -69,11 +67,11 @@ namespace ChatTCP.Data.Packets
 				response = new Packet(sender.clientSocket, 0) 
 				{ 
 					packetType = PacketType.PACKET_ACK, 
-					packetSubType = PacketSubType.ACK_ACK, 
+					//packetSubType = PacketSubType.ACK_ACK, 
 					content = result
 				};
 			}
-
+			*/
 			response.Send();
 			return packet;
 		}
@@ -84,11 +82,12 @@ namespace ChatTCP.Data.Packets
 		int userID;
 		public string username { get; }
 		public string password { get; }
+		public PacketSubType packetSubType { get; }
 
-		public AuthPacket(ClientSocket clientSocket, int subType, int sender, string username, string password) : base (clientSocket, sender)
+		public AuthPacket(ClientSocket clientSocket, PacketSubType subType, int sender, string username, string password) : base (clientSocket, sender)
 		{
 			base.packetType = PacketType.PACKET_AUTH;
-			base.packetSubType = (PacketSubType) subType;
+			this.packetSubType = (AuthPacket.PacketSubType) subType;
 
 			this.userID = sender;
 			this.username = username;
@@ -106,11 +105,16 @@ namespace ChatTCP.Data.Packets
 
 	public partial class AckPacket : Packet
 	{
-		public AckPacket(ClientSocket clientSocket, int subType, string content) : base(clientSocket, 0)
+		public AckPacket(ClientSocket clientSocket, PacketSubType subType, string content) : base(clientSocket, 0)
 		{
 			base.packetType = PacketType.PACKET_ACK;
 			base.packetSubType = PacketSubType.ACK_ACK;
 			base.content = content;
+		}
+
+		public static AckPacket Acknowledge(ClientSocket clientSocket, string message)
+		{
+			return new AckPacket(clientSocket, 0, message);
 		}
 	}
 }

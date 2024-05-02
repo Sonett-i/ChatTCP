@@ -19,7 +19,7 @@ namespace TCPClient.Data.Packets
 		int sender;
 		byte[] data;
 		Socket socket;
-		ClientSocket clientSocket;
+		public ClientSocket clientSocket;
 		public string content;
 
 		public PacketType packetType;
@@ -57,7 +57,7 @@ namespace TCPClient.Data.Packets
 		{
 			Packet packet = PacketHandler.FromBytes(sender, data);
 
-
+			PacketHandler.HandlePacket(packet);
 			
 			return packet;
 		}
@@ -93,7 +93,7 @@ namespace TCPClient.Data.Packets
 		public AckPacket(ClientSocket clientSocket, int subType, string content) : base(clientSocket, 0)
 		{
 			base.packetType = PacketType.PACKET_ACK;
-			base.packetSubType = PacketSubType.ACK_ACK;
+			base.packetSubType = (PacketSubType) subType;
 			base.content = content;
 		}
 	}

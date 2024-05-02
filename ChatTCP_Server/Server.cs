@@ -7,6 +7,7 @@ using ChatTCP.Config;
 using ChatTCP.Logging;
 using ChatTCP.Data.Client;
 using ChatTCP.Data.Database;
+using ChatTCP.Data.Packets;
 
 namespace ChatTCP
 {
@@ -97,6 +98,9 @@ namespace ChatTCP
 				Socket joiningSocket = await Aurora.AcceptConnection(this, cancellationToken);
 
 				Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
+
+				Packet handshake = new AckPacket(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING");
+				handshake.Send();
 
 				Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint.ToString()} connecting");
 				newClient = await Aurora.AuthorizeConnection(newClient, cancellationToken);

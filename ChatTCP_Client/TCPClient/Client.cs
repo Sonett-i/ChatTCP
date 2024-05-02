@@ -68,8 +68,6 @@ namespace TCPClient
 			}
 			else
 			{
-				this.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_AUTHORIZING;
-
 				try
 				{
 					clientSocket.socket.BeginReceive(clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, ReceiveCallback, clientSocket);

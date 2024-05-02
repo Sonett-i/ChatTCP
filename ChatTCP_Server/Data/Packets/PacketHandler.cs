@@ -16,6 +16,8 @@ namespace ChatTCP.Data.Packets
 		static Dictionary<Packet.PacketType, CommandDelegate> GetPacket = new Dictionary<Packet.PacketType, CommandDelegate>()
 		{
 			[Packet.PacketType.PACKET_AUTH] = (clientSocket, args) => GetAuthPacket(clientSocket, args),
+			[Packet.PacketType.PACKET_ACK] = (clientSocket, args) => GetAckPacket(clientSocket, args),
+			[Packet.PacketType.PACKET_MESSAGE] = (clientSocket, args) => GetMessagePacket(clientSocket, args),
 		};
 
 		public static Packet FromBytes(ClientSocket clientSocket, byte[] buffer)
@@ -32,16 +34,23 @@ namespace ChatTCP.Data.Packets
 
 		public static AuthPacket GetAuthPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AuthPacket authPacket = new AuthPacket(clientSocket, int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
+			AuthPacket authPacket = new AuthPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
 
 			return authPacket;
 		}
 
 		public static AckPacket GetAckPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AckPacket ackPacket = new AckPacket(clientSocket, int.Parse(blob[1]), blob[2]);
+			AckPacket ackPacket = new AckPacket(clientSocket, (Packet.PacketSubType) int.Parse(blob[1]), blob[2]);
 
 			return ackPacket;
+		}
+
+		public static MessagePacket GetMessagePacket(ClientSocket clientSocket, string[] blob)
+		{
+			MessagePacket messagePacket = null;
+
+			return messagePacket;
 		}
 
 	}

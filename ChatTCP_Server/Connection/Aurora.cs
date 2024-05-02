@@ -19,6 +19,7 @@ namespace ChatTCP.Connection
 			STATE_CONNECTING,
 			STATE_AUTHORIZING,
 			STATE_CONNECTED,
+			STATE_DISCONNECTED,
 		}
 		// Client Connection Protocol
 
@@ -66,7 +67,7 @@ namespace ChatTCP.Connection
 
 			// to-do: Handshake between server and client.
 
-			Packet handshake = new AckPacket(newClient.clientSocket, (int)Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING");
+			Packet handshake = new AckPacket(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "AUTHORIZING");
 
 			handshake.Send();
 
@@ -88,6 +89,7 @@ namespace ChatTCP.Connection
 			{
 				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint.ToString()} disconnected");
 				currentClient.clientSocket.socket.Close();
+				currentClient.clientSocket.connectionState = ConnectionState.STATE_DISCONNECTED;
 				return;
 			}
 
@@ -99,7 +101,7 @@ namespace ChatTCP.Connection
 			Log.Event(Log.LogType.LOG_EVENT, $"AURORA: CALLBACK");
 
 			//Message message = Message.Receive(buffer, currentClientSocket);
-			if (!currentClient.clientSocket.authorized)
+			if (!currentClient.clientSocket.authorized && currentClient.clientSocket.connectionState == ConnectionState.STATE_AUTHORIZING)
 			{
 				currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, currentClient);
 			}

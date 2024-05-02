@@ -39,7 +39,7 @@ namespace TCPClient.Data.Packets
 
 		public static AckPacket GetAckPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AckPacket ackPacket = new AckPacket(clientSocket, int.Parse(blob[1]), blob[2]);
+			AckPacket ackPacket = new AckPacket(clientSocket, int.Parse(blob[1]), blob[3]);
 
 			return ackPacket;
 		}
@@ -51,5 +51,44 @@ namespace TCPClient.Data.Packets
 			return messagePacket;
 		}
 
+		public static void HandlePacket(Packet packet)
+		{
+			if (packet.packetType == Packet.PacketType.PACKET_ACK)
+				HandlePacket((AckPacket)packet);
+
+			if (packet.packetType == Packet.PacketType.PACKET_AUTH)
+				HandlePacket((AuthPacket)packet);
+
+			if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
+				HandlePacket((MessagePacket)packet);
+		}
+
+		//Overloaded Authpacket
+		public static void HandlePacket(AuthPacket packet)
+		{
+
+		}
+
+		// Overloaded AckPacket
+		public static void HandlePacket(AckPacket packet)
+		{
+			if (packet.content == "CONNECTING")
+			{
+				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_CONNECTING;
+			}
+			else if (packet.content == "AUTHORIZING")
+			{
+				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_AUTHORIZING;
+			}
+			else if (packet.content == "CONNECTED")
+			{
+				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_CONNECTED;
+			}
+		}
+
+		public static void HandlePacket(MessagePacket packet)
+		{
+
+		}
 	}
 }

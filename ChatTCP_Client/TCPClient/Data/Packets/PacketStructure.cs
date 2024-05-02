@@ -60,12 +60,6 @@ namespace TCPClient.Data.Packets
 		};
 
 
-
-		public static MessagePacket GetMessagePacket(Socket socket, object[] blob)
-		{
-			return null;
-		}
-
 		/* Packet Structure
 		 * index	datatype	desc
 		 * 0		int			packetType: auth, ACK, NAK, message etc.
