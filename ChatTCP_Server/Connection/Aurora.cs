@@ -22,6 +22,57 @@ namespace ChatTCP.Connection
 			STATE_DISCONNECTED,
 		}
 		// Client Connection Protocol
+		public static void HandleNewConnection(Socket joiningSocket)
+		{
+			Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
+			Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint} connecting");
+
+			newClient.clientSocket.connectionState = ConnectionState.STATE_CONNECTING;
+			AckPacket.Send(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING"); // handshake
+
+			Server.ConnectedClients.Add(newClient);
+
+			AuthorizeNewConnection(newClient);
+		}
+
+		private static void AuthorizeNewConnection(Client client)
+		{
+			AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "AUTHORIZING");
+			client.clientSocket.connectionState = ConnectionState.STATE_AUTHORIZING;
+
+			client.clientSocket.socket.BeginReceive(client.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, client);
+		}
+
+		private static void AuthReceiveCallback(IAsyncResult AR)
+		{
+			Client currentClient = (Client)AR.AsyncState;
+
+			int received = 0;
+
+			try
+			{
+				received = currentClient.clientSocket.socket.EndReceive(AR);
+			}
+			catch (SocketException)
+			{
+				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint} disconnected");
+				currentClient.clientSocket.socket.Close();
+				Server.ConnectedClients.Remove(currentClient);
+				return;
+			}
+
+			byte[] buffer = new byte[received];
+			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
+
+			Packet packet = Packet.Receive(currentClient, buffer);
+
+			if (currentClient.clientSocket.connectionState == ConnectionState.STATE_CONNECTED)
+			{
+				return;
+			}
+
+			currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, currentClient);
+		}
 
 		public static Task<Socket> AcceptConnection(Server server, CancellationToken cancellationToken)
 		{
@@ -52,61 +103,6 @@ namespace ChatTCP.Connection
 			}, null);
 
 			return tcs.Task;
-		}
-
-		public static Task<Client> AuthorizeConnection(Client newClient, CancellationToken cancellationToken)
-		{
-			TaskCompletionSource<Client> tcs = new TaskCompletionSource<Client>();
-
-			newClient.clientSocket.connectionState = Aurora.ConnectionState.STATE_AUTHORIZING;
-
-			cancellationToken.Register(() =>
-			{
-				tcs.TrySetCanceled();
-			});
-
-			// to-do: Handshake between server and client.
-
-			Packet handshake = new AckPacket(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "AUTHORIZING");
-
-			handshake.Send();
-
-			newClient.clientSocket.socket.BeginReceive(newClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, newClient);
-
-			return tcs.Task;
-		}
-
-		private static void AuthorizationCallback(IAsyncResult AR)
-		{
-			Client? currentClient = (Client)AR.AsyncState;
-			int received = ClientSocket.BUFFER_SIZE;
-
-			try
-			{
-				received = currentClient.clientSocket.socket.EndReceive(AR);
-			}
-			catch (SocketException)
-			{
-				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint.ToString()} disconnected");
-				currentClient.clientSocket.socket.Close();
-				currentClient.clientSocket.connectionState = ConnectionState.STATE_DISCONNECTED;
-				currentClient = null;
-				return;
-			}
-
-			byte[] buffer = new byte[received];
-			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
-
-			Packet authPacket = Packet.Receive(currentClient, buffer);
-
-			Log.Event(Log.LogType.LOG_EVENT, $"AURORA: CALLBACK");
-
-			//Message message = Message.Receive(buffer, currentClientSocket);
-			if (!currentClient.clientSocket.authorized && currentClient.clientSocket.connectionState == ConnectionState.STATE_AUTHORIZING)
-			{
-				currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, currentClient);
-			}
-			
 		}
 	}
 }

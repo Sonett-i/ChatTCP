@@ -117,6 +117,9 @@ namespace ChatTCP.Connection
 				else
 				{
 					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, authResult);
+
+					client.clientSocket.authorized = true;
+					client.clientSocket.connectionState = Aurora.ConnectionState.STATE_CONNECTED;
 				}
 
 			}

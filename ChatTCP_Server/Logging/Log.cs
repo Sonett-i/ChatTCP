@@ -16,6 +16,7 @@ namespace ChatTCP.Logging
 			LOG_ERROR,
 			LOG_EVENT,
 			LOG_MESSAGE,
+			LOG_PACKET,
 			LOG_COMMAND
 		}
 
@@ -25,7 +26,8 @@ namespace ChatTCP.Logging
 			[LogType.LOG_ERROR] = "ERROR",
 			[LogType.LOG_EVENT] = "EVENT",
 			[LogType.LOG_MESSAGE] = "MESSAGE",
-			[LogType.LOG_COMMAND] = "COMMAND"
+			[LogType.LOG_COMMAND] = "COMMAND",
+			[LogType.LOG_PACKET] = "PACKET",
 		};
 
 		DateTime timestamp;

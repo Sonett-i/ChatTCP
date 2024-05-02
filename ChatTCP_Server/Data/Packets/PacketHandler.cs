@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChatTCP.Data.Client;
 using System.Net.Sockets;
 using ChatTCP.Connection;
+using ChatTCP.Logging;
 
 namespace ChatTCP.Data.Packets
 {
@@ -36,6 +37,7 @@ namespace ChatTCP.Data.Packets
 		{
 			AuthPacket authPacket = new AuthPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
 
+			Log.Event(Log.LogType.LOG_PACKET, $"{authPacket.packetType}:{authPacket.packetSubType}:{authPacket.username}");
 			return authPacket;
 		}
 
