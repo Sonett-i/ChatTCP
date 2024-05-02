@@ -64,7 +64,7 @@ namespace ChatTCP.Connection
 		public static Client Client(Client client, AuthPacket packet, out string result)
 		{
 			result = "";
-			if (packet.packetSubType == PacketStructure.PacketSubType.AUTH_REGISTER)
+			if (packet.packetSubType == Packet.PacketSubType.AUTH_REGISTER)
 			{
 				RegisterNewUser(client, packet, out string registerResult);
 				result = registerResult;

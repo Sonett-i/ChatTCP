@@ -66,6 +66,10 @@ namespace ChatTCP.Connection
 
 			// to-do: Handshake between server and client.
 
+			Packet handshake = new AckPacket(newClient.clientSocket, (int)Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING");
+
+			handshake.Send();
+
 			newClient.clientSocket.socket.BeginReceive(newClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthorizationCallback, newClient);
 
 			return tcs.Task;

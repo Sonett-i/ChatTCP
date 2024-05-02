@@ -12,6 +12,7 @@ namespace ChatTCP.Data.Packets
 {
 	public partial class Packet
 	{
+
 		public static char field = (char)30;
 		public static char record = (char)31;
 
@@ -20,11 +21,12 @@ namespace ChatTCP.Data.Packets
 		byte[] data;
 		Socket socket;
 		ClientSocket clientSocket;
+		public string content;
 
-		public PacketStructure.PacketType packetType;
-		public PacketStructure.PacketSubType packetSubType;
+		public PacketType packetType;
+		public PacketSubType packetSubType;
 
-		string content;
+		
 
 		public Packet(ClientSocket clientSocket, int sender)
 		{
@@ -43,7 +45,7 @@ namespace ChatTCP.Data.Packets
 
 		public void Serialize()
 		{
-			string serialized = Format.String(PacketStructure.PacketFormat[packetType][packetSubType],
+			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
 				(int)packetType,
 				(int)packetSubType,
 				sender, 
@@ -54,19 +56,22 @@ namespace ChatTCP.Data.Packets
 
 		public static Packet Receive(Client.Client sender, byte[] data)
 		{
-			Packet packet = null;
-			packet = PacketStructure.GetPacket(sender.clientSocket, data);
+			Packet packet = PacketHandler.FromBytes(sender.clientSocket, data);
 
 
-
-			Packet response = null;  new Packet(sender.clientSocket, 0) { packetType = PacketStructure.PacketType.PACKET_ACK, packetSubType = PacketStructure.PacketSubType.ACK_ACK, content = "null" };
+			Packet response = null; 
 			
-
+			
 			if (sender.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
 			{
 				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
 
-				response = new Packet(sender.clientSocket, 0) { packetType = PacketStructure.PacketType.PACKET_ACK, packetSubType = PacketStructure.PacketSubType.ACK_ACK, content = result };
+				response = new Packet(sender.clientSocket, 0) 
+				{ 
+					packetType = PacketType.PACKET_ACK, 
+					packetSubType = PacketSubType.ACK_ACK, 
+					content = result
+				};
 			}
 
 			response.Send();
@@ -82,8 +87,8 @@ namespace ChatTCP.Data.Packets
 
 		public AuthPacket(ClientSocket clientSocket, int subType, int sender, string username, string password) : base (clientSocket, sender)
 		{
-			base.packetType = PacketStructure.PacketType.PACKET_AUTH;
-			base.packetSubType = (PacketStructure.PacketSubType) subType;
+			base.packetType = PacketType.PACKET_AUTH;
+			base.packetSubType = (PacketSubType) subType;
 
 			this.userID = sender;
 			this.username = username;
@@ -96,6 +101,16 @@ namespace ChatTCP.Data.Packets
 		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 
+		}
+	}
+
+	public partial class AckPacket : Packet
+	{
+		public AckPacket(ClientSocket clientSocket, int subType, string content) : base(clientSocket, 0)
+		{
+			base.packetType = PacketType.PACKET_ACK;
+			base.packetSubType = PacketSubType.ACK_ACK;
+			base.content = content;
 		}
 	}
 }
