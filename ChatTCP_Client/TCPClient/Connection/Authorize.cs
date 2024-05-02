@@ -23,6 +23,11 @@ namespace TCPClient
 			public bool Authorize(string username, string password, out string result)
 			{
 				result = "authorize";
+
+				string hashedPassword = Hash(password);
+
+				AuthPacket authPacket = new AuthPacket(parent.clientSocket, (int)Packet.PacketSubType.AUTH_AUTHORIZE, -1, username, hashedPassword);
+				authPacket.Send();
 				return false;
 			}
 

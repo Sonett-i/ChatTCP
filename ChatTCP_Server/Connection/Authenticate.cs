@@ -45,11 +45,20 @@ namespace ChatTCP.Connection
 
 			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER, packet.username));
 
-			object[] userData = Server.database.Query(selectQuery);
+			object[][] userData = Server.database.Query(selectQuery);
 
 			if (userData.Length > 0)
 			{
+				string password = (string)userData[0][2];
 
+				if (password == packet.password)
+				{
+					client.ID = (Int32) userData[0][0];
+					client.username = (string)userData[0][1];
+					client.secLevel = (Int16) userData[0][3];
+					result = $"User: {client.username} authenticated";
+					return true;
+				}
 			}
 
 			return false;

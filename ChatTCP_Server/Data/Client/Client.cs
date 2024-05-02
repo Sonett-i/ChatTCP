@@ -9,8 +9,9 @@ namespace ChatTCP.Data.Client
 {
 	public class Client
 	{
-		int ID;
-		string username;
+		public Int32 ID;
+		public string username;
+		public Int16 secLevel;
 
 		public ClientSocket clientSocket;
 	}
