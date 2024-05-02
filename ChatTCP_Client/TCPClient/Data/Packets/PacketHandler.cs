@@ -56,10 +56,10 @@ namespace TCPClient.Data.Packets
 			if (packet.packetType == Packet.PacketType.PACKET_ACK)
 				HandlePacket((AckPacket)packet);
 
-			if (packet.packetType == Packet.PacketType.PACKET_AUTH)
+			else if (packet.packetType == Packet.PacketType.PACKET_AUTH)
 				HandlePacket((AuthPacket)packet);
 
-			if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
+			else if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
 				HandlePacket((MessagePacket)packet);
 		}
 
@@ -75,6 +75,7 @@ namespace TCPClient.Data.Packets
 			if (packet.content == "CONNECTING")
 			{
 				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_CONNECTING;
+
 			}
 			else if (packet.content == "AUTHORIZING")
 			{

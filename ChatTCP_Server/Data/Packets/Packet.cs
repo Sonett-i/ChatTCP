@@ -56,7 +56,7 @@ namespace ChatTCP.Data.Packets
 		{
 			Packet packet = PacketHandler.FromBytes(sender.clientSocket, data);
 
-
+			packet.Handle();
 			Packet response = null; 
 			
 			/*
@@ -93,6 +93,8 @@ namespace ChatTCP.Data.Packets
 			this.username = username;
 			this.password = password;
 		}
+
+
 	}
 
 	public partial class MessagePacket : Packet

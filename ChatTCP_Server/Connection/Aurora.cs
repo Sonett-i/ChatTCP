@@ -90,6 +90,7 @@ namespace ChatTCP.Connection
 				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint.ToString()} disconnected");
 				currentClient.clientSocket.socket.Close();
 				currentClient.clientSocket.connectionState = ConnectionState.STATE_DISCONNECTED;
+				currentClient = null;
 				return;
 			}
 

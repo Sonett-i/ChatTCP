@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ChatTCP_Client
@@ -16,7 +17,10 @@ namespace ChatTCP_Client
 
 		public void SetLabel(Label label, string text)
 		{
-			label.Content = text;
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				label.Content = text;
+			});
 		}
 
 		public void AddToChat(TextBox textBox, string text)

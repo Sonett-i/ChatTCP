@@ -22,8 +22,6 @@ namespace TCPClient
 		public string serverIP;
 		public bool active = true;
 
-		public event EventHandler<string> MessageReceived;
-
 		public static Client CreateInstance(int port, int serverPort, string serverIP)
 		{
 			Client tcp = null;
@@ -105,7 +103,7 @@ namespace TCPClient
 
 			Packet.Receive(currentClientSocket, recBuffer);
 
-			MessageReceived?.Invoke(this, "aaaaa");
+			
 
 			//text is from server but could have been broadcast from the other clients
 			//AddToChat(message.Format());

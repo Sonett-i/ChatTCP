@@ -104,6 +104,7 @@ namespace ChatTCP
 
 				Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint.ToString()} connecting");
 				newClient = await Aurora.AuthorizeConnection(newClient, cancellationToken);
+
 			}
 		}
 

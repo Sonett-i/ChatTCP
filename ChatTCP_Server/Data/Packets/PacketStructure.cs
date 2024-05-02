@@ -67,5 +67,38 @@ namespace ChatTCP.Data.Packets
 		 * 3		string		message string being sent.
 		 */
 
+		public void Handle()
+		{
+			if (this.packetType == Packet.PacketType.PACKET_AUTH)
+			{
+				 Handle();
+			}
+		}
+	}
+
+	// Packet methods
+
+	public partial class AuthPacket
+	{
+		public void Handle()
+		{
+
+		}
+	}
+
+	public partial class AckPacket
+	{
+		public void Handle()
+		{
+
+		}
+	}
+
+	public partial class MessagePacket
+	{
+		public void Handle()
+		{
+
+		}
 	}
 }

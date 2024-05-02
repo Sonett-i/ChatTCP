@@ -29,7 +29,8 @@ namespace ChatTCP_Client.LoginForm
 
 			Connect();
 
-			App.tcpClient.MessageReceived += Output.RegisterMessage;
+			TCPClient.Data.Packets.Packet.PacketReceived += Output.RegisterMessage;
+
 		}
 
 		void Connect()

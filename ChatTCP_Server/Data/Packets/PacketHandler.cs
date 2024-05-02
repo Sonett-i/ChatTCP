@@ -52,6 +52,5 @@ namespace ChatTCP.Data.Packets
 
 			return messagePacket;
 		}
-
 	}
 }

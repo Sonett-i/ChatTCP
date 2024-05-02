@@ -9,9 +9,10 @@ using TCPClient.Messaging;
 
 namespace TCPClient.Data.Packets
 {
-	public partial class Packet
+	public partial class Packet : Client
 	{
 
+		public Client parent;
 		public static char field = (char)30;
 		public static char record = (char)31;
 
@@ -25,6 +26,7 @@ namespace TCPClient.Data.Packets
 		public PacketType packetType;
 		public PacketSubType packetSubType;
 
+		public static event EventHandler<string> PacketReceived;
 
 
 		public Packet(ClientSocket clientSocket, int sender)
@@ -37,7 +39,7 @@ namespace TCPClient.Data.Packets
 
 		public void Send()
 		{
-			this.Serialize();
+			//this.Serialize();
 			this.data = encoding.GetBytes(content);
 			this.socket.Send(data, 0, data.Length, SocketFlags.None);
 		}
@@ -58,8 +60,15 @@ namespace TCPClient.Data.Packets
 			Packet packet = PacketHandler.FromBytes(sender, data);
 
 			PacketHandler.HandlePacket(packet);
-			
+
+			packet.DispatchInfo();
+
 			return packet;
+		}
+
+		public void DispatchInfo()
+		{
+			PacketReceived?.Invoke(this, this.content);
 		}
 	}
 
@@ -77,6 +86,19 @@ namespace TCPClient.Data.Packets
 			this.userID = sender;
 			this.username = username;
 			this.password = password;
+
+			this.Serialize();
+		}
+
+		public new void Serialize()
+		{
+			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
+				(int)packetType,
+				(int)packetSubType,
+				this.userID,
+				$"{this.username}{Packet.field}{this.password}");
+
+			base.content = serialized;
 		}
 	}
 
