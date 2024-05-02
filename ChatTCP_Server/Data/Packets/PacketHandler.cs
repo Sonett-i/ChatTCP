@@ -48,7 +48,7 @@ namespace ChatTCP.Data.Packets
 
 		public static MessagePacket GetMessagePacket(ClientSocket clientSocket, string[] blob)
 		{
-			MessagePacket messagePacket = null;
+			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[1]);
 
 			return messagePacket;
 		}

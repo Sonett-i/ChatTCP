@@ -13,6 +13,8 @@ namespace ChatTCP.Data.Client
 		public const int BUFFER_SIZE = 2048;
 		public byte[] buffer = new byte[BUFFER_SIZE];
 
+		public int userID;
+
 		public IPAddress? IP;
 		public bool authorized = false;
 		public Aurora.ConnectionState connectionState = Aurora.ConnectionState.STATE_CONNECTING;

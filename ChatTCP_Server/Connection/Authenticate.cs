@@ -40,7 +40,7 @@ namespace ChatTCP.Connection
 			// now i get to do the database stuff
 			if (UserExists(packet.username))
 			{
-				result = "user exists, not registered.";
+				result = "Registration failed: user exists.";
 				return false;
 			}
 
@@ -48,16 +48,16 @@ namespace ChatTCP.Connection
 
 			if (newID < 1)
 			{
-				result = "invalid ID";
+				result = "Registration failed: user exists";
 				return false;
 			}
 
 			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, (Int64)1));
 
 			Log.Event(Log.LogType.LOG_EVENT, $"{client.clientSocket.socket.RemoteEndPoint.ToString()} registered as new user: {packet.username}");
-			object[] insertResult = Server.database.Query(insertQuery);
-
-			result = "user not exist";
+			
+			Server.database.Query(insertQuery);
+			result = "Registered new user: " + packet.username;
 
 			return false;
 		}
@@ -66,9 +66,19 @@ namespace ChatTCP.Connection
 			result = "";
 			if (packet.packetSubType == Packet.PacketSubType.AUTH_REGISTER)
 			{
-				RegisterNewUser(client, packet, out string registerResult);
+				bool newUser = RegisterNewUser(client, packet, out string registerResult);
 				result = registerResult;
+
+				if (!newUser)
+				{
+					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_NAK, result);
+				}
+				else
+				{
+					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, result);
+				}
 			}
+
 
 			return client;
 		}

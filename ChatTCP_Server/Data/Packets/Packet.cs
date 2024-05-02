@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using ChatTCP.Connection;
 using ChatTCP.Data.Formatting;
 
+
 namespace ChatTCP.Data.Packets
 {
 	public partial class Packet
@@ -20,13 +21,15 @@ namespace ChatTCP.Data.Packets
 		int sender;
 		byte[] data;
 		Socket socket;
-		ClientSocket clientSocket;
+		public Client.Client client;
+
+		public ClientSocket clientSocket;
 		public string content;
 
 		public PacketType packetType;
 		public PacketSubType packetSubType;
 
-		public Packet(ClientSocket clientSocket, int sender)
+		public Packet(ClientSocket clientSocket, int sender, Client.Client client = null)
 		{
 			this.clientSocket = clientSocket;
 			this.socket = clientSocket.socket;
@@ -36,7 +39,6 @@ namespace ChatTCP.Data.Packets
 
 		public void Send()
 		{
-			this.Serialize();
 			this.data = encoding.GetBytes(content);
 			this.socket.Send(data, 0, data.Length, SocketFlags.None);
 		}
@@ -55,24 +57,10 @@ namespace ChatTCP.Data.Packets
 		public static Packet Receive(Client.Client sender, byte[] data)
 		{
 			Packet packet = PacketHandler.FromBytes(sender.clientSocket, data);
+			packet.client = sender;
 
 			packet.Handle();
-			Packet response = null; 
-			
-			/*
-			if (sender.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
-			{
-				sender = Authenticate.Client(sender, (AuthPacket) packet, out string result);
 
-				response = new Packet(sender.clientSocket, 0) 
-				{ 
-					packetType = PacketType.PACKET_ACK, 
-					//packetSubType = PacketSubType.ACK_ACK, 
-					content = result
-				};
-			}
-			*/
-			response.Send();
 			return packet;
 		}
 	}
@@ -107,16 +95,24 @@ namespace ChatTCP.Data.Packets
 
 	public partial class AckPacket : Packet
 	{
+		public int flag = 0;
 		public AckPacket(ClientSocket clientSocket, PacketSubType subType, string content) : base(clientSocket, 0)
 		{
 			base.packetType = PacketType.PACKET_ACK;
-			base.packetSubType = PacketSubType.ACK_ACK;
+			base.packetSubType = subType;
 			base.content = content;
+			this.Serialize();
 		}
 
-		public static AckPacket Acknowledge(ClientSocket clientSocket, string message)
+		public void Serialize()
 		{
-			return new AckPacket(clientSocket, 0, message);
+			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
+				(int)packetType,
+				(int)packetSubType,
+				flag,
+				content);
+
+			base.content = serialized;
 		}
 	}
 }

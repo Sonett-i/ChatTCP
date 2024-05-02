@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using ChatTCP.Data.Client;
+using ChatTCP.Connection;
 
 namespace ChatTCP.Data.Packets
 {
@@ -42,6 +43,7 @@ namespace ChatTCP.Data.Packets
 			{ Packet.PacketType.PACKET_ACK, new Dictionary<Packet.PacketSubType, string>
 				{
 					{ Packet.PacketSubType.ACK_ACK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.ACK_HANDSHAKE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.ACK_NAK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
@@ -69,9 +71,20 @@ namespace ChatTCP.Data.Packets
 
 		public void Handle()
 		{
-			if (this.packetType == Packet.PacketType.PACKET_AUTH)
+			if (this is AuthPacket)
 			{
-				 Handle();
+				AuthPacket authPacket = (AuthPacket)this;
+				authPacket.Handle();
+			}
+			else if (this is AckPacket)
+			{
+				AckPacket ackPacket = (AckPacket)this;
+				ackPacket.Handle();
+			}
+			else if (this is MessagePacket)
+			{
+				MessagePacket messagePacket = (MessagePacket)this;
+				messagePacket.Handle();
 			}
 		}
 	}
@@ -80,14 +93,30 @@ namespace ChatTCP.Data.Packets
 
 	public partial class AuthPacket
 	{
+
 		public void Handle()
 		{
+			if (this.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
+			{
+				this.client = Authenticate.Client(this.client, (AuthPacket)this, out string result);
 
+				if (this.client == null)
+				{
+					AckPacket nak = new AckPacket(this.clientSocket, Packet.PacketSubType.ACK_NAK, result);
+					nak.Send();
+				}
+			}
 		}
 	}
 
 	public partial class AckPacket
 	{
+		public static void Send(Client.ClientSocket clientSocket, Packet.PacketSubType subType, string content)
+		{
+			AckPacket ackPacket = new AckPacket(clientSocket, subType, content);
+			ackPacket.Send();
+		}
+
 		public void Handle()
 		{
 
