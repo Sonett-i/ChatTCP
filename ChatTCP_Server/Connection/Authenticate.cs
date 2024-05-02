@@ -34,7 +34,26 @@ namespace ChatTCP.Connection
 
 			return 0;
 		}
+		public static bool AuthenticateUser(Client client, AuthPacket packet, out string result)
+		{
+			result = "";
+			if (!UserExists(packet.username))
+			{
+				result = "User does not exist";
+				return false;
+			}
 
+			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER, packet.username));
+
+			object[] userData = Server.database.Query(selectQuery);
+
+			if (userData.Length > 0)
+			{
+
+			}
+
+			return false;
+		}
 		public static bool RegisterNewUser(Client client, AuthPacket packet, out string result)
 		{
 			// now i get to do the database stuff
@@ -78,7 +97,20 @@ namespace ChatTCP.Connection
 					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, result);
 				}
 			}
+			else if (packet.packetSubType == Packet.PacketSubType.AUTH_AUTHORIZE)
+			{
+				bool validUser = AuthenticateUser(client, packet, out string authResult);
 
+				if (!validUser)
+				{
+					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_NAK, authResult);
+				}
+				else
+				{
+					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, authResult);
+				}
+
+			}
 
 			return client;
 		}
