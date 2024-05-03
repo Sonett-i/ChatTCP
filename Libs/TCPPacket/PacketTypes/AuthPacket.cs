@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TCPClientSocket;
+using Libs.Formatting;
 
 namespace TCPPacket
 {
@@ -22,8 +23,13 @@ namespace TCPPacket
 			this.userID = sender;
 			this.username = username;
 			this.password = password;
+
+			this.Serialize();
 		}
 
-
+		public void Serialize()
+		{
+			base.content = Format.String(PacketFormat[PacketType.PACKET_AUTH][packetSubType], (int)packetType, (int)packetSubType, userID, $"{username}{Packet.field}{password}");
+		}
 	}
 }

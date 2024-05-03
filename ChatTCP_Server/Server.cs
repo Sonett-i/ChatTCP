@@ -10,7 +10,7 @@ using ChatTCP.Data.Database;
 
 namespace ChatTCP
 {
-	public class Server
+	public partial class Server
 	{
 		#region config
 		public Server(int port)
@@ -113,5 +113,6 @@ namespace ChatTCP
 			return (port > 0 && port < 65535);
 		}
 		#endregion
+
 	}
 }

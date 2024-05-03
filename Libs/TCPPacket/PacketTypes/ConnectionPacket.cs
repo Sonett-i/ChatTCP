@@ -14,7 +14,7 @@ namespace TCPPacket
 
 		public ConnectionPacket(ClientSocket clientSocket, ClientSocket.ConnectionState connectionState) : base(clientSocket, 0)
 		{
-			base.packetType = PacketType.PACKET_CON;
+			base.packetType = PacketType.PACKET_CONNECTION;
 			this.connectionState = connectionState;
 			this.Serialize();
 		}

@@ -22,7 +22,7 @@ namespace TCPPacket
 		{
 			PACKET_AUTH,
 			PACKET_ACK,
-			PACKET_CON,
+			PACKET_CONNECTION,
 			PACKET_COMMAND,
 			PACKET_MESSAGE
 		}
@@ -54,7 +54,7 @@ namespace TCPPacket
 					{ Packet.PacketSubType.ACK_NAK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
-			{ Packet.PacketType.PACKET_CON, new Dictionary<Enum, string>
+			{ Packet.PacketType.PACKET_CONNECTION, new Dictionary<Enum, string>
 				{
 					{ ClientSocket.ConnectionState.STATE_DISCONNECTED, $"%i{Packet.field}%i{Packet.record}" },
 					{ ClientSocket.ConnectionState.STATE_AUTHORIZING, $"%i{Packet.field}%i{Packet.record}" },

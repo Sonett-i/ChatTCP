@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Packet\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Libs\TCPClientSocket\TCPClientSocket.csproj" />
     <ProjectReference Include="..\Libs\TCPPacket\TCPPacket.csproj" />
   </ItemGroup>

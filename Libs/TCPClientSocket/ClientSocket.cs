@@ -6,11 +6,11 @@ namespace TCPClientSocket
 	{
 		public enum ConnectionState
 		{
+			STATE_DISCONNECTED,
 			STATE_CONNECTING,
 			STATE_AUTHORIZING,
 			STATE_AUTHORIZED,
 			STATE_CONNECTED,
-			STATE_DISCONNECTED,
 		}
 
 		public Socket socket;

@@ -4,13 +4,6 @@ namespace Libs.Formatting
 {
     public class Format
     {
-        public enum DataTypes
-        {
-            TYPE_STRING,
-            TYPE_INT,
-            TYPE_FLOAT
-        }
-
         public static Dictionary<string, Type> FormatTypes = new Dictionary<string, Type>()
         {
             ["%s"] = typeof(string),

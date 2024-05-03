@@ -74,7 +74,7 @@ namespace TCPPacket
 		{
 			Packet packet = PacketHandler.FromBytes(sender, data);
 
-			PacketReceived.Invoke(packet, sender);
+			PacketReceived?.Invoke(packet, sender);
 
 			return packet;
 		}

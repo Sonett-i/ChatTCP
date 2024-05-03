@@ -61,10 +61,7 @@ namespace ChatTCP.Connect
 
 			Packet packet = Packet.Receive(currentClient.clientSocket, buffer);
 
-			if (currentClient.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_CONNECTED)
-			{
-				return;
-			}
+			Server.Receive(currentClient, packet);
 
 			currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, currentClient);
 		}

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using TCPPacket;
 
 namespace ChatTCP_Client
 {
@@ -30,9 +31,10 @@ namespace ChatTCP_Client
 
 		public static void RegisterMessage(object sender, TCPClientSocket.ClientSocket client)
 		{
+			Packet packet = (Packet)sender;
 			if (App.currentScreen == App.screen.SCREEN_LOGIN)
 			{
-				App.output.SetLabel(App.output.loginOutput, "aaaa");
+				App.output.SetLabel(App.output.loginOutput, packet.content);
 			}
 		}
 	}
