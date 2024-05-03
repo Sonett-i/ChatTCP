@@ -99,7 +99,7 @@ namespace TCPClient
 			byte[] recBuffer = new byte[received];
 			Array.Copy(currentClientSocket.buffer, recBuffer, received);
 
-			Packet.Receive(currentClientSocket, recBuffer);
+			Packet packet = Packet.Receive(currentClientSocket, recBuffer);
 
 			//we just received a message from this socket, better keep an ear out with another thread for the next one
 			try

@@ -28,7 +28,7 @@ namespace TCPClientSocket
 		{
 			connectionState = state;
 
-			ConnectionStateChanged.Invoke(this, (int)state);
+			ConnectionStateChanged?.Invoke(this, (int)state);
 		}
 	}
 }

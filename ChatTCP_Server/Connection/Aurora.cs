@@ -16,11 +16,14 @@ namespace ChatTCP.Connect
 	public class Aurora
 	{
 
+
 		// Client Connection Protocol
 		public static void HandleNewConnection(Socket joiningSocket)
 		{
 			Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
-			Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint} connecting");
+			
+
+			newClient.clientSocket.ConnectionStateChanged += newClient.StateChanged;
 
 			newClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_CONNECTING);
 			Server.ConnectedClients.Add(newClient);
@@ -47,7 +50,7 @@ namespace ChatTCP.Connect
 			}
 			catch (SocketException)
 			{
-				Log.Event(Log.LogType.LOG_EVENT, $"{currentClient.clientSocket.socket.RemoteEndPoint} disconnected");
+				currentClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_DISCONNECTED);
 				currentClient.clientSocket.socket.Close();
 				Server.ConnectedClients.Remove(currentClient);
 				return;

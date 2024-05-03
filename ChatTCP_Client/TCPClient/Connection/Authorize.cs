@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TCPClient.Data.Packets;
-using TCPClient.Messaging;
+using TCPPacket;
 
 namespace TCPClient
 {
@@ -48,13 +47,10 @@ namespace TCPClient
 				{
 					string hashedPassword = Hash(password);
 
-					AuthPacket authPacket = new AuthPacket(parent.clientSocket, (int)Packet.PacketSubType.AUTH_REGISTER, -1, username, hashedPassword);
+					AuthPacket authPacket = new AuthPacket(parent.clientSocket, Packet.PacketSubType.AUTH_REGISTER, -1, username, hashedPassword);
 					authPacket.Send();
 				}
 				result = "new acc";
-
-
-				//base.clientSocket.socket.Send();
 
 				return false;
 			}
