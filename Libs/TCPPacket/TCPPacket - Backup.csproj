@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libs\TCPClientSocket\TCPClientSocket.csproj" />
-    <ProjectReference Include="..\..\Libs\TCPPacket\TCPPacket.csproj" />
+    <ProjectReference Include="..\TCPClientSocket\TCPClientSocket.csproj" />
   </ItemGroup>
 
 </Project>

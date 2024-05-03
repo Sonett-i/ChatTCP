@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using ChatTCP.Data.Client;
-using ChatTCP.Data.Packets;
 using ChatTCP.Logging;
+using TCPClientSocket;
+using TCPPacket;
 
 
 namespace ChatTCP.Connect
@@ -21,7 +22,7 @@ namespace ChatTCP.Connect
 			Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
 			Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint} connecting");
 
-			newClient.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_CONNECTING);
+			newClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_CONNECTING);
 			Server.ConnectedClients.Add(newClient);
 
 			AuthorizeNewConnection(newClient);
@@ -29,7 +30,7 @@ namespace ChatTCP.Connect
 
 		private static void AuthorizeNewConnection(Client client)
 		{
-			client.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_AUTHORIZING);
+			client.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_AUTHORIZING);
 
 			client.clientSocket.socket.BeginReceive(client.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, client);
 		}
@@ -55,9 +56,9 @@ namespace ChatTCP.Connect
 			byte[] buffer = new byte[received];
 			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
 
-			Packet packet = Packet.Receive(currentClient, buffer);
+			Packet packet = Packet.Receive(currentClient.clientSocket, buffer);
 
-			if (currentClient.clientSocket.connectionState == Connection.ConnectionState.STATE_CONNECTED)
+			if (currentClient.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_CONNECTED)
 			{
 				return;
 			}

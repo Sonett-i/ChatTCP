@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChatTCP.Data.Client;
-using System.Net.Sockets;
-using ChatTCP.Connect;
-using ChatTCP.Logging;
+using TCPClientSocket;
 
-namespace ChatTCP.Data.Packets
+namespace TCPPacket
 {
 	public static class PacketHandler
 	{
@@ -37,13 +34,13 @@ namespace ChatTCP.Data.Packets
 		{
 			AuthPacket authPacket = new AuthPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
 
-			Log.Event(Log.LogType.LOG_PACKET, $"{authPacket.packetType}:{authPacket.packetSubType}:{authPacket.username}");
+
 			return authPacket;
 		}
 
 		public static AckPacket GetAckPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AckPacket ackPacket = new AckPacket(clientSocket, (Packet.PacketSubType) int.Parse(blob[1]), blob[2]);
+			AckPacket ackPacket = new AckPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), blob[2]);
 
 			return ackPacket;
 		}

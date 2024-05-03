@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libs\TCPClientSocket\TCPClientSocket.csproj" />
-    <ProjectReference Include="..\..\Libs\TCPPacket\TCPPacket.csproj" />
-  </ItemGroup>
-
 </Project>

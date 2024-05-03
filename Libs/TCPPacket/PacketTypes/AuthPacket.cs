@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChatTCP.Data.Client;
-using ChatTCP.Data.Formatting;
-using ChatTCP.Connect;
+using TCPClientSocket;
 
-namespace ChatTCP.Data.Packets
+namespace TCPPacket
 {
 	public partial class AuthPacket : Packet
 	{
@@ -26,19 +24,6 @@ namespace ChatTCP.Data.Packets
 			this.password = password;
 		}
 
-		public void Handle()
-		{
-			if (this.clientSocket.connectionState == Connection.ConnectionState.STATE_AUTHORIZING)
-			{
-				this.client = Authenticate.Client(this.client, (AuthPacket)this, out string result);
-
-				if (this.client == null)
-				{
-					AckPacket nak = new AckPacket(this.clientSocket, Packet.PacketSubType.ACK_NAK, result);
-					nak.Send();
-				}
-			}
-		}
 
 	}
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace ChatTCP.Data.Formatting
+namespace Libs.Formatting
 {
-    internal class Format
+    public class Format
     {
         public enum DataTypes
         {
@@ -21,7 +15,7 @@ namespace ChatTCP.Data.Formatting
         {
             ["%s"] = typeof(string),
             ["%i"] = typeof(int), //int32
-			["%b"] = typeof(Int64), // int64 (BigInt)
+            ["%b"] = typeof(Int64), // int64 (BigInt)
             ["%f"] = typeof(float),
         };
 

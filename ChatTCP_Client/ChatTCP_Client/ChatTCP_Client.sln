@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatTCP_Client", "ChatTCP_Client.csproj", "{C51903ED-450A-4A26-94E2-1A648D8C48CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatTCP_Client", "ChatTCP_Client.csproj", "{C51903ED-450A-4A26-94E2-1A648D8C48CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClient", "..\TCPClient\TCPClient.csproj", "{2FBADD82-DA45-4D58-936A-76A94439070A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPClient", "..\TCPClient\TCPClient.csproj", "{2FBADD82-DA45-4D58-936A-76A94439070A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPPacket", "..\..\Libs\TCPPacket\TCPPacket.csproj", "{B781D878-2A9C-4D0D-8005-456C053A3E58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B911287-24D9-4156-AEAC-4636008A4961}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPClientSocket", "..\..\Libs\TCPClientSocket\TCPClientSocket.csproj", "{A1D2ABB8-6949-495F-A1A5-A11F64010FDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,14 @@ Global
 		{2FBADD82-DA45-4D58-936A-76A94439070A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FBADD82-DA45-4D58-936A-76A94439070A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FBADD82-DA45-4D58-936A-76A94439070A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B781D878-2A9C-4D0D-8005-456C053A3E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B781D878-2A9C-4D0D-8005-456C053A3E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B781D878-2A9C-4D0D-8005-456C053A3E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B781D878-2A9C-4D0D-8005-456C053A3E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D2ABB8-6949-495F-A1A5-A11F64010FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D2ABB8-6949-495F-A1A5-A11F64010FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D2ABB8-6949-495F-A1A5-A11F64010FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D2ABB8-6949-495F-A1A5-A11F64010FDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

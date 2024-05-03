@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChatTCP.Data.Client;
-using ChatTCP.Data.Formatting;
+using TCPClientSocket;
+using Libs.Formatting;
 
-namespace ChatTCP.Data.Packets
+namespace TCPPacket
 {
 	public partial class AckPacket : Packet
 	{

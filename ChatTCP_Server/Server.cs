@@ -1,13 +1,12 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Libs.Terminal;
-using ChatTCP.Data.Formatting;
 using ChatTCP.Connect;
 using ChatTCP.Config;
 using ChatTCP.Logging;
 using ChatTCP.Data.Client;
 using ChatTCP.Data.Database;
-using ChatTCP.Data.Packets;
+
 
 namespace ChatTCP
 {

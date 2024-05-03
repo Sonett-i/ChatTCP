@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ChatTCP.Data.Database;
 using ChatTCP.Data.Client;
-using ChatTCP.Data.Packets;
-using ChatTCP.Data.Formatting;
 using ChatTCP.Logging;
+
+using TCPPacket;
+using TCPClientSocket;
+using Libs.Formatting;
 
 namespace ChatTCP.Connect
 {
@@ -116,7 +118,7 @@ namespace ChatTCP.Connect
 				}
 				else
 				{
-					client.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_AUTHORIZED);
+					client.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_AUTHORIZED);
 				}
 			}
 

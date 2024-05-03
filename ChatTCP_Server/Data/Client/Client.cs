@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using TCPClientSocket;
 
 namespace ChatTCP.Data.Client
 {

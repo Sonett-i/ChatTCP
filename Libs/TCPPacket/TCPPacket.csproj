@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="PacketTypes\" />
+    <ProjectReference Include="..\..\Formatting\Formatting.csproj" />
+    <ProjectReference Include="..\TCPClientSocket\TCPClientSocket.csproj" />
   </ItemGroup>
 
 </Project>

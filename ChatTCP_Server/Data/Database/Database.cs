@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using ChatTCP.Data;
 using Libs.Terminal;
+using Libs.Formatting;
 
 namespace ChatTCP.Data.Database
 {
@@ -27,7 +28,7 @@ namespace ChatTCP.Data.Database
 			this.database = database;
 
 			connection = new MySqlConnection();
-			connection.ConnectionString = Data.Formatting.Format.String("server=%s;uid=%s;pwd=%s;database=%s", this.host, this.uid, this.password, this.database);
+			connection.ConnectionString = Format.String("server=%s;uid=%s;pwd=%s;database=%s", this.host, this.uid, this.password, this.database);
 			this.Connect();
 		}
 
