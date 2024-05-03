@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using TCPClient.Data.Sockets;
 using TCPClient.Connection;
-using TCPClient.Messaging;
-using TCPClient.Data.Packets;
-
+using TCPClientSocket;
+using TCPPacket;
 
 namespace TCPClient
 {
@@ -62,7 +60,7 @@ namespace TCPClient
 
 			if (!socket.Connected)
 			{
-				this.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_DISCONNECTED;
+				this.clientSocket.connectionState = ClientSocket.ConnectionState.STATE_DISCONNECTED;
 			}
 			else
 			{
@@ -72,7 +70,7 @@ namespace TCPClient
 				}
 				catch (Exception ex)
 				{
-					this.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_DISCONNECTED;
+					this.clientSocket.connectionState = ClientSocket.ConnectionState.STATE_DISCONNECTED;
 				}
 			}
 		}

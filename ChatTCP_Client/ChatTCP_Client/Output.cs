@@ -28,11 +28,11 @@ namespace ChatTCP_Client
 			textBox.Text += text;
 		}
 
-		public static void RegisterMessage(object sender, string text)
+		public static void RegisterMessage(object sender, TCPClientSocket.ClientSocket client)
 		{
 			if (App.currentScreen == App.screen.SCREEN_LOGIN)
 			{
-				App.output.SetLabel(App.output.loginOutput, text);
+				App.output.SetLabel(App.output.loginOutput, "aaaa");
 			}
 		}
 	}

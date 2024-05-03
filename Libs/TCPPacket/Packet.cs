@@ -24,6 +24,8 @@ namespace TCPPacket
 		public PacketType packetType;
 		public PacketSubType packetSubType;
 
+		public static event EventHandler<ClientSocket> PacketReceived;
+
 		public Packet(ClientSocket clientSocket, int sender)
 		{
 			this.clientSocket = clientSocket;
@@ -72,7 +74,7 @@ namespace TCPPacket
 		{
 			Packet packet = PacketHandler.FromBytes(sender, data);
 
-			packet.Handle();
+			PacketReceived.Invoke(packet, sender);
 
 			return packet;
 		}

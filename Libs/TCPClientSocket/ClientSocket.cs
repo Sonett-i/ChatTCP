@@ -19,7 +19,7 @@ namespace TCPClientSocket
 
 		public int userID;
 
-		public ConnectionState connectionState;
+		public ConnectionState connectionState = ConnectionState.STATE_DISCONNECTED;
 		public bool authorized = false;
 
 		public event EventHandler<int> ConnectionStateChanged;
@@ -27,9 +27,8 @@ namespace TCPClientSocket
 		public void SetConnectionState(ConnectionState state)
 		{
 			connectionState = state;
-			ConnectionStateChanged.Invoke(this, (int)this.connectionState);
+
+			ConnectionStateChanged.Invoke(this, (int)state);
 		}
-
-
 	}
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TCPClient;
 using TCPClient.Data;
-using TCPClient.Data.Sockets;
+using TCPClientSocket;
 
 namespace ChatTCP_Client
 {
