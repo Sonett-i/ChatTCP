@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using ChatTCP.Connect;
+using ChatTCP.Data.Packets;
 
 namespace ChatTCP.Data.Client
 {
@@ -23,6 +24,14 @@ namespace ChatTCP.Data.Client
 		public EndPoint GetIP()
 		{
 			return socket.RemoteEndPoint;
+		}
+
+		public void ChangeConnectionState(Connection.ConnectionState connectionState, bool authorized = false)
+		{
+			this.connectionState = connectionState;
+			this.authorized = (authorized == true) ? authorized : this.authorized;
+
+			ConPacket.Send(this, this.connectionState);
 		}
 	}
 }

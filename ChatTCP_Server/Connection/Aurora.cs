@@ -21,9 +21,7 @@ namespace ChatTCP.Connect
 			Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
 			Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint} connecting");
 
-			newClient.clientSocket.connectionState = Connection.ConnectionState.STATE_CONNECTING;
-			AckPacket.Send(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING"); // handshake
-
+			newClient.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_CONNECTING);
 			Server.ConnectedClients.Add(newClient);
 
 			AuthorizeNewConnection(newClient);
@@ -31,8 +29,7 @@ namespace ChatTCP.Connect
 
 		private static void AuthorizeNewConnection(Client client)
 		{
-			AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "AUTHORIZING");
-			client.clientSocket.connectionState = Connection.ConnectionState.STATE_AUTHORIZING;
+			client.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_AUTHORIZING);
 
 			client.clientSocket.socket.BeginReceive(client.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, client);
 		}

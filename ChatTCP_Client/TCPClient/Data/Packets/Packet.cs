@@ -41,7 +41,14 @@ namespace TCPClient.Data.Packets
 		{
 			//this.Serialize();
 			this.data = encoding.GetBytes(content);
-			this.socket.Send(data, 0, data.Length, SocketFlags.None);
+			try
+			{
+				this.socket.Send(data, 0, data.Length, SocketFlags.None);
+			}
+			catch (Exception ex)
+			{
+				this.DispatchInfo("Socket dead");
+			}
 		}
 
 		public void Serialize()
@@ -69,6 +76,11 @@ namespace TCPClient.Data.Packets
 		public void DispatchInfo()
 		{
 			PacketReceived?.Invoke(this, this.content);
+		}
+
+		public void DispatchInfo(string message)
+		{
+			PacketReceived?.Invoke(this, message);
 		}
 	}
 

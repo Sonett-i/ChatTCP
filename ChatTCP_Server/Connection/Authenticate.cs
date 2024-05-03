@@ -116,12 +116,8 @@ namespace ChatTCP.Connect
 				}
 				else
 				{
-					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, "AUTHENTICATED");
-
-					client.clientSocket.authorized = true;
-					client.clientSocket.connectionState = Connection.ConnectionState.STATE_CONNECTED;
+					client.clientSocket.ChangeConnectionState(Connection.ConnectionState.STATE_AUTHORIZED);
 				}
-
 			}
 
 			return client;

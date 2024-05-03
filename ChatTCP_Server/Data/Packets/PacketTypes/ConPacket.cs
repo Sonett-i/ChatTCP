@@ -28,7 +28,7 @@ namespace ChatTCP.Data.Packets
 
 		new public static void Send(ClientSocket clientSocket, Connection.ConnectionState connectionState)
 		{
-			ConPacket conPacket =new ConPacket(clientSocket, connectionState);
+			ConPacket conPacket = new ConPacket(clientSocket, connectionState);
 			conPacket.Send();
 		}
 	}

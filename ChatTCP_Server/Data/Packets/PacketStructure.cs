@@ -60,6 +60,7 @@ namespace ChatTCP.Data.Packets
 				{
 					{ Connection.ConnectionState.STATE_DISCONNECTED, $"%i{Packet.field}%i{Packet.record}" },
 					{ Connection.ConnectionState.STATE_AUTHORIZING, $"%i{Packet.field}%i{Packet.record}" },
+					{ Connection.ConnectionState.STATE_AUTHORIZED, $"%i{Packet.field}%i{Packet.record}" },
 					{ Connection.ConnectionState.STATE_CONNECTED, $"%i{Packet.field}%i{Packet.record}" },
 					{ Connection.ConnectionState.STATE_CONNECTING, $"%i{Packet.field}%i{Packet.record}" },
 				}
