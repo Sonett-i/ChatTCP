@@ -30,7 +30,7 @@ namespace ChatTCP.Data.Packets
 			base.content = serialized;
 		}
 
-		public static void Send(Client.ClientSocket clientSocket, Packet.PacketSubType subType, string content)
+		public static void Send(ClientSocket clientSocket, Packet.PacketSubType subType, string content)
 		{
 			AckPacket ackPacket = new AckPacket(clientSocket, subType, content);
 			ackPacket.Send();

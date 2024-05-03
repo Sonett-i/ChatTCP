@@ -11,6 +11,7 @@ namespace ChatTCP.Data.Packets
 {
 	public partial class Packet
 	{
+
 		/* Packet Structure
 		 * index	datatype	desc
 		 * 0		int			packetType: auth, ACK, NAK, message etc.
@@ -18,6 +19,7 @@ namespace ChatTCP.Data.Packets
 		 * 2		int			senderID: aligns with userID who sent, -1 for guest.
 		 * 3		string		message string being sent.
 		 */
+
 		public enum PacketType
 		{
 			PACKET_AUTH,
@@ -39,22 +41,30 @@ namespace ChatTCP.Data.Packets
 			MESSAGE_COMMAND
 		}
 
-		public static Dictionary<Packet.PacketType, Dictionary<Packet.PacketSubType, string>> PacketFormat = new Dictionary<Packet.PacketType, Dictionary<Packet.PacketSubType, string>>()
+		public static Dictionary<Packet.PacketType, Dictionary<Enum, string>> PacketFormat = new Dictionary<Packet.PacketType, Dictionary<Enum, string>>()
 		{
-			{ Packet.PacketType.PACKET_AUTH, new Dictionary<Packet.PacketSubType, string>
+			{ Packet.PacketType.PACKET_AUTH, new Dictionary<Enum, string>
 				{
 					{ Packet.PacketSubType.AUTH_AUTHORIZE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.AUTH_REGISTER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
-			{ Packet.PacketType.PACKET_ACK, new Dictionary<Packet.PacketSubType, string>
+			{ Packet.PacketType.PACKET_ACK, new Dictionary<Enum, string>
 				{
 					{ Packet.PacketSubType.ACK_ACK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.ACK_HANDSHAKE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.ACK_NAK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
-			{ Packet.PacketType.PACKET_MESSAGE, new Dictionary<Packet.PacketSubType, string>
+			{ Packet.PacketType.PACKET_CON, new Dictionary<Enum, string>
+				{
+					{ Connection.ConnectionState.STATE_DISCONNECTED, $"%i{Packet.field}%i{Packet.record}" },
+					{ Connection.ConnectionState.STATE_AUTHORIZING, $"%i{Packet.field}%i{Packet.record}" },
+					{ Connection.ConnectionState.STATE_CONNECTED, $"%i{Packet.field}%i{Packet.record}" },
+					{ Connection.ConnectionState.STATE_CONNECTING, $"%i{Packet.field}%i{Packet.record}" },
+				}
+			},
+			{ Packet.PacketType.PACKET_MESSAGE, new Dictionary<Enum, string>
 				{									// type				subtype			sender
 					{ Packet.PacketSubType.MESSAGE_MESAGE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.MESSAGE_BROADCAST, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
@@ -62,11 +72,8 @@ namespace ChatTCP.Data.Packets
 					{ Packet.PacketSubType.MESSAGE_COMMAND, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 																										// recipientID
 					{ Packet.PacketSubType.MESSAGE_WHISPER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
-
-
 				}
 			},
-		};		
+		};
 	}
-
 }

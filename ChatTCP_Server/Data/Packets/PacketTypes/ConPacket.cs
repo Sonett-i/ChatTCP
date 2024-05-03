@@ -17,11 +17,19 @@ namespace ChatTCP.Data.Packets
 		{
 			base.packetType = PacketType.PACKET_CON;
 			this.connectionState = connectionState;
+			this.Serialize();
 		}
 
 		public void Serialize()
 		{
-			//string serialize = Format.String(Connection.Connection.],
+			string serialize = Format.String(Packet.PacketFormat[packetType][this.connectionState],(int)this.packetType, (int)this.connectionState);
+			this.content = serialize;
+		}
+
+		new public static void Send(ClientSocket clientSocket, Connection.ConnectionState connectionState)
+		{
+			ConPacket conPacket =new ConPacket(clientSocket, connectionState);
+			conPacket.Send();
 		}
 	}
 }
