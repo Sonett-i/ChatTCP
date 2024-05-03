@@ -13,12 +13,19 @@ namespace TCPClient.Data.Sockets
 		public byte[] buffer = new byte[BUFFER_SIZE];
 
 		public Connection.Connection.ConnectionState connectionState = Connection.Connection.ConnectionState.STATE_DISCONNECTED;
-
+		public event EventHandler<int> ConnectionStateChanged;
 		public IPAddress? IP;
 
 		public EndPoint GetIP()
 		{
 			return socket.RemoteEndPoint;
+		}
+
+
+		public void SetConnectionState(Connection.Connection.ConnectionState state)
+		{
+			connectionState = state;
+			ConnectionStateChanged.Invoke(this, (int)this.connectionState);
 		}
 	}
 }

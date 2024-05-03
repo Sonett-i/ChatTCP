@@ -22,6 +22,7 @@ namespace ChatTCP_Client
 		public static Client tcpClient = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
 
 		
+
 		public static Output output = new Output();
 
 		public enum screen
@@ -32,5 +33,15 @@ namespace ChatTCP_Client
 
 		public static screen currentScreen = screen.SCREEN_LOGIN;
 
+
+		public void StateChanged(object sender, int arg)
+		{
+
+		}
+
+		public void ChangeWindow()
+		{
+
+		}
 	}
 }

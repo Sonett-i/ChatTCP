@@ -5,18 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using ChatTCP.Data.Client;
-using ChatTCP.Connection;
+using ChatTCP.Connect;
 
 namespace ChatTCP.Data.Packets
 {
 	public partial class Packet
 	{
+		/* Packet Structure
+		 * index	datatype	desc
+		 * 0		int			packetType: auth, ACK, NAK, message etc.
+		 * 1		int			packetSubType: auth_register, auth_login etc.
+		 * 2		int			senderID: aligns with userID who sent, -1 for guest.
+		 * 3		string		message string being sent.
+		 */
 		public enum PacketType
 		{
 			PACKET_AUTH,
 			PACKET_ACK,
-			PACKET_NAK,
-			PACKET_ACK_ACK,
+			PACKET_CON,
+			PACKET_COMMAND,
 			PACKET_MESSAGE
 		}
 		public enum PacketSubType
@@ -59,75 +66,7 @@ namespace ChatTCP.Data.Packets
 
 				}
 			},
-		};
-
-		/* Packet Structure
-		 * index	datatype	desc
-		 * 0		int			packetType: auth, ACK, NAK, message etc.
-		 * 1		int			packetSubType: auth_register, auth_login etc.
-		 * 2		int			senderID: aligns with userID who sent, -1 for guest.
-		 * 3		string		message string being sent.
-		 */
-
-		public void Handle()
-		{
-			if (this is AuthPacket)
-			{
-				AuthPacket authPacket = (AuthPacket)this;
-				authPacket.Handle();
-			}
-			else if (this is AckPacket)
-			{
-				AckPacket ackPacket = (AckPacket)this;
-				ackPacket.Handle();
-			}
-			else if (this is MessagePacket)
-			{
-				MessagePacket messagePacket = (MessagePacket)this;
-				messagePacket.Handle();
-			}
-		}
+		};		
 	}
 
-	// Packet methods
-
-	public partial class AuthPacket
-	{
-
-		public void Handle()
-		{
-			if (this.clientSocket.connectionState == Connection.Aurora.ConnectionState.STATE_AUTHORIZING)
-			{
-				this.client = Authenticate.Client(this.client, (AuthPacket)this, out string result);
-
-				if (this.client == null)
-				{
-					AckPacket nak = new AckPacket(this.clientSocket, Packet.PacketSubType.ACK_NAK, result);
-					nak.Send();
-				}
-			}
-		}
-	}
-
-	public partial class AckPacket
-	{
-		public static void Send(Client.ClientSocket clientSocket, Packet.PacketSubType subType, string content)
-		{
-			AckPacket ackPacket = new AckPacket(clientSocket, subType, content);
-			ackPacket.Send();
-		}
-
-		public void Handle()
-		{
-
-		}
-	}
-
-	public partial class MessagePacket
-	{
-		public void Handle()
-		{
-
-		}
-	}
 }

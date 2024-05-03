@@ -81,7 +81,7 @@ namespace TCPClient.Data.Packets
 			{
 				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_AUTHORIZING;
 			}
-			else if (packet.content == "CONNECTED")
+			else if (packet.content == "AUTHORIZED")
 			{
 				packet.clientSocket.connectionState = Connection.Connection.ConnectionState.STATE_CONNECTED;
 			}

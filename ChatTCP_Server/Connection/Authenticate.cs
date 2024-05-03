@@ -9,7 +9,7 @@ using ChatTCP.Data.Packets;
 using ChatTCP.Data.Formatting;
 using ChatTCP.Logging;
 
-namespace ChatTCP.Connection
+namespace ChatTCP.Connect
 {
 	public static class Authenticate
 	{
@@ -116,10 +116,10 @@ namespace ChatTCP.Connection
 				}
 				else
 				{
-					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, authResult);
+					AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_ACK, "AUTHENTICATED");
 
 					client.clientSocket.authorized = true;
-					client.clientSocket.connectionState = Aurora.ConnectionState.STATE_CONNECTED;
+					client.clientSocket.connectionState = Connection.ConnectionState.STATE_CONNECTED;
 				}
 
 			}

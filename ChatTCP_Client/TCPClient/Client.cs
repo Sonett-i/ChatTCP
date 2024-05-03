@@ -103,11 +103,6 @@ namespace TCPClient
 
 			Packet.Receive(currentClientSocket, recBuffer);
 
-			
-
-			//text is from server but could have been broadcast from the other clients
-			//AddToChat(message.Format());
-
 			//we just received a message from this socket, better keep an ear out with another thread for the next one
 			try
 			{

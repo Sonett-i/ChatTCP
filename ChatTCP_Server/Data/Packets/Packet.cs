@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChatTCP.Data.Client;
 using System.Net.Sockets;
-using ChatTCP.Connection;
+using ChatTCP.Connect;
 using ChatTCP.Data.Formatting;
 
 
@@ -54,6 +54,25 @@ namespace ChatTCP.Data.Packets
 			content = serialized;
 		}
 
+		public void Handle()
+		{
+			if (this is AuthPacket)
+			{
+				AuthPacket authPacket = (AuthPacket)this;
+				authPacket.Handle();
+			}
+			else if (this is AckPacket)
+			{
+				AckPacket ackPacket = (AckPacket)this;
+				ackPacket.Handle();
+			}
+			else if (this is MessagePacket)
+			{
+				MessagePacket messagePacket = (MessagePacket)this;
+				messagePacket.Handle();
+			}
+		}
+
 		public static Packet Receive(Client.Client sender, byte[] data)
 		{
 			Packet packet = PacketHandler.FromBytes(sender.clientSocket, data);
@@ -65,54 +84,4 @@ namespace ChatTCP.Data.Packets
 		}
 	}
 
-	public partial class AuthPacket : Packet
-	{
-		int userID;
-		public string username { get; }
-		public string password { get; }
-		public PacketSubType packetSubType { get; }
-
-		public AuthPacket(ClientSocket clientSocket, PacketSubType subType, int sender, string username, string password) : base (clientSocket, sender)
-		{
-			base.packetType = PacketType.PACKET_AUTH;
-			this.packetSubType = (AuthPacket.PacketSubType) subType;
-
-			this.userID = sender;
-			this.username = username;
-			this.password = password;
-		}
-
-
-	}
-
-	public partial class MessagePacket : Packet
-	{
-		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
-		{
-
-		}
-	}
-
-	public partial class AckPacket : Packet
-	{
-		public int flag = 0;
-		public AckPacket(ClientSocket clientSocket, PacketSubType subType, string content) : base(clientSocket, 0)
-		{
-			base.packetType = PacketType.PACKET_ACK;
-			base.packetSubType = subType;
-			base.content = content;
-			this.Serialize();
-		}
-
-		public void Serialize()
-		{
-			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
-				(int)packetType,
-				(int)packetSubType,
-				flag,
-				content);
-
-			base.content = serialized;
-		}
-	}
 }

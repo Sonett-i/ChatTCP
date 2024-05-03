@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChatTCP.Data.Client;
 using System.Net.Sockets;
-using ChatTCP.Connection;
+using ChatTCP.Connect;
 using ChatTCP.Logging;
 
 namespace ChatTCP.Data.Packets

@@ -32,5 +32,7 @@ namespace TCPClient.Connection
 		{
 			client.ConnectToServer();
 		}
+
+
 	}
 }

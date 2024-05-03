@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using Libs.Terminal;
 using ChatTCP.Data.Formatting;
-using ChatTCP.Connection;
+using ChatTCP.Connect;
 using ChatTCP.Config;
 using ChatTCP.Logging;
 using ChatTCP.Data.Client;

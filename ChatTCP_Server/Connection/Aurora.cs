@@ -10,24 +10,18 @@ using ChatTCP.Data.Packets;
 using ChatTCP.Logging;
 
 
-namespace ChatTCP.Connection
+namespace ChatTCP.Connect
 {
 	public class Aurora
 	{
-		public enum ConnectionState
-		{
-			STATE_CONNECTING,
-			STATE_AUTHORIZING,
-			STATE_CONNECTED,
-			STATE_DISCONNECTED,
-		}
+
 		// Client Connection Protocol
 		public static void HandleNewConnection(Socket joiningSocket)
 		{
 			Client newClient = new Client() { clientSocket = new ClientSocket() { socket = joiningSocket } };
 			Log.Event(Log.LogType.LOG_EVENT, $"{newClient.clientSocket.socket.RemoteEndPoint} connecting");
 
-			newClient.clientSocket.connectionState = ConnectionState.STATE_CONNECTING;
+			newClient.clientSocket.connectionState = Connection.ConnectionState.STATE_CONNECTING;
 			AckPacket.Send(newClient.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "CONNECTING"); // handshake
 
 			Server.ConnectedClients.Add(newClient);
@@ -38,7 +32,7 @@ namespace ChatTCP.Connection
 		private static void AuthorizeNewConnection(Client client)
 		{
 			AckPacket.Send(client.clientSocket, Packet.PacketSubType.ACK_HANDSHAKE, "AUTHORIZING");
-			client.clientSocket.connectionState = ConnectionState.STATE_AUTHORIZING;
+			client.clientSocket.connectionState = Connection.ConnectionState.STATE_AUTHORIZING;
 
 			client.clientSocket.socket.BeginReceive(client.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, client);
 		}
@@ -66,7 +60,7 @@ namespace ChatTCP.Connection
 
 			Packet packet = Packet.Receive(currentClient, buffer);
 
-			if (currentClient.clientSocket.connectionState == ConnectionState.STATE_CONNECTED)
+			if (currentClient.clientSocket.connectionState == Connection.ConnectionState.STATE_CONNECTED)
 			{
 				return;
 			}
