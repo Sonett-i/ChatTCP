@@ -23,11 +23,15 @@ namespace TCPPacket
 		{
 			string[] blob = Packet.encoding.GetString(buffer).Replace(Packet.record.ToString(), "").Split(Packet.field);
 
-			Packet.PacketType packetType = (Packet.PacketType)int.Parse(blob[0]);
+			if (blob.Length > 1)
+			{
+				Packet.PacketType packetType = (Packet.PacketType)int.Parse(blob[0]);
 
-			Packet packet = GetPacket[packetType].Invoke(clientSocket, blob);
+				Packet packet = GetPacket[packetType].Invoke(clientSocket, blob);
+				return packet;
+			}
 
-			return packet;
+			return null;
 		}
 
 		public static ConnectionPacket GetConnectionPacket(ClientSocket clientSocket, string[] blob)

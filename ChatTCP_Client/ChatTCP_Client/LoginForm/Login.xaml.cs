@@ -30,7 +30,7 @@ namespace ChatTCP_Client.LoginForm
 
 			Connect();
 			Packet.PacketReceived += Output.RegisterMessage;
-
+			//App.tcpClient.clientSocket.ConnectionStateChanged += ChatTCP_Client.App.
 		}
 
 		void Connect()
@@ -57,7 +57,6 @@ namespace ChatTCP_Client.LoginForm
 				loginResult.Content = "Connection to server failed";
 			}
 		}
-
 
 		private void loginButton_Click(object sender, RoutedEventArgs e)
 		{

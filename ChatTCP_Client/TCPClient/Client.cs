@@ -15,7 +15,7 @@ namespace TCPClient
 		public ClientSocket clientSocket = new ClientSocket();
 
 		public Authentication Authenticator;
-
+		public EventManager EventManager;
 		public int serverPort;
 		public string serverIP;
 		public bool active = true;
@@ -33,7 +33,9 @@ namespace TCPClient
 				tcp.serverIP = serverIP;
 				tcp.clientSocket.socket = tcp.socket;
 				tcp.Authenticator = new Authentication();
+				tcp.EventManager = new EventManager(tcp);
 				tcp.Authenticator.parent = tcp;
+
 			}
 
 			return tcp;
@@ -100,6 +102,9 @@ namespace TCPClient
 			Array.Copy(currentClientSocket.buffer, recBuffer, received);
 
 			Packet packet = Packet.Receive(currentClientSocket, recBuffer);
+
+			// To-do do stuff with packet
+			Client.Receive(currentClientSocket, packet);
 
 			//we just received a message from this socket, better keep an ear out with another thread for the next one
 			try

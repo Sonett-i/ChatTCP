@@ -37,7 +37,14 @@ namespace TCPPacket
 		public void Send()
 		{
 			this.data = encoding.GetBytes(content);
-			this.socket.Send(data, 0, data.Length, SocketFlags.None);
+			try
+			{
+				this.socket.Send(data, 0, data.Length, SocketFlags.None);
+			}
+			catch
+			{
+
+			}
 		}
 
 		public void Serialize()

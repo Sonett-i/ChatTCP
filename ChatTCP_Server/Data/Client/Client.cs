@@ -18,7 +18,7 @@ namespace ChatTCP.Data.Client
 
 		public ClientSocket clientSocket;
 
-		public void StateChanged(object sender, int i)
+		public void StateChanged(object sender, ClientSocket.ConnectionState connectionState)
 		{
 			Log.Event(Log.LogType.LOG_EVENT, $"{clientSocket.socket.RemoteEndPoint} {clientSocket.connectionState}");
 			try

@@ -34,14 +34,14 @@ namespace ChatTCP_Client
 		public static screen currentScreen = screen.SCREEN_LOGIN;
 
 
-		public void StateChanged(object sender, int arg)
+		public static void StateChanged(object sender, int arg)
 		{
-
+			object currentWindow = App.Current.Windows;
 		}
 
 		public void ChangeWindow()
 		{
-
+			MainWindow.Show();
 		}
 	}
 }

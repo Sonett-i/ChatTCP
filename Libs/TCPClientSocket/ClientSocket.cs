@@ -22,13 +22,19 @@ namespace TCPClientSocket
 		public ConnectionState connectionState = ConnectionState.STATE_DISCONNECTED;
 		public bool authorized = false;
 
-		public event EventHandler<int> ConnectionStateChanged;
+		public event EventHandler<ConnectionState> ConnectionStateChanged;
+		public event EventHandler<ConnectionState> ClientAuthorized;
 
 		public void SetConnectionState(ConnectionState state)
 		{
 			connectionState = state;
 
-			ConnectionStateChanged?.Invoke(this, (int)state);
+			ConnectionStateChanged?.Invoke(this, state);
+
+			if (state == ConnectionState.STATE_AUTHORIZED)
+			{
+				ClientAuthorized?.Invoke(this, state);
+			}
 		}
 	}
 }
