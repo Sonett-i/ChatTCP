@@ -26,7 +26,9 @@ namespace ChatTCP.Connect
 			newClient.clientSocket.ConnectionStateChanged += newClient.StateChanged;
 
 			newClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_CONNECTING);
-			Server.ConnectedClients.Add(newClient);
+
+			Server.AddNewClient(newClient);
+			//Server.ConnectedClients.Add(newClient);
 
 			AuthorizeNewConnection(newClient);
 		}
@@ -52,7 +54,7 @@ namespace ChatTCP.Connect
 			{
 				currentClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_DISCONNECTED);
 				currentClient.clientSocket.socket.Close();
-				Server.ConnectedClients.Remove(currentClient);
+				Server.RemoveClient(currentClient);
 				return;
 			}
 

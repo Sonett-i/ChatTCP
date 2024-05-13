@@ -11,7 +11,7 @@ namespace TCPClient
 {
 	public partial class Client
 	{
-		public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		public Socket socket;// = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		public ClientSocket clientSocket = new ClientSocket();
 
 		public Authentication Authenticator;
@@ -27,8 +27,9 @@ namespace TCPClient
 
 			if (Connection.Connection.ValidPort(port, out serverPort))
 			{
+				
 				tcp = new Client();
-
+				tcp.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 				tcp.serverPort = serverPort;
 				tcp.serverIP = serverIP;
 				tcp.clientSocket.socket = tcp.socket;

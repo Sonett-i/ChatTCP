@@ -26,15 +26,22 @@ namespace ChatTCP_Client
 
 		public void AddToChat(TextBox textBox, string text)
 		{
-			textBox.Text += text;
+			Application.Current.Dispatcher.Invoke(() => 
+			{
+				textBox.Text += text;
+			});
 		}
 
 		public static void RegisterMessage(object sender, TCPClientSocket.ClientSocket client)
 		{
 			Packet packet = (Packet)sender;
-			if (App.currentScreen == App.screen.SCREEN_LOGIN)
+			if (App.currentScreen == App.Screen.SCREEN_LOGIN)
 			{
 				App.output.SetLabel(App.output.loginOutput, packet.content);
+			}
+			else
+			{
+
 			}
 		}
 	}

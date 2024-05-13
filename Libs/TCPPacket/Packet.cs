@@ -25,6 +25,7 @@ namespace TCPPacket
 		public PacketSubType packetSubType;
 
 		public static event EventHandler<ClientSocket> PacketReceived;
+		public static event EventHandler<ClientSocket> ClientClosed;
 
 		public Packet(ClientSocket clientSocket, int sender)
 		{
@@ -43,7 +44,7 @@ namespace TCPPacket
 			}
 			catch
 			{
-
+				ClientClosed.Invoke(this, this.clientSocket);
 			}
 		}
 

@@ -38,6 +38,7 @@ namespace TCPPacket
 		{
 			ConnectionPacket conPacket = new ConnectionPacket(clientSocket, (ClientSocket.ConnectionState)int.Parse(blob[1]));
 
+
 			return conPacket;
 		}
 		public static AuthPacket GetAuthPacket(ClientSocket clientSocket, string[] blob)
@@ -57,7 +58,7 @@ namespace TCPPacket
 
 		public static MessagePacket GetMessagePacket(ClientSocket clientSocket, string[] blob)
 		{
-			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[1]);
+			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[3]);
 
 			return messagePacket;
 		}

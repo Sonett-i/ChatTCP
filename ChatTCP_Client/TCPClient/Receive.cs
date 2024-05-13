@@ -54,5 +54,10 @@ namespace TCPClient
 		{
 			client.SetConnectionState(connectionPacket.connectionState);
 		}
+
+		public static void Receive(ClientSocket client, MessagePacket messagePacket)
+		{
+
+		}
 	}
 }

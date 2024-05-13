@@ -8,6 +8,7 @@ using System.Windows;
 using TCPClient;
 using TCPClient.Data;
 using TCPClientSocket;
+using ChatTCP_Client.Events;
 
 namespace ChatTCP_Client
 {
@@ -19,19 +20,26 @@ namespace ChatTCP_Client
 	{
 		public static User currentUser;
 		public static ClientSocket currentClient;
-		public static Client tcpClient = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
+		public static Client tcpClient;// = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
 
-		
+		public static TCPEvent eventHandler;
 
 		public static Output output = new Output();
 
-		public enum screen
+		public static LoginForm.Login loginForm;
+
+		public enum Screen
 		{
 			SCREEN_LOGIN,
 			SCREEN_MAIN
 		}
 
-		public static screen currentScreen = screen.SCREEN_LOGIN;
+		public static void NewClient()
+		{
+			tcpClient = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
+		}
+
+		public static Screen currentScreen = Screen.SCREEN_LOGIN;
 
 
 		public static void StateChanged(object sender, int arg)
@@ -39,9 +47,30 @@ namespace ChatTCP_Client
 			object currentWindow = App.Current.Windows;
 		}
 
-		public void ChangeWindow()
+		public static void ChangeWindow(Screen screen)
 		{
-			MainWindow.Show();
+
+			if (screen == Screen.SCREEN_LOGIN)
+			{
+				App.currentScreen = Screen.SCREEN_LOGIN;
+			}
+			else if (screen == Screen.SCREEN_MAIN)
+			{
+				App.currentScreen = Screen.SCREEN_MAIN;
+				//close login form
+
+
+				Application.Current.Dispatcher.Invoke(() => 
+				{
+					MainWindow mainWindow = new MainWindow();
+					mainWindow.Show();
+				});
+
+				Application.Current.Dispatcher.Invoke(() =>
+				{
+					loginForm.Close();
+				});
+			}
 		}
 	}
 }

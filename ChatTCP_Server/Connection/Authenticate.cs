@@ -91,6 +91,7 @@ namespace ChatTCP.Connect
 
 			return false;
 		}
+
 		public static Client Client(Client client, AuthPacket packet, out string result)
 		{
 			result = "";

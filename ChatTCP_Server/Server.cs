@@ -6,6 +6,8 @@ using ChatTCP.Config;
 using ChatTCP.Logging;
 using ChatTCP.Data.Client;
 using ChatTCP.Data.Database;
+using TCPPacket;
+using TCPClientSocket;
 
 
 namespace ChatTCP
@@ -81,6 +83,8 @@ namespace ChatTCP
 				return;
 			}
 
+			Packet.ClientClosed += ClientDisconnect;
+
 			Log.Event(Log.LogType.LOG_EVENT, $"Database connected");
 
 			serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
@@ -111,6 +115,49 @@ namespace ChatTCP
 		static bool ValidPort(int port)
 		{
 			return (port > 0 && port < 65535);
+		}
+
+		public static void SendToAll(MessagePacket packet)
+		{
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_CONNECTED)
+				{
+					packet.clientSocket = client.clientSocket;
+					packet.Send();
+				}
+			}
+		}
+
+		public void ClientDisconnect(object packet, ClientSocket clientSocket)
+		{
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket == clientSocket)
+				{
+					Server.RemoveClient(client);
+					return;
+				}
+			}
+		}
+
+		public static void RemoveClient(Client client)
+		{
+			client.clientSocket.socket.Close();
+			
+			if (ConnectedClients.Contains(client))
+			{
+				ConnectedClients.Remove(client);
+			}
+			client = null;
+		}
+
+		public static void AddNewClient(Client client)
+		{
+			if (!ConnectedClients.Contains(client))
+			{
+				ConnectedClients.Add(client);
+			}
 		}
 		#endregion
 

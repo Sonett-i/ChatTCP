@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TCPPacket;
+using ChatTCP_Client.Events;
+using TCPClientSocket;
 
 
 
@@ -22,15 +24,39 @@ namespace ChatTCP_Client.LoginForm
 	/// </summary>
 	public partial class Login : Window
 	{
+		TCPEvent eventHandler;
 		public Login()
 		{
 			InitializeComponent();
-			App.currentScreen = App.screen.SCREEN_LOGIN;
+
+			App.loginForm = this;
+			App.currentScreen = App.Screen.SCREEN_LOGIN;
 			App.output.loginOutput = loginResult;
 
+			App.NewClient();
+
+			eventHandler = new TCPEvent() { activeLabel = loginResult };
+
 			Connect();
-			Packet.PacketReceived += Output.RegisterMessage;
+			//Packet.PacketReceived += RegisterMessage;
+			App.tcpClient.clientSocket.ClientAuthorized += ConState;
 			//App.tcpClient.clientSocket.ConnectionStateChanged += ChatTCP_Client.App.
+		}
+
+		public void ConState(object sender, ClientSocket.ConnectionState state)
+		{
+			if (state == ClientSocket.ConnectionState.STATE_AUTHORIZED)
+			{
+				App.ChangeWindow(App.Screen.SCREEN_MAIN);
+			}
+		}
+
+		public void RegisterMessage(object sender, ClientSocket client)
+		{
+			Packet packet = (Packet)sender;
+
+			App.output.SetLabel(loginResult, packet.content);
+
 		}
 
 		void Connect()

@@ -52,5 +52,10 @@ namespace ChatTCP
 		{
 
 		}
+
+		public static void Receive(Client client, MessagePacket messagePacket)
+		{
+			Server.SendToAll(messagePacket);
+		}
 	}
 }

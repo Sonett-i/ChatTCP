@@ -36,9 +36,5 @@ namespace TCPPacket
 			ackPacket.Send();
 		}
 
-		public void Handle()
-		{
-
-		}
 	}
 }
