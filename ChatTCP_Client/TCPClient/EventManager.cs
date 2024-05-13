@@ -39,7 +39,7 @@ namespace TCPClient
 
 		void ClientAuthorizedEvent(object sender, ClientSocket.ConnectionState args)
 		{
-
+			
 		}
 	}
 }

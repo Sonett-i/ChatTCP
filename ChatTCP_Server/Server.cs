@@ -152,15 +152,35 @@ namespace ChatTCP
 			}
 			return null;
 		}
+
+		public static void ShutdownSocket(Socket socket)
+		{
+			try
+			{
+				socket.Shutdown(SocketShutdown.Both);
+			}
+			catch (Exception e)
+			{
+				Terminal.Print("Socket Shutdown failed");
+			}
+
+			try
+			{
+				socket.Close();
+			}
+			catch (Exception e)
+			{
+				Terminal.Print("Socket close failed");
+			}
+		}
 		public static void RemoveClient(Client client)
 		{
-			client.clientSocket.socket.Close();
+			ShutdownSocket(client.clientSocket.socket);
 			
 			if (ConnectedClients.Contains(client))
 			{
 				ConnectedClients.Remove(client);
 			}
-			client = null;
 		}
 
 		public static void AddNewClient(Client client)

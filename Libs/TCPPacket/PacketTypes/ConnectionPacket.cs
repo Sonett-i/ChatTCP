@@ -11,11 +11,12 @@ namespace TCPPacket
 	public partial class ConnectionPacket : Packet
 	{
 		public ClientSocket.ConnectionState connectionState;
-
-		public ConnectionPacket(ClientSocket clientSocket, ClientSocket.ConnectionState connectionState) : base(clientSocket, 0)
+		public string? username ="";
+		public ConnectionPacket(ClientSocket clientSocket, ClientSocket.ConnectionState connectionState, string username = "") : base(clientSocket, 0)
 		{
 			base.packetType = PacketType.PACKET_CONNECTION;
 			this.connectionState = connectionState;
+			this.username = username;
 			this.Serialize();
 		}
 

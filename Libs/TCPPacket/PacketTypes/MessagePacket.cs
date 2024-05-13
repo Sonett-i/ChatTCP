@@ -16,9 +16,15 @@ namespace TCPPacket
 		{
 			base.packetType = PacketType.PACKET_MESSAGE;
 			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
+			this.username = clientSocket.username;
 			base.content = message;
 
 			this.Serialize();
+		}
+
+		public string Format(string message)
+		{
+			return $"{username}{Packet.field}{message}";
 		}
 
 		public void Handle()

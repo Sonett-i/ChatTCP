@@ -36,7 +36,16 @@ namespace TCPPacket
 
 		public static ConnectionPacket GetConnectionPacket(ClientSocket clientSocket, string[] blob)
 		{
-			ConnectionPacket conPacket = new ConnectionPacket(clientSocket, (ClientSocket.ConnectionState)int.Parse(blob[1]));
+			ConnectionPacket conPacket;
+			if (blob.Length > 2)
+			{
+				conPacket = new ConnectionPacket(clientSocket, (ClientSocket.ConnectionState)int.Parse(blob[1]), blob[2]);
+			}
+			else
+			{
+				conPacket = new ConnectionPacket(clientSocket, (ClientSocket.ConnectionState)int.Parse(blob[1]));
+			}
+			
 
 
 			return conPacket;

@@ -38,6 +38,11 @@ namespace TCPPacket
 		public void Send()
 		{
 			this.data = encoding.GetBytes(content);
+
+			if (this.data.Length > 4)
+			{
+
+			}
 			try
 			{
 				this.socket.Send(data, 0, data.Length, SocketFlags.None);
@@ -78,13 +83,22 @@ namespace TCPPacket
 			}
 		}
 
-		public static Packet Receive(ClientSocket sender, byte[] data)
+		public static List<Packet> Receive(ClientSocket sender, byte[] data)
 		{
-			Packet packet = PacketHandler.FromBytes(sender, data);
+			string[] rawPackets = Packet.encoding.GetString(data).Split(Packet.record);
+			List<Packet> packets = new List<Packet>();
 
-			PacketReceived?.Invoke(packet, sender);
+			foreach (string blob in rawPackets)
+			{
+				if (blob != "")
+				{
+					Packet packet = PacketHandler.FromBytes(sender, Packet.encoding.GetBytes(blob));
 
-			return packet;
+					PacketReceived?.Invoke(packet, sender);
+					packets.Add(packet);
+				}
+			}
+			return packets;
 		}
 	}
 }

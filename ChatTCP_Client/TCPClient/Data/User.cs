@@ -11,5 +11,7 @@ namespace TCPClient.Data
 		public string username;
 
 		public string password;
+
+
 	}
 }

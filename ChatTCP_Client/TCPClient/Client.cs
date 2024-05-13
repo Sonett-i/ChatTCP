@@ -102,10 +102,12 @@ namespace TCPClient
 			byte[] recBuffer = new byte[received];
 			Array.Copy(currentClientSocket.buffer, recBuffer, received);
 
-			Packet packet = Packet.Receive(currentClientSocket, recBuffer);
-
-			// To-do do stuff with packet
-			Client.Receive(currentClientSocket, packet);
+			List<Packet> packets = Packet.Receive(currentClientSocket, recBuffer);
+			
+			foreach (Packet packet in packets)
+			{
+				Client.Receive(currentClientSocket, packet);
+			}
 
 			//we just received a message from this socket, better keep an ear out with another thread for the next one
 			try

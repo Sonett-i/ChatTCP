@@ -58,6 +58,7 @@ namespace TCPPacket
 				{
 					{ ClientSocket.ConnectionState.STATE_DISCONNECTED, $"%i{Packet.field}%i{Packet.record}" },
 					{ ClientSocket.ConnectionState.STATE_AUTHORIZING, $"%i{Packet.field}%i{Packet.record}" },
+					//													type		subtype		username
 					{ ClientSocket.ConnectionState.STATE_AUTHORIZED, $"%i{Packet.field}%i{Packet.record}" },
 					{ ClientSocket.ConnectionState.STATE_CONNECTED, $"%i{Packet.field}%i{Packet.record}" },
 					{ ClientSocket.ConnectionState.STATE_CONNECTING, $"%i{Packet.field}%i{Packet.record}" },

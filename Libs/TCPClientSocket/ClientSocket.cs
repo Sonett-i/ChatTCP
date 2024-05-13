@@ -23,6 +23,7 @@ namespace TCPClientSocket
 		public ConnectionState connectionState = ConnectionState.STATE_DISCONNECTED;
 		public bool authorized = false;
 
+		// Events
 		public event EventHandler<ConnectionState> ConnectionStateChanged;
 		public event EventHandler<ConnectionState> ClientAuthorized;
 

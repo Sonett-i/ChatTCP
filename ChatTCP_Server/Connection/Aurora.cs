@@ -53,18 +53,21 @@ namespace ChatTCP.Connect
 			catch (SocketException)
 			{
 				currentClient.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_DISCONNECTED);
-				currentClient.clientSocket.socket.Close();
-				Server.RemoveClient(currentClient);
+
+				//Server.RemoveClient(currentClient);
 				return;
 			}
 
 			byte[] buffer = new byte[received];
 			Array.Copy(currentClient.clientSocket.buffer, buffer, received);
 
-			Packet packet = Packet.Receive(currentClient.clientSocket, buffer);
+			List<Packet> receivedPackets = Packet.Receive(currentClient.clientSocket, buffer);
 
-			Server.Receive(currentClient, packet);
-
+			foreach (Packet packet in receivedPackets)
+			{
+				Server.Receive(currentClient, packet);
+			}
+			
 			currentClient.clientSocket.socket.BeginReceive(currentClient.clientSocket.buffer, 0, ClientSocket.BUFFER_SIZE, SocketFlags.None, AuthReceiveCallback, currentClient);
 		}
 

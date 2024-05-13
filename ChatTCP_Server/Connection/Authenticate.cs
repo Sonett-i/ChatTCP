@@ -58,7 +58,7 @@ namespace ChatTCP.Connect
 					client.ID = (Int32) userData[0][0];
 					client.username = (string)userData[0][1];
 					client.secLevel = (Int16) userData[0][3];
-					result = $"User: {client.username} authenticated";
+					result = $"{client.username}";
 					client.clientSocket.username = client.username;
 					return true;
 				}
@@ -120,6 +120,8 @@ namespace ChatTCP.Connect
 				}
 				else
 				{
+					//ConnectionPacket.Send(client.clientSocket, client.username, ClientSocket.ConnectionState.STATE_AUTHORIZED);
+					AuthPacket.Send(client.clientSocket, client.username, "");
 					client.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_AUTHORIZED);
 				}
 			}
