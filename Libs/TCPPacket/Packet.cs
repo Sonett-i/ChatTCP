@@ -83,6 +83,7 @@ namespace TCPPacket
 			}
 		}
 
+		// sometimes we receive multiple packets in the same byte stream, so we need to split and return these packets.
 		public static List<Packet> Receive(ClientSocket sender, byte[] data)
 		{
 			string[] rawPackets = Packet.encoding.GetString(data).Split(Packet.record);

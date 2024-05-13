@@ -19,17 +19,33 @@ namespace TCPPacket
 			this.username = clientSocket.username;
 			base.content = message;
 
-			this.Serialize();
+			Serialize();
 		}
 
-		public string Format(string message)
+		public string MessageFormat(string message)
 		{
 			return $"{username}{Packet.field}{message}";
+		}
+
+		void Serialize()
+		{
+			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
+				(int)packetType,
+				(int)packetSubType,
+				username,
+				content);
+
+			content = serialized;
 		}
 
 		public void Handle()
 		{
 
+		}
+
+		public override string ToString()
+		{
+			return $"{this.userID}:{this.username}:{base.content}";
 		}
 	}
 }

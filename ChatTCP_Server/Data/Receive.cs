@@ -7,6 +7,7 @@ using ChatTCP.Data.Client;
 using TCPPacket;
 using TCPClientSocket;
 using ChatTCP.Connect;
+using ChatTCP.Logging;
 
 namespace ChatTCP
 {
@@ -55,7 +56,8 @@ namespace ChatTCP
 
 		public static void Receive(Client client, MessagePacket messagePacket)
 		{
-			messagePacket.username = client.username;
+			//messagePacket.username = client.username;
+			Log.Event(Log.LogType.LOG_MESSAGE, messagePacket.ToString());
 			Server.SendToAll(messagePacket);
 		}
 	}
