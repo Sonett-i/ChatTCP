@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using ChatTCP_Client.Events;
 using TCPPacket;
 using TCPClientSocket;
+using TCPClient.Data;
 
 namespace ChatTCP_Client
 {
@@ -29,15 +30,25 @@ namespace ChatTCP_Client
 			InitializeComponent();
 			tcpEventHandler = new TCPEvent() { activeText = chatEditBox};
 
-			Packet.PacketReceived += RegisterMessage;
+			Packet.PacketReceived += RegisterPacket;
+			Message.messageReceived += RegisterMessage;
 		}
 
-		public void RegisterMessage(object sender, ClientSocket client)
+		public void RegisterPacket(object sender, ClientSocket client)
 		{
 			Packet packet = (Packet)sender;
 			if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
 			{
 				AddToChat(packet.content);
+			}
+		}
+
+		public void RegisterMessage(object sender, Message message)
+		{
+			Packet packet = (Packet)sender;
+			if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
+			{
+				AddToChat(message.Format());
 			}
 		}
 

@@ -55,6 +55,7 @@ namespace ChatTCP
 
 		public static void Receive(Client client, MessagePacket messagePacket)
 		{
+			messagePacket.username = client.username;
 			Server.SendToAll(messagePacket);
 		}
 	}

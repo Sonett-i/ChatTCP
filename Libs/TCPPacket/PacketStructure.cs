@@ -65,12 +65,12 @@ namespace TCPPacket
 			},
 			{ Packet.PacketType.PACKET_MESSAGE, new Dictionary<Enum, string>
 				{									// type				subtype			sender
-					{ Packet.PacketSubType.MESSAGE_MESAGE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
-					{ Packet.PacketSubType.MESSAGE_BROADCAST, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.MESSAGE_MESAGE, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.MESSAGE_BROADCAST, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
 																										// commandID
-					{ Packet.PacketSubType.MESSAGE_COMMAND, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.MESSAGE_COMMAND, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%i{Packet.field}%s{Packet.record}" },
 																										// recipientID
-					{ Packet.PacketSubType.MESSAGE_WHISPER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.MESSAGE_WHISPER, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.field}%s{Packet.record}" },
 				}
 			},
 		};

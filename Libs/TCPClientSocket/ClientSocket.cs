@@ -18,6 +18,7 @@ namespace TCPClientSocket
 		public byte[] buffer = new byte[BUFFER_SIZE];
 
 		public int userID;
+		public string username;
 
 		public ConnectionState connectionState = ConnectionState.STATE_DISCONNECTED;
 		public bool authorized = false;

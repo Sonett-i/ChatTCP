@@ -141,6 +141,17 @@ namespace ChatTCP
 			}
 		}
 
+		public static Client GetClient(ClientSocket clientSocket)
+		{
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket == clientSocket)
+				{
+					return client;
+				}
+			}
+			return null;
+		}
 		public static void RemoveClient(Client client)
 		{
 			client.clientSocket.socket.Close();

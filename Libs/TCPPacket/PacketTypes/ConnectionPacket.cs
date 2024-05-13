@@ -19,13 +19,13 @@ namespace TCPPacket
 			this.Serialize();
 		}
 
-		public void Serialize()
+		new public void Serialize()
 		{
 			string serialize = Format.String(Packet.PacketFormat[packetType][this.connectionState], (int)this.packetType, (int)this.connectionState);
 			this.content = serialize;
 		}
 
-		new public static void Send(ClientSocket clientSocket, ClientSocket.ConnectionState connectionState)
+		public static void Send(ClientSocket clientSocket, ClientSocket.ConnectionState connectionState)
 		{
 			ConnectionPacket conPacket = new ConnectionPacket(clientSocket, connectionState);
 			conPacket.Send();
