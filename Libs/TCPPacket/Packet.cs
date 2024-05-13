@@ -39,10 +39,6 @@ namespace TCPPacket
 		{
 			this.data = encoding.GetBytes(content);
 
-			if (this.data.Length > 4)
-			{
-
-			}
 			try
 			{
 				this.socket.Send(data, 0, data.Length, SocketFlags.None);

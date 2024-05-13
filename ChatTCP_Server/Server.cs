@@ -121,7 +121,7 @@ namespace ChatTCP
 		{
 			foreach (Client client in Server.ConnectedClients)
 			{
-				if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_CONNECTED)
+				if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_AUTHORIZED)
 				{
 					packet.clientSocket = client.clientSocket;
 					packet.Send();
