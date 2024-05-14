@@ -67,7 +67,7 @@ namespace TCPPacket
 
 		public static MessagePacket GetMessagePacket(ClientSocket clientSocket, string[] blob)
 		{
-			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[3]);
+			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[2], blob[3]);
 
 			return messagePacket;
 		}

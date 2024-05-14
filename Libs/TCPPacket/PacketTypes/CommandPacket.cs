@@ -9,6 +9,12 @@ namespace TCPPacket
 {
 	public partial class CommandPacket : Packet
 	{
+		public enum CommandType
+		{
+			COMMAND_RESULT,
+			COMMAND_GAME,
+		}
+
 		public CommandPacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 

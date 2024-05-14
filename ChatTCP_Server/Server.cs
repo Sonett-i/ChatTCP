@@ -8,6 +8,7 @@ using ChatTCP.Data.Client;
 using ChatTCP.Data.Database;
 using TCPPacket;
 using TCPClientSocket;
+using ChatTCP_Server.Data.Game;
 
 
 namespace ChatTCP
@@ -32,6 +33,7 @@ namespace ChatTCP
 		public bool running = false;
 
 		public static List<Client> ConnectedClients = new List<Client>();
+		public static List<TicTacToe> CurrentGames = new List<TicTacToe>();
 		#endregion
 
 		#region Classes
@@ -123,8 +125,7 @@ namespace ChatTCP
 			{
 				if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_AUTHORIZED)
 				{
-					packet.clientSocket = client.clientSocket;
-					packet.Send();
+					Packet.Send(client.clientSocket, packet);
 				}
 			}
 		}
@@ -189,6 +190,59 @@ namespace ChatTCP
 			{
 				ConnectedClients.Add(client);
 			}
+		}
+
+		public static void AddNewGame(TicTacToe game)
+		{
+			if (!CurrentGames.Contains(game))
+			{
+				Log.Event(Log.LogType.LOG_EVENT, $"Game started between {game.playerA.clientSocket.username} and {game.playerB.clientSocket.username}");
+				CurrentGames.Add(game);
+			}
+		}
+
+		public static void RemoveGame(TicTacToe game)
+		{
+			if (CurrentGames.Contains(game))
+			{
+				CurrentGames.Remove(game);
+			}
+		}
+
+		public static bool CurrentlyPlaying(ClientSocket player)
+		{
+			foreach (TicTacToe game in CurrentGames)
+			{
+				if (player == game.playerA.clientSocket || player == game.playerB.clientSocket)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static int GetNewGameID()
+		{
+			int ID = 0;
+			foreach (TicTacToe game in CurrentGames)
+			{
+				ID = game.gameID;
+			}
+
+			return ID + 1;
+		}
+
+		public static ClientSocket GetClientSocket(string username)
+		{
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket.username == username)
+				{
+					return client.clientSocket;
+				}
+			}
+
+			return null;
 		}
 		#endregion
 

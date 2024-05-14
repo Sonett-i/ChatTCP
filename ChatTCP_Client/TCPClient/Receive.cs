@@ -10,6 +10,12 @@ namespace TCPClient
 {
 	public partial class Client
 	{
+		// Event handlers
+
+		public static event EventHandler<MessagePacket> MessageReceived;
+		public static event EventHandler<GamePacket> GameStateReceived;
+
+
 		public static void Receive(ClientSocket client, Packet packet)
 		{
 			if (packet.packetType == Packet.PacketType.PACKET_ACK)
@@ -31,6 +37,10 @@ namespace TCPClient
 			else if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
 			{
 				Receive(client, (MessagePacket)packet);
+			}
+			else if (packet.packetType == Packet.PacketType.PACKET_GAME)
+			{
+				Receive(client, (GamePacket)packet);
 			}
 		}
 
@@ -58,7 +68,12 @@ namespace TCPClient
 
 		public static void Receive(ClientSocket client, MessagePacket messagePacket)
 		{
+			MessageReceived.Invoke(client, messagePacket);
+		}
 
+		public static void Receive(ClientSocket client, GamePacket gamePacket)
+		{
+			GameStateReceived.Invoke(client, gamePacket);
 		}
 	}
 }

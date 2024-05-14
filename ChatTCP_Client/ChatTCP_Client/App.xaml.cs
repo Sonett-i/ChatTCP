@@ -19,7 +19,7 @@ namespace ChatTCP_Client
 	public partial class App : Application
 	{
 		public static User currentUser;
-		public static ClientSocket currentClient;
+
 		public static Client tcpClient;// = Client.CreateInstance(ClientConfig.defaultPort, ClientConfig.defaultPort, ClientConfig.defaultServer);
 
 		public static TCPEvent eventHandler;

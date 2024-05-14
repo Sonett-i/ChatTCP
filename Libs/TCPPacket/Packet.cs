@@ -49,6 +49,20 @@ namespace TCPPacket
 			}
 		}
 
+		public static void Send(ClientSocket clientSocket, Packet packet)
+		{
+			byte[] data = encoding.GetBytes(packet.content);
+			try
+			{
+				clientSocket.socket.Send(data, 0, data.Length, SocketFlags.None);
+			}
+			catch
+			{
+
+			}
+			
+		}
+
 		public void Serialize()
 		{
 			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],

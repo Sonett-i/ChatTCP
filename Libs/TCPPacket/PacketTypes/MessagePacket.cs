@@ -12,16 +12,34 @@ namespace TCPPacket
 	{
 		public int userID;
 		public string username;
+		public string message;
+
 		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 			base.packetType = PacketType.PACKET_MESSAGE;
 			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
 			this.username = clientSocket.username;
 			base.content = message;
-
+			this.message = GetMessage(message);
 			Serialize();
 		}
 
+		public MessagePacket(ClientSocket clientSocket, int sender, string username, string message) : base(clientSocket, sender)
+		{
+			base.packetType = PacketType.PACKET_MESSAGE;
+			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
+			this.username = username;
+			base.content = message;
+			this.message = GetMessage(message);
+			Serialize();
+		}
+
+		string GetMessage(string content)
+		{
+			string[] blob = content.Split(Packet.field);
+
+			return content;
+		}
 		public string MessageFormat(string message)
 		{
 			return $"{username}{Packet.field}{message}";
@@ -46,6 +64,11 @@ namespace TCPPacket
 		public override string ToString()
 		{
 			return $"{this.userID}:{this.username}:{base.content}";
+		}
+
+		public string FormatMessage()
+		{
+			return $"[{this.username}]: {this.message}";
 		}
 	}
 }

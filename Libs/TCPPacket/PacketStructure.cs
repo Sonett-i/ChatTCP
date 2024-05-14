@@ -24,7 +24,8 @@ namespace TCPPacket
 			PACKET_ACK,
 			PACKET_CONNECTION,
 			PACKET_COMMAND,
-			PACKET_MESSAGE
+			PACKET_MESSAGE,
+			PACKET_GAME,
 		}
 		public enum PacketSubType
 		{
@@ -36,17 +37,22 @@ namespace TCPPacket
 			MESSAGE_MESAGE,
 			MESSAGE_BROADCAST,
 			MESSAGE_WHISPER,
-			MESSAGE_COMMAND
+			MESSAGE_COMMAND,
+			GAME_START,
+			GAME_MOVE,
+			GAME_RESULT
 		}
 
 		public static Dictionary<Packet.PacketType, Dictionary<Enum, string>> PacketFormat = new Dictionary<Packet.PacketType, Dictionary<Enum, string>>()
 		{
+			// Auth Packet Structure
 			{ Packet.PacketType.PACKET_AUTH, new Dictionary<Enum, string>
 				{
 					{ Packet.PacketSubType.AUTH_AUTHORIZE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.AUTH_REGISTER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
+			// Acknowledge packet Structure
 			{ Packet.PacketType.PACKET_ACK, new Dictionary<Enum, string>
 				{
 					{ Packet.PacketSubType.ACK_ACK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
@@ -54,6 +60,7 @@ namespace TCPPacket
 					{ Packet.PacketSubType.ACK_NAK, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},
+			// Connection State packet structure
 			{ Packet.PacketType.PACKET_CONNECTION, new Dictionary<Enum, string>
 				{
 					{ ClientSocket.ConnectionState.STATE_DISCONNECTED, $"%i{Packet.field}%i{Packet.record}" },
@@ -64,6 +71,7 @@ namespace TCPPacket
 					{ ClientSocket.ConnectionState.STATE_CONNECTING, $"%i{Packet.field}%i{Packet.record}" },
 				}
 			},
+			// Message packet structure
 			{ Packet.PacketType.PACKET_MESSAGE, new Dictionary<Enum, string>
 				{									// type				subtype			sender
 					{ Packet.PacketSubType.MESSAGE_MESAGE, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
@@ -72,6 +80,21 @@ namespace TCPPacket
 					{ Packet.PacketSubType.MESSAGE_COMMAND, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%i{Packet.field}%s{Packet.record}" },
 																										// recipientID
 					{ Packet.PacketSubType.MESSAGE_WHISPER, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.field}%s{Packet.record}" },
+				}
+			},
+			// Game packet structure
+
+			/*
+			 * 
+			 * 
+			 */
+
+			{ Packet.PacketType.PACKET_GAME, new Dictionary<Enum, string>
+				{
+													// type,	subtype,	gameID,	player1,	player2
+					{ Packet.PacketSubType.GAME_START, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.GAME_MOVE, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.GAME_RESULT, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
 				}
 			},
 		};

@@ -16,6 +16,7 @@ using ChatTCP_Client.Events;
 using TCPPacket;
 using TCPClientSocket;
 using TCPClient.Data;
+using TCPClient;
 
 namespace ChatTCP_Client
 {
@@ -31,7 +32,12 @@ namespace ChatTCP_Client
 			tcpEventHandler = new TCPEvent() { activeText = chatEditBox};
 
 			Packet.PacketReceived += RegisterPacket;
-			Message.messageReceived += RegisterMessage;
+			Client.MessageReceived += MessageEvents;
+			Client.GameStateReceived += GameEvents;
+
+			UsernameLabel.Content = App.tcpClient.clientSocket.username;
+
+			messageInput.Focus();
 		}
 
 		public void RegisterPacket(object sender, ClientSocket client)
@@ -39,7 +45,7 @@ namespace ChatTCP_Client
 			Packet packet = (Packet)sender;
 			if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
 			{
-				AddToChat(packet.content);
+				//AddToChat(packet.content);
 			}
 		}
 
@@ -58,9 +64,14 @@ namespace ChatTCP_Client
 			{
 				string _message = messageInput.Text;
 
+				HandleInput(messageInput.Text);
+
 				MessagePacket message = new MessagePacket(App.tcpClient.clientSocket, App.tcpClient.clientSocket.userID, _message);
 
 				message.Send();
+
+				messageInput.Text = "";
+				messageInput.Focus();
 			}
 		}
 
@@ -69,8 +80,72 @@ namespace ChatTCP_Client
 		{
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				chatEditBox.AppendText("\n" + text);
+				chatEditBox.AppendText(text + "\n");
 			});
+		}
+
+		void HandleInput(string text)
+		{
+			
+		}
+
+		void MessageEvents(object sender, MessagePacket packet)
+		{
+			AddToChat(packet.FormatMessage());
+		}
+
+		void GameEvents(object sender, GamePacket packet)
+		{
+
+		}
+		private void t00_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(0, 0);
+		}
+
+		private void t01_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(0, 1);
+		}
+
+		private void t02_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(0, 2);
+		}
+
+		private void t10_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(1, 0);
+		}
+
+		private void t11_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(1, 1);
+		}
+
+		private void t12_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(1, 2);
+		}
+
+		private void t20_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(2, 0);
+		}
+
+		private void t21_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(2, 1);
+		}
+
+		private void t22_Click(object sender, RoutedEventArgs e)
+		{
+			GameMove(2, 2);
+		}
+
+		void GameMove(int x, int y)
+		{
+
 		}
 	}
 }

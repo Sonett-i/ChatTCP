@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChatTCP.Data.Client;
+using ChatTCP_Server.Data;
 using TCPPacket;
 using TCPClientSocket;
 using ChatTCP.Connect;
@@ -58,7 +59,21 @@ namespace ChatTCP
 		{
 			//messagePacket.username = client.username;
 			Log.Event(Log.LogType.LOG_MESSAGE, messagePacket.ToString());
-			Server.SendToAll(messagePacket);
+
+			// check if message is command
+			if (messagePacket.message[0] == Commands.CommandChar)
+			{
+				Commands.HandleCommand(messagePacket);
+			}
+			else
+			{
+				Server.SendToAll(messagePacket);
+			}
+		}
+
+		public static void Receive(Client client, GamePacket gamePacket)
+		{
+			Log.Event(Log.LogType.LOG_PACKET, gamePacket.ToString());
 		}
 	}
 }
