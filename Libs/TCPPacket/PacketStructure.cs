@@ -91,10 +91,10 @@ namespace TCPPacket
 
 			{ Packet.PacketType.PACKET_GAME, new Dictionary<Enum, string>
 				{
-													// type,	subtype,	gameID,	player1,	player2
-					{ Packet.PacketSubType.GAME_START, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
-					{ Packet.PacketSubType.GAME_MOVE, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
-					{ Packet.PacketSubType.GAME_RESULT, $"%i{Packet.field}%i{Packet.field}%s{Packet.field}%s{Packet.record}" },
+													// type,	subtype,	gameID,	gameinfo
+					{ Packet.PacketSubType.GAME_START, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.GAME_MOVE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.GAME_RESULT, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 				}
 			},
 		};

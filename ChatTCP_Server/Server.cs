@@ -8,7 +8,7 @@ using ChatTCP.Data.Client;
 using ChatTCP.Data.Database;
 using TCPPacket;
 using TCPClientSocket;
-using ChatTCP_Server.Data.Game;
+using ChatTCP.Data.Game;
 
 
 namespace ChatTCP
@@ -242,6 +242,18 @@ namespace ChatTCP
 				}
 			}
 
+			return null;
+		}
+
+		public static TicTacToe GetGame(int ID)
+		{
+			foreach(TicTacToe game in CurrentGames)
+			{
+				if (game.gameID == ID)
+				{
+					return game;
+				}
+			}
 			return null;
 		}
 		#endregion

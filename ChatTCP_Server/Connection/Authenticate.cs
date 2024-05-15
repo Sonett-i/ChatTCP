@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ChatTCP.Data.Database;
 using ChatTCP.Data.Client;
 using ChatTCP.Logging;
-
 using TCPPacket;
 using TCPClientSocket;
 using Libs.Formatting;
@@ -84,10 +83,12 @@ namespace ChatTCP.Connect
 			}
 
 			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, (Int64)1));
+			Query playerScoresQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER_SCORES, newID, 0, 0, 0));
 
 			Log.Event(Log.LogType.LOG_EVENT, $"{client.clientSocket.socket.RemoteEndPoint.ToString()} registered as new user: {packet.username}");
 			
 			Server.database.Query(insertQuery);
+			Server.database.Query(playerScoresQuery);
 			result = "Registered new user: " + packet.username;
 
 			return false;

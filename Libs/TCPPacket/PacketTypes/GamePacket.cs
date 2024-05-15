@@ -15,10 +15,13 @@ namespace TCPPacket
 		public string opponent;
 		public string gameInfo;
 
-		public GamePacket(ClientSocket clientSocket, PacketSubType subType, int gameID) : base(clientSocket, -1)
+		public GamePacket(ClientSocket clientSocket, PacketSubType subType, int gameID, string gameInfo) : base(clientSocket, -1)
 		{
 			base.packetType = PacketType.PACKET_GAME;
 			base.packetSubType = subType;
+			this.gameID = gameID;
+			this.gameInfo = gameInfo;
+			this.Serialize();
 		}
 
 		public static void Send(ClientSocket clientSocket, PacketSubType subType, params object[] args)
@@ -26,14 +29,15 @@ namespace TCPPacket
 			string format = "";
 		}
 
+		public static void Send(ClientSocket clientSocket, PacketSubType subType, int gameID, string message)
+		{
+			GamePacket gamePacket = new GamePacket(clientSocket, subType, gameID, message);
+
+			gamePacket.Send();
+		}
+
 		// To do 
 
-
-		public void Serialize(string format, params object[] args)
-		{
-			string serialized = Format.String(format, args);
-			base.content = serialized;
-		}
 
 		public void Serialize()
 		{
@@ -44,10 +48,6 @@ namespace TCPPacket
 				gameInfo);
 
 			base.content = serialized;
-		}
-		public static GamePacket Receive(string[] blob)
-		{
-			return null;
 		}
 	}
 }

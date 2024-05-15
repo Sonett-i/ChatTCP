@@ -9,6 +9,7 @@ using TCPPacket;
 using TCPClientSocket;
 using ChatTCP.Connect;
 using ChatTCP.Logging;
+using ChatTCP.Data.Game;
 
 namespace ChatTCP
 {
@@ -37,6 +38,10 @@ namespace ChatTCP
 			else if (packet.packetType == Packet.PacketType.PACKET_MESSAGE)
 			{
 				Receive(client, (MessagePacket)packet);
+			}
+			else if (packet.packetType == Packet.PacketType.PACKET_GAME)
+			{
+				Receive(client, (GamePacket)packet);
 			}
 		}
 
@@ -73,7 +78,8 @@ namespace ChatTCP
 
 		public static void Receive(Client client, GamePacket gamePacket)
 		{
-			Log.Event(Log.LogType.LOG_PACKET, gamePacket.ToString());
+			Log.Event(Log.LogType.LOG_PACKET, gamePacket.content);
+			Game.ReceiveInfo(gamePacket);
 		}
 	}
 }

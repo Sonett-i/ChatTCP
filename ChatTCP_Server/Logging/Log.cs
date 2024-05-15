@@ -17,7 +17,8 @@ namespace ChatTCP.Logging
 			LOG_EVENT,
 			LOG_MESSAGE,
 			LOG_PACKET,
-			LOG_COMMAND
+			LOG_COMMAND,
+			LOG_GAME,
 		}
 
 		public static Dictionary<LogType, string> logStrings = new Dictionary<LogType, string>() 
@@ -28,6 +29,7 @@ namespace ChatTCP.Logging
 			[LogType.LOG_MESSAGE] = "MESSAGE",
 			[LogType.LOG_COMMAND] = "COMMAND",
 			[LogType.LOG_PACKET] = "PACKET",
+			[LogType.LOG_GAME] =  "GAME",
 		};
 
 		DateTime timestamp;

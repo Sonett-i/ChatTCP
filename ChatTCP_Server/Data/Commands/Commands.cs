@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ChatTCP;
 using TCPClientSocket;
 using TCPPacket;
-using ChatTCP_Server.Data.Game;
+using ChatTCP.Data.Game;
 
 namespace ChatTCP_Server.Data
 {
@@ -30,6 +30,7 @@ namespace ChatTCP_Server.Data
 			//tictactoe
 			COMMAND_INVITE,
 			COMMAND_STOPGAME,
+			COMMAND_GAMESTATS,
 			COMMAND_INVALID
 		}
 
@@ -48,6 +49,7 @@ namespace ChatTCP_Server.Data
 			["mods"] = ChatCommand.COMMAND_MODS,
 			["invite"] = ChatCommand.COMMAND_INVITE,
 			["stop"] = ChatCommand.COMMAND_STOPGAME,
+			["stats"] = ChatCommand.COMMAND_GAMESTATS,
 		};
 
 		public static Dictionary<ChatCommand, string> commandDetails = new Dictionary<ChatCommand, string>()
@@ -65,6 +67,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_MODS] = "List available moderators",
 			[ChatCommand.COMMAND_INVITE] = "Invite player to play tic tac toe",
 			[ChatCommand.COMMAND_STOPGAME] = "Stop playing tic tac toe",
+			[ChatCommand.COMMAND_GAMESTATS] = "Display your tictactoe game stats",
 		};
 
 		public delegate CommandPacket CommandDelegate(CommandPacket message, string[] args);
@@ -85,6 +88,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_MODS] = (message, args) => Placeholder(message),
 			[ChatCommand.COMMAND_INVITE] = (message, args) => Invite(message, args),
 			[ChatCommand.COMMAND_STOPGAME] = (message, args) => StopGame(message),
+			[ChatCommand.COMMAND_GAMESTATS] = (message, args) => GameStats(message),
 		};
 
 
@@ -148,7 +152,8 @@ namespace ChatTCP_Server.Data
 		{
 			ClientSocket opponent = Server.GetClientSocket(args[1]);
 
-			if (opponent == null)
+			// if opponent is null, or opponent is the same player as inviter, do not proceed.
+			if (opponent == null || opponent.username == message.clientSocket.username)
 				return null;
 
 			TicTacToe game = TicTacToe.NewGame(message.clientSocket, opponent);
@@ -164,6 +169,12 @@ namespace ChatTCP_Server.Data
 
 		public static CommandPacket StopGame(CommandPacket message)
 		{
+			return message;
+		}
+
+		public static CommandPacket GameStats(CommandPacket message)
+		{
+
 			return message;
 		}
 		//void methods for commands

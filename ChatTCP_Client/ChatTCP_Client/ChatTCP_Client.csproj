@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="TicTacToe\" />
   </ItemGroup>
 
 </Project>

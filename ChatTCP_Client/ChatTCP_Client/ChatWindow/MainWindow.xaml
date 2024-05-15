@@ -31,6 +31,10 @@
                         <Label x:Name="opponentName" Content="" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
+                        <Label Content="Turn:"></Label>
+                        <Label x:Name="playerTurn" Content="" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Label x:Name="gameLog" Content="not currently playing" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">

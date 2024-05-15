@@ -23,7 +23,7 @@ namespace ChatTCP.Data.Database
 		public static Dictionary<DatabaseTable, string> DatabaseTables = new Dictionary<DatabaseTable, string>()
 		{ 
 			[DatabaseTable.TABLE_USERS] = "users",
-			[DatabaseTable.TABLE_GAMESCORES] = "gamescores"
+			[DatabaseTable.TABLE_GAMESCORES] = "scores"
 		};
 	}
 }

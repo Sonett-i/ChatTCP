@@ -17,6 +17,7 @@ using TCPPacket;
 using TCPClientSocket;
 using TCPClient.Data;
 using TCPClient;
+using ChatTCP_Client.TicTacToe;
 
 namespace ChatTCP_Client
 {
@@ -26,6 +27,7 @@ namespace ChatTCP_Client
 	public partial class MainWindow : Window
 	{
 		TCPEvent tcpEventHandler;
+		Game game;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -38,6 +40,25 @@ namespace ChatTCP_Client
 			UsernameLabel.Content = App.tcpClient.clientSocket.username;
 
 			messageInput.Focus();
+
+
+			game = new Game();
+
+			// Add game buttons to game class
+			game.gameButtons.Add(t00);
+			game.gameButtons.Add(t01);
+			game.gameButtons.Add(t02);
+			game.gameButtons.Add(t10);
+			game.gameButtons.Add(t11);
+			game.gameButtons.Add(t12);
+			game.gameButtons.Add(t20);
+			game.gameButtons.Add(t21);
+			game.gameButtons.Add(t22);
+
+			game.opponentLabel = opponentName;
+			game.gameLog = gameLog;
+			game.turnLabel = playerTurn;
+
 		}
 
 		public void RegisterPacket(object sender, ClientSocket client)
@@ -94,10 +115,13 @@ namespace ChatTCP_Client
 			AddToChat(packet.FormatMessage());
 		}
 
+		char field = (char)31;
 		void GameEvents(object sender, GamePacket packet)
 		{
-
+			string[] gameBlob = packet.gameInfo.Split(field.ToString());
+			game.ReceiveInfo(packet.packetSubType, packet.gameID, gameBlob);
 		}
+
 		private void t00_Click(object sender, RoutedEventArgs e)
 		{
 			GameMove(0, 0);
@@ -145,7 +169,7 @@ namespace ChatTCP_Client
 
 		void GameMove(int x, int y)
 		{
-
+			game.Move(x, y);
 		}
 	}
 }

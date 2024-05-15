@@ -16,7 +16,8 @@ namespace TCPPacket
 			[Packet.PacketType.PACKET_AUTH] = (clientSocket, args) => GetAuthPacket(clientSocket, args),
 			[Packet.PacketType.PACKET_ACK] = (clientSocket, args) => GetAckPacket(clientSocket, args),
 			[Packet.PacketType.PACKET_MESSAGE] = (clientSocket, args) => GetMessagePacket(clientSocket, args),
-			[Packet.PacketType.PACKET_CONNECTION] = (clientSocket, args) => GetConnectionPacket(clientSocket, args)
+			[Packet.PacketType.PACKET_CONNECTION] = (clientSocket, args) => GetConnectionPacket(clientSocket, args),
+			[Packet.PacketType.PACKET_GAME] = (clientSocket, args) => GetGamePacket(clientSocket, args)
 		};
 
 		public static Packet FromBytes(ClientSocket clientSocket, byte[] buffer)
@@ -70,6 +71,18 @@ namespace TCPPacket
 			MessagePacket messagePacket = new MessagePacket(clientSocket, clientSocket.userID, blob[2], blob[3]);
 
 			return messagePacket;
+		}
+
+		public static GamePacket GetGamePacket(ClientSocket clientSocket, string[] blob)
+		{
+			if (blob.Length > 0)
+			{
+				GamePacket gamePacket = new GamePacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), blob[3]);
+
+				return gamePacket;
+			}
+			
+			return null;
 		}
 	}
 }
