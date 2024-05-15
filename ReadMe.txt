@@ -16,18 +16,30 @@ MySQL 8.0
 
 ==Database Setup==
 
+Server requires user: 
+username: ChatTCP
+password: none
+
+For security, only permit connections from localhost.
+
 In MySQL Workbench:
 1. Database User Setup
 	1.1 Create Database user with username: ChatTCP, with no password. Limit connections to localhost
 	2. Make sure it has access to schema privileges SELECT, INSERT, UPDATE, DELETE.
 2. Database Setup
-	1.1 Run the MySQL\Create.sql file, and ensure no errors.
+	2.1 Run the MySQL\Create.sql file, and ensure no errors.
 
 
-Server Setup
 
-in server\bin
 
-Set-Up
+==Running Server==
 
-1. Set up Database
+run \server\bin\ChatTCP_Console.exe
+
+Common errors include:
+	Invalid Database Configuration: Read Supplied Exception Errors
+		If database user fails to authenticate, error should read something like: unable to authenticate (using password: true/false) etc. Consult MySQL Workbench->Server->Users and Privileges and ensure user has required permissions.
+
+
+==Running Client==
+run \client\bin\ChatTCP_Client.exe
