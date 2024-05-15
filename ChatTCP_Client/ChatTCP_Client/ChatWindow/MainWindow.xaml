@@ -59,7 +59,7 @@
             <!-- Chat Input -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" Width="750" Height="30" ClipToBounds="True" Margin="0,10,0,5">
                 <TextBox Name="messageInput" TextWrapping="Wrap" Text="" Width="650" Height="28" FontFamily="Comic Sans MS" TextAlignment="Left" KeyDown="sendMessage" />
-                <Button x:Name="messageSendButton" Content="Send" Width="80" Margin="20,0,20,0" />
+                <Button x:Name="messageSendButton" Content="Send" Width="80" Margin="20,0,20,0" Click="messageSendButton_Click" />
             </StackPanel>
             
         </StackPanel>

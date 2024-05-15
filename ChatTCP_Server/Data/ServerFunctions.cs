@@ -43,8 +43,6 @@ namespace ChatTCP
 
 		public static void Broadcast(ClientSocket sender, string message)
 		{
-			string broadcast = "";
-
 			foreach (Client client in Server.ConnectedClients)
 			{
 				if (client.clientSocket != sender)
@@ -56,6 +54,21 @@ namespace ChatTCP
 				}
 			}
 		}
+
+		public static void Broadcast(string message)
+		{
+			string broadcast = "";
+
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_AUTHORIZED)
+				{
+					CommandPacket.Send(client.clientSocket, message);
+				}
+			}
+		}
+
+
 
 		public static void Joined(ClientSocket socket)
 		{

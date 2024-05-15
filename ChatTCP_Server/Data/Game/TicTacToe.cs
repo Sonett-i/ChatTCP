@@ -182,6 +182,7 @@ namespace ChatTCP.Data.Game
 			if (gameResult != 0)
 			{
 				EndGame(gameResult);
+				return;
 			}
 
 			if (player == playerA)
@@ -230,23 +231,28 @@ namespace ChatTCP.Data.Game
 
 		void EndGame(int result)
 		{
+			string announcement = "";
 			if (result == -1)
 			{
 				GameStats.Draw(playerA);
 				GameStats.Draw(playerB);
+				announcement = $"{playerA.clientSocket.displayName} drew with {playerB.clientSocket.displayName} in a game of Tic Tac Toe!";
 			}
 
 			if (playerA.ID == result)
 			{
 				GameStats.Win(playerA);
 				GameStats.Lose(playerB);
+				announcement = $"{playerA.clientSocket.displayName} beat {playerB.clientSocket.displayName} in a game of Tic Tac Toe!";
 			}
 			else if (playerB.ID == result)
 			{
 				GameStats.Win(playerB);
 				GameStats.Lose(playerA);
+				announcement = $"{playerB.clientSocket.displayName} beat {playerA.clientSocket.displayName} in a game of Tic Tac Toe!";
 			}
 
+			Server.Broadcast(announcement);
 			GameStats.UpdateStats(playerA);
 			GameStats.UpdateStats(playerB);
 
@@ -288,12 +294,6 @@ namespace ChatTCP.Data.Game
 
 			GamePacket.Send(player.clientSocket, Packet.PacketSubType.GAME_START, gameID, output);
 		}
-
-		void SendTurnInfo()
-		{
-
-		}
-
 
 		// Pathfinding algo?
 		public int Validate(int player)
