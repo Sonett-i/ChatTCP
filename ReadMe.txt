@@ -8,6 +8,8 @@ Version: 2.0.0
 Source code is located in folders named \src\
 Binary executables are located in folders named \bin\
 
+Registering new accounts with the usernames: Sam, Sabira, or Robert will result in them automatically being made moderators.
+
 ==Requirements==
 
 MySQL 8.0
