@@ -27,7 +27,7 @@ namespace ChatTCP_Server.Data
 			COMMAND_COMMANDS,
 			COMMAND_HELP,
 			COMMAND_KICK,
-			//tictactoe
+			//	tictactoe
 			COMMAND_INVITE,
 			COMMAND_STOPGAME,
 			COMMAND_GAMESTATS,
@@ -50,6 +50,7 @@ namespace ChatTCP_Server.Data
 			["invite"] = ChatCommand.COMMAND_INVITE,
 			["stop"] = ChatCommand.COMMAND_STOPGAME,
 			["stats"] = ChatCommand.COMMAND_GAMESTATS,
+
 		};
 
 		public static Dictionary<ChatCommand, string> commandDetails = new Dictionary<ChatCommand, string>()
@@ -78,7 +79,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_WHO] = (message, args) => Placeholder(message),
 			[ChatCommand.COMMAND_USERNAME] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_USERINFO] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_ABOUT] = (message, args) => Placeholder(message),
+			[ChatCommand.COMMAND_ABOUT] = (message, args) => About(message),
 			[ChatCommand.COMMAND_WHISPER] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_PROMOTE] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_DEMOTE] = (message, args) => Placeholder(message, args),
@@ -90,7 +91,6 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_STOPGAME] = (message, args) => StopGame(message),
 			[ChatCommand.COMMAND_GAMESTATS] = (message, args) => GameStats(message),
 		};
-
 
 		// iterates through commandStrings dictionary and returns enum if match.
 		public static ChatCommand CommandFromString(string input)
@@ -147,7 +147,12 @@ namespace ChatTCP_Server.Data
 			return message;
 		}
 
-		
+		public static CommandPacket About(CommandPacket message)
+		{
+			string result = $"Welcome to ChatTCP, {message.clientSocket.username}. For help, type {Commands.CommandChar}help";
+			CommandPacket.Send(message.clientSocket, result);
+			return message;
+		}
 		public static CommandPacket Invite(CommandPacket message, string[] args)
 		{
 			ClientSocket opponent = Server.GetClientSocket(args[1]);
@@ -181,8 +186,5 @@ namespace ChatTCP_Server.Data
 			CommandPacket.Send(message.clientSocket, result);
 			return message;
 		}
-		//void methods for commands
-
-		// Start on tictactoe
 	}
 }

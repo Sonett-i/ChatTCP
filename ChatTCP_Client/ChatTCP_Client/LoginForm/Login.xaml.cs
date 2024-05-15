@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TCPPacket;
 using ChatTCP_Client.Events;
+using TCPClient;
 using TCPClientSocket;
 
 
@@ -40,6 +41,8 @@ namespace ChatTCP_Client.LoginForm
 			Connect();
 			//Packet.PacketReceived += RegisterMessage;
 			App.tcpClient.clientSocket.ClientAuthorized += ConState;
+
+			Client.CommandReceived += AuthUpdate;
 			//App.tcpClient.clientSocket.ConnectionStateChanged += ChatTCP_Client.App.
 		}
 
@@ -49,6 +52,11 @@ namespace ChatTCP_Client.LoginForm
 			{
 				App.ChangeWindow(App.Screen.SCREEN_MAIN);
 			}
+		}
+
+		void AuthUpdate(object sender, CommandPacket packet)
+		{
+			App.output.SetLabel(loginResult, packet.result);
 		}
 
 		public void RegisterMessage(object sender, ClientSocket client)

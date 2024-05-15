@@ -15,6 +15,8 @@ namespace TCPClient
 		public static event EventHandler<MessagePacket> MessageReceived;
 		public static event EventHandler<GamePacket> GameStateReceived;
 		public static event EventHandler<CommandPacket> CommandReceived;
+		public static event EventHandler<AuthPacket> AuthReceived;
+		public static event EventHandler<AckPacket> AckReceived;
 
 
 		public static void Receive(ClientSocket client, Packet packet)
@@ -48,13 +50,15 @@ namespace TCPClient
 
 		public static void Receive(ClientSocket client, AckPacket ackPacket)
 		{
-
+			//AckReceived.Invoke(client, ackPacket);
 		}
 
 		public static void Receive(ClientSocket client, AuthPacket authPacket)
 		{
 			if (authPacket.packetSubType == Packet.PacketSubType.AUTH_AUTHORIZE)
 				client.username = authPacket.username;
+
+			//AuthReceived.Invoke(client, authPacket);
 		}
 
 		public static void Receive(ClientSocket client, CommandPacket commandPacket)

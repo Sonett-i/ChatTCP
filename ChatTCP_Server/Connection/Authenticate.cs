@@ -41,6 +41,18 @@ namespace ChatTCP.Connect
 			if (!UserExists(packet.username))
 			{
 				result = "User does not exist";
+				CommandPacket.Send(client.clientSocket, "Invalid Username");
+				return false;
+			}
+
+			// is user already logged in?
+			ClientSocket existing = Server.GetClientSocket(packet.username);
+
+			if (existing != null)
+			{
+				result = "user already logged in";
+				CommandPacket.Send(client.clientSocket, "User already logged in");
+
 				return false;
 			}
 
@@ -72,6 +84,7 @@ namespace ChatTCP.Connect
 			if (UserExists(packet.username))
 			{
 				result = "Registration failed: user exists.";
+				CommandPacket.Send(client.clientSocket, $"User {packet.username} already exists");
 				return false;
 			}
 
@@ -79,7 +92,8 @@ namespace ChatTCP.Connect
 
 			if (newID < 1)
 			{
-				result = "Registration failed: user exists";
+				result = "Registration failed: invalid ID";
+				CommandPacket.Send(client.clientSocket, "Invalid ID");
 				return false;
 			}
 

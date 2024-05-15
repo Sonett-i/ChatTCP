@@ -256,6 +256,16 @@ namespace ChatTCP
 			}
 			return null;
 		}
+
+		public static void Kick(string user)
+		{
+			Client client = Server.GetClient(Server.GetClientSocket(user));
+
+			if (client != null)
+			{
+				RemoveClient(client);
+			}
+		}
 		#endregion
 
 	}

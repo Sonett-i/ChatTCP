@@ -60,6 +60,12 @@ namespace ChatTCP_Client
 			game.gameLog = gameLog;
 			game.turnLabel = playerTurn;
 
+
+			//Send Hi message
+
+			MessagePacket message = new MessagePacket(App.tcpClient.clientSocket, App.tcpClient.clientSocket.userID, "/about");
+
+			message.Send();
 		}
 
 		public void RegisterPacket(object sender, ClientSocket client)
