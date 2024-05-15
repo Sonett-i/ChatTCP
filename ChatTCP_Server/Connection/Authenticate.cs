@@ -59,6 +59,7 @@ namespace ChatTCP.Connect
 					client.secLevel = (Int16) userData[0][3];
 					result = $"{client.username}";
 					client.clientSocket.username = client.username;
+					client.clientSocket.userID = client.ID;
 					return true;
 				}
 			}

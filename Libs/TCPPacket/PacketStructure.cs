@@ -40,7 +40,8 @@ namespace TCPPacket
 			MESSAGE_COMMAND,
 			GAME_START,
 			GAME_MOVE,
-			GAME_RESULT
+			GAME_RESULT,
+			COMMAND_RESULT
 		}
 
 		public static Dictionary<Packet.PacketType, Dictionary<Enum, string>> PacketFormat = new Dictionary<Packet.PacketType, Dictionary<Enum, string>>()
@@ -88,7 +89,12 @@ namespace TCPPacket
 			 * 
 			 * 
 			 */
-
+			{ Packet.PacketType.PACKET_COMMAND, new Dictionary<Enum, string>
+				{
+													// type,	subtype,	gameID,	gameinfo
+					{ Packet.PacketSubType.COMMAND_RESULT, $"%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+				}
+			},
 			{ Packet.PacketType.PACKET_GAME, new Dictionary<Enum, string>
 				{
 													// type,	subtype,	gameID,	gameinfo

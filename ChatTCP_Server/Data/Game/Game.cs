@@ -38,7 +38,20 @@ namespace ChatTCP.Data.Game
 
 		public static string[] GetStats(ClientSocket clientSocket)
 		{
-			return new string[] { "winds", "losds", "drawns" };
+			Query statQuery = PreparedStatements.GetQuery(PreparedStatements.SELECT_USER_SCORES, (Int64)clientSocket.userID);
+
+			object[][] stats = Server.database.Query(statQuery);
+
+			if (stats == null || stats.Length == 0)
+			{
+
+			}
+			int wins = (int)stats[0][1];
+			int losses = (int)stats[0][2];
+			int draws = (int)stats[0][3];
+
+
+			return new string[] { wins.ToString(), losses.ToString(), draws.ToString() };
 		}
 	}
 }

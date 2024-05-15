@@ -174,7 +174,9 @@ namespace ChatTCP_Server.Data
 
 		public static CommandPacket GameStats(CommandPacket message)
 		{
+			Game.GetStats(message.clientSocket);
 
+			
 			return message;
 		}
 		//void methods for commands
