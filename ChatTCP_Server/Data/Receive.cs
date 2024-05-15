@@ -63,8 +63,13 @@ namespace ChatTCP
 		public static void Receive(Client client, MessagePacket messagePacket)
 		{
 			//messagePacket.username = client.username;
-			Log.Event(Log.LogType.LOG_MESSAGE, messagePacket.ToString());
+			
+			if (messagePacket.message == "")
+			{
+				return;
+			}
 
+			Log.Event(Log.LogType.LOG_MESSAGE, messagePacket.ToString());
 			// check if message is command
 			if (messagePacket.message[0] == Commands.CommandChar)
 			{

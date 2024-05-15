@@ -36,6 +36,8 @@ namespace Program
 
 			await Initialize(ct);
 
+			Console.WriteLine("Press any key to continue");
+			Console.ReadKey();
 			//ChatTCP.Data.Debugging.Debugging.Debug();
 
 			return;

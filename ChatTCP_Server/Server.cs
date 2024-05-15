@@ -81,7 +81,7 @@ namespace ChatTCP
 			// Database 
 			if (!ConnectDatabase())
 			{
-				Log.Event(Log.LogType.LOG_ERROR, $"Could not connect to database.");
+				Log.Event(Log.LogType.LOG_ERROR, $"Could not connect to database, please ensure that the database has been created.");
 				return;
 			}
 
