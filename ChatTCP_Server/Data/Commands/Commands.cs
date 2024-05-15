@@ -235,7 +235,6 @@ namespace ChatTCP_Server.Data
 
 				CommandPacket.Send(client, $"Whisper from [{message.clientSocket.displayName}]: {whisperMessage}");
 				CommandPacket.Send(message.clientSocket, $"Whisper to [{client.displayName}]: {whisperMessage}");
-
 			}
 
 			return message;
@@ -243,41 +242,94 @@ namespace ChatTCP_Server.Data
 
 		public static CommandPacket Promote(CommandPacket message, string[] args)
 		{
+			if (message.clientSocket.secLevel < 2)
+			{
+				CommandPacket.Send(message.clientSocket, $"You do not have permission to do this.");
+				return message;
+			}
+
+			Query selectUser = PreparedStatements.GetQuery(PreparedStatements.SELECT_USER_BY_USERNAME, args[1]); // get update query
+			object[][] selectResult = Server.database.Query(selectUser);
+
+			if (selectResult.Length > 0)
+			{
+				int secLevel = (int) selectResult[0][4] + 1;
+				if (secLevel <= 2)
+				{
+					Query updateUser = PreparedStatements.GetQuery(PreparedStatements.UPDATE_SET_SECLVL, (int)secLevel, (Int64)selectResult[0][0]);
+					Server.database.Query(updateUser);
+					CommandPacket.Send(message.clientSocket, $"Promoted {selectResult[0][1]} to secLvl {secLevel}");
+				}
+				else
+				{
+					CommandPacket.Send(message.clientSocket, selectResult[0][1] + " is already at the maximum security level.");
+				}
+			}
+			else
+			{
+				CommandPacket.Send(message.clientSocket, "Invalid user");
+			}
+
 			return message;
 		}
 
 		public static CommandPacket Demote(CommandPacket message, string[] args)
 		{
+			if (message.clientSocket.secLevel < 2)
+			{
+				CommandPacket.Send(message.clientSocket, $"You do not have permission to do this.");
+				return message;
+			}
+
 			return message;
 		}
 
 		public static CommandPacket Kick(CommandPacket message, string[] args)
 		{
-			if (message.clientSocket.secLevel > 1)
+			if (message.clientSocket.secLevel < 2)
 			{
-				Client client = Server.GetClient(Server.GetClientSocket(args[1]));
+				CommandPacket.Send(message.clientSocket, $"You do not have permission to do this.");
+				return message;
+			}
 
-				if (client != null)
-				{
-					CommandPacket.Send(client.clientSocket, $"You have been kicked from the server.");
-					CommandPacket.Send(message.clientSocket, $"{client.clientSocket.displayName} has been kicked from the server.");
-					client.clientSocket.isActive = false;
-					client.clientSocket.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
-				}
-				else
-				{
-					CommandPacket.Send(message.clientSocket, $"Invalid user.");
-				}
+			Client client = Server.GetClient(Server.GetClientSocket(args[1]));
+
+			if (client != null)
+			{
+				CommandPacket.Send(client.clientSocket, $"You have been kicked from the server.");
+				CommandPacket.Send(message.clientSocket, $"{client.clientSocket.displayName} has been kicked from the server.");
+				client.clientSocket.isActive = false;
+				client.clientSocket.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
 			}
 			else
 			{
-				CommandPacket.Send(message.clientSocket, "You do not have permission to do this.");
+				CommandPacket.Send(message.clientSocket, $"Invalid user.");
 			}
+
 			return message;
 		}
 
 		public static CommandPacket Mods(CommandPacket message)
 		{
+			List<string> mods = new List<string>();
+
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket.secLevel > 1)
+				{
+					mods.Add(client.clientSocket.displayName);
+				}
+			}
+
+			string result = $"There are {mods.Count} moderators online{((mods.Count > 0) ? ':' : '.')}";
+
+			foreach (string mod in mods)
+			{
+				result += "\n\t" + mod;
+			}
+
+			CommandPacket.Send(message.clientSocket, result);
+
 			return message;
 		}
 
