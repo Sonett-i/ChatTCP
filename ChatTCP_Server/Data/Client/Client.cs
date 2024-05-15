@@ -16,6 +16,8 @@ namespace ChatTCP.Data.Client
 		public string username;
 		public Int16 secLevel;
 
+		public string displayName;
+
 		public ClientSocket clientSocket;
 
 		public void StateChanged(object sender, ClientSocket.ConnectionState connectionState)

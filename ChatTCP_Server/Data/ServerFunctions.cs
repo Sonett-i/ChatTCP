@@ -131,7 +131,7 @@ namespace ChatTCP
 		{
 			foreach (Client client in Server.ConnectedClients)
 			{
-				if (client.clientSocket.username == username)
+				if (client.clientSocket.username == username || client.clientSocket.displayName == username)
 				{
 					return client.clientSocket;
 				}

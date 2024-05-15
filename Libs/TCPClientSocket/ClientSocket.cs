@@ -19,6 +19,7 @@ namespace TCPClientSocket
 
 		public int userID;
 		public string username;
+		public string displayName;
 
 		public ConnectionState connectionState = ConnectionState.STATE_DISCONNECTED;
 		public bool authorized = false;

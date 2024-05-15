@@ -16,7 +16,7 @@ namespace ChatTCP.Data.Database
 		public static string SELECT_COUNT_USERS = $"SELECT COUNT(*) FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]};";
 		public static string SELECT_USER_SCORES = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} WHERE user = %b;";
 		// INSERT
-		public static string INSERT_NEW_USER = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]}(`userID`, `username`, `password`, `role`) VALUES (%b, \"%s\", \"%s\", %b);";
+		public static string INSERT_NEW_USER = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]}(`userID`, `username`, `password`, `displayname`, `role`) VALUES (%b, \"%s\", \"%s\", \"%s\", %b);";
 		public static string INSERT_NEW_USER_SCORES = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]}(`user`, `wins`, `losses`, `draws`) VALUES (%b, \"%i\", \"%i\", %i);";
 
 		// UPDATE

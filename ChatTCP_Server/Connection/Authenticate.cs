@@ -68,9 +68,11 @@ namespace ChatTCP.Connect
 				{
 					client.ID = (Int32) userData[0][0];
 					client.username = (string)userData[0][1];
-					client.secLevel = (Int16) userData[0][3];
+					client.displayName = (string)userData[0][3];
+					client.secLevel = (Int16) userData[0][4];
 					result = $"{client.username}";
 					client.clientSocket.username = client.username;
+					client.clientSocket.displayName = client.displayName;
 					client.clientSocket.userID = client.ID;
 					return true;
 				}
@@ -97,10 +99,11 @@ namespace ChatTCP.Connect
 				return false;
 			}
 
-			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, (Int64)1));
+			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, packet.username, (Int64)1));
 			Query playerScoresQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER_SCORES, newID, 0, 0, 0));
 
 			Log.Event(Log.LogType.LOG_EVENT, $"{client.clientSocket.socket.RemoteEndPoint.ToString()} registered as new user: {packet.username}");
+			CommandPacket.Send(client.clientSocket, "Registered new account with username: " + packet.username);
 			
 			Server.database.Query(insertQuery);
 			Server.database.Query(playerScoresQuery);

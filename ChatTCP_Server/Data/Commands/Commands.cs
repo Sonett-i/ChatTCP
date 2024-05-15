@@ -7,6 +7,7 @@ using ChatTCP;
 using TCPClientSocket;
 using TCPPacket;
 using ChatTCP.Data.Game;
+using ChatTCP.Data.Client;
 
 namespace ChatTCP_Server.Data
 {
@@ -42,7 +43,7 @@ namespace ChatTCP_Server.Data
 			["whisper"] = ChatCommand.COMMAND_WHISPER,
 			["promote"] = ChatCommand.COMMAND_PROMOTE,
 			["demote"] = ChatCommand.COMMAND_DEMOTE,
-			["username"] = ChatCommand.COMMAND_USERNAME,
+			["changename"] = ChatCommand.COMMAND_USERNAME,
 			["kick"] = ChatCommand.COMMAND_KICK,
 			["commands"] = ChatCommand.COMMAND_COMMANDS,
 			["help"] = ChatCommand.COMMAND_HELP,
@@ -50,8 +51,12 @@ namespace ChatTCP_Server.Data
 			["invite"] = ChatCommand.COMMAND_INVITE,
 			["stop"] = ChatCommand.COMMAND_STOPGAME,
 			["stats"] = ChatCommand.COMMAND_GAMESTATS,
-
 		};
+
+		static string GetKey(ChatCommand command)
+		{
+			return commandStrings.FirstOrDefault(x => x.Value == command).Key;
+		}
 
 		public static Dictionary<ChatCommand, string> commandDetails = new Dictionary<ChatCommand, string>()
 		{
@@ -61,7 +66,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_WHISPER] = "Message another client directly.",
 			[ChatCommand.COMMAND_PROMOTE] = "Promote a user's security rank.",
 			[ChatCommand.COMMAND_DEMOTE] = "Demote a user's security rank.",
-			[ChatCommand.COMMAND_USERNAME] = "Change your username.",
+			[ChatCommand.COMMAND_USERNAME] = "Change your display name.",
 			[ChatCommand.COMMAND_KICK] = "Kick another user.",
 			[ChatCommand.COMMAND_COMMANDS] = "Lists all available commands",
 			[ChatCommand.COMMAND_HELP] = "Lists all available commands",
@@ -76,7 +81,7 @@ namespace ChatTCP_Server.Data
 		// https://stackoverflow.com/questions/21924359/pass-a-dictionary-from-one-function-to-another-function-and-print-it
 		public static Dictionary<ChatCommand, CommandDelegate> commands = new Dictionary<ChatCommand, CommandDelegate>()
 		{
-			[ChatCommand.COMMAND_WHO] = (message, args) => Placeholder(message),
+			[ChatCommand.COMMAND_WHO] = (message, args) => Who(message),
 			[ChatCommand.COMMAND_USERNAME] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_USERINFO] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_ABOUT] = (message, args) => About(message),
@@ -84,7 +89,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_PROMOTE] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_DEMOTE] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_COMMANDS] = (message, args) => Placeholder(message),
-			[ChatCommand.COMMAND_HELP] = (message, args) => Placeholder(message),
+			[ChatCommand.COMMAND_HELP] = (message, args) => Help(message),
 			[ChatCommand.COMMAND_KICK] = (message, args) => Placeholder(message, args),
 			[ChatCommand.COMMAND_MODS] = (message, args) => Placeholder(message),
 			[ChatCommand.COMMAND_INVITE] = (message, args) => Invite(message, args),
@@ -150,6 +155,35 @@ namespace ChatTCP_Server.Data
 			CommandPacket.Send(message.clientSocket, result);
 			return message;
 		}
+
+		public static CommandPacket Help(CommandPacket message)
+		{
+			string result = $"Help\n";
+
+			foreach (ChatCommand command in Enum.GetValues(typeof(ChatCommand)))
+			{
+				if (command != ChatCommand.COMMAND_INVALID)
+				{
+					result += $"\t{CommandChar}{GetKey(command)} - {commandDetails[command]}\n";
+				}
+			};
+
+			CommandPacket.Send(message.clientSocket, result);
+			return message;
+		}
+
+		public static CommandPacket Who(CommandPacket message)
+		{
+			string result = "Who";
+			foreach(Client client in Server.ConnectedClients)
+			{
+				result += $"\n\t{client.clientSocket.displayName}";
+			}
+
+			CommandPacket.Send(message.clientSocket, result);
+			return message;
+		}
+
 		public static CommandPacket Invite(CommandPacket message, string[] args)
 		{
 			ClientSocket opponent = Server.GetClientSocket(args[1]);
