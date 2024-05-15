@@ -40,6 +40,7 @@ namespace TCPPacket
 			MESSAGE_COMMAND,
 			GAME_START,
 			GAME_MOVE,
+			GAME_TURN,
 			GAME_RESULT,
 			COMMAND_RESULT
 		}
@@ -100,6 +101,7 @@ namespace TCPPacket
 													// type,	subtype,	gameID,	gameinfo
 					{ Packet.PacketSubType.GAME_START, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.GAME_MOVE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.GAME_TURN, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.GAME_RESULT, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 				}
 			},

@@ -24,11 +24,6 @@ namespace TCPPacket
 			this.Serialize();
 		}
 
-		public static void Send(ClientSocket clientSocket, PacketSubType subType, params object[] args)
-		{
-			string format = "";
-		}
-
 		public static void Send(ClientSocket clientSocket, PacketSubType subType, int gameID, string message)
 		{
 			GamePacket gamePacket = new GamePacket(clientSocket, subType, gameID, message);

@@ -81,6 +81,12 @@ namespace ChatTCP_Client.TicTacToe
 				}
 			}
 
+			if (subType == Packet.PacketSubType.GAME_TURN)
+			{
+				turn = (gameInfo[0] == "YOURS");
+				updateLabel(turnLabel, (turn == true) ? "Yours" : "Opponents");
+			}
+
 			if (subType == Packet.PacketSubType.GAME_RESULT)
 			{
 				updateLabel(gameLog, gameInfo[0]);
@@ -142,9 +148,14 @@ namespace ChatTCP_Client.TicTacToe
 			if (!gamePlaying)
 			{
 				updateLabel(gameLog, "Not currently playing a game");
-				//return;
+				return;
 			}
 
+			if (!turn)
+			{
+				updateLabel(gameLog, "It's not your turn!");
+				return;
+			}
 			/*
 			if (!turn)
 			{

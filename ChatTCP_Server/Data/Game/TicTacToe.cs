@@ -161,6 +161,11 @@ namespace ChatTCP.Data.Game
 
 		public void Move(int x, int y, Player player)
 		{
+			if (player != currentTurn)
+			{
+				return;
+			}
+
 			if (board[x,y] == 0)
 			{
 				board[x,y] = player.ID;
@@ -178,6 +183,16 @@ namespace ChatTCP.Data.Game
 				EndGame(gameResult);
 			}
 
+			if (player == playerA)
+			{
+				currentTurn = playerB;
+			}
+			else if (player == playerB)
+			{
+				currentTurn = playerA;
+			}
+
+			BroadcastTurn();
 			Log.Event(Log.LogType.LOG_GAME, boardinfo);
 		}
 
@@ -187,6 +202,25 @@ namespace ChatTCP.Data.Game
 			SendOpponentInfo(playerA);
 			SendOpponentInfo(playerB);
 
+			int rand = new Random().Next(1, 2);
+
+			currentTurn = GetPlayer(rand);
+			BroadcastTurn();
+
+		}
+
+		public void BroadcastTurn()
+		{
+			GamePacket.Send(currentTurn.clientSocket, Packet.PacketSubType.GAME_TURN, gameID, "YOURS");
+
+			if (playerA != currentTurn)
+			{
+				GamePacket.Send(playerA.clientSocket, Packet.PacketSubType.GAME_TURN, gameID, "NOT YOUR TURN");
+			}
+			else
+			{
+				GamePacket.Send(playerB.clientSocket, Packet.PacketSubType.GAME_TURN, gameID, "NOT YOUR TURN");
+			}
 		}
 
 		void EndGame(int result)
