@@ -33,8 +33,8 @@ namespace ChatTCP.Data.Database
 		// UPDATE QUERIES
 		
 		public static string UPDATE_USER_STATS = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} SET `wins`=%i,`losses`=%i,`draws`=%i WHERE `user`=%b;";
-		public static string UPDATE_USER_DISPLAYNAME = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} SET `displayname`=%s WHERE `userID`=%b;";
-		public static string UPDATE_SET_SECLVL = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} SET `role`=%i WHERE `userID`=%b;";
+		public static string UPDATE_USER_DISPLAYNAME = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} SET `displayname`=\"%s\" WHERE `userID`=%b;";
+		public static string UPDATE_SET_SECLVL = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} SET `role`=%l WHERE `userID`=%b;";
 
 		public static Query GetQuery(string query, params object[] args)
 		{

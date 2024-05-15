@@ -60,13 +60,17 @@ namespace TCPClient
 				client.username = authPacket.username;
 				client.displayName = authPacket.displayname;
 			}
-				
+			if (authPacket.packetSubType == Packet.PacketSubType.AUTH_UPDATE)
+			{
+				client.displayName = authPacket.displayname;
+			}
 
 			//AuthReceived.Invoke(client, authPacket);
 		}
 
 		public static void Receive(ClientSocket client, CommandPacket commandPacket)
 		{
+			client.displayName = commandPacket.clientSocket.displayName;
 			CommandReceived.Invoke(client, commandPacket);
 		}
 

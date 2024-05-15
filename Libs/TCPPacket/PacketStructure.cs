@@ -31,6 +31,7 @@ namespace TCPPacket
 		{
 			AUTH_AUTHORIZE,
 			AUTH_REGISTER,
+			AUTH_UPDATE,
 			ACK_HANDSHAKE,
 			ACK_ACK,
 			ACK_NAK,
@@ -51,6 +52,7 @@ namespace TCPPacket
 			{ Packet.PacketType.PACKET_AUTH, new Dictionary<Enum, string>
 				{
 					{ Packet.PacketSubType.AUTH_AUTHORIZE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
+					{ Packet.PacketSubType.AUTH_UPDATE, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" },
 					{ Packet.PacketSubType.AUTH_REGISTER, $"%i{Packet.field}%i{Packet.field}%i{Packet.field}%s{Packet.record}" }
 				}
 			},

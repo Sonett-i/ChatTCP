@@ -253,10 +253,14 @@ namespace ChatTCP_Server.Data
 
 			if (selectResult.Length > 0)
 			{
-				int secLevel = (int) selectResult[0][4] + 1;
+				short secLevel = (short)selectResult[0][4];
+				secLevel++;
+
+				int userID = (int)selectResult[0][0];
+
 				if (secLevel <= 2)
 				{
-					Query updateUser = PreparedStatements.GetQuery(PreparedStatements.UPDATE_SET_SECLVL, (int)secLevel, (Int64)selectResult[0][0]);
+					Query updateUser = PreparedStatements.GetQuery(PreparedStatements.UPDATE_SET_SECLVL, (Int16)secLevel, (Int64)userID);
 					Server.database.Query(updateUser);
 					CommandPacket.Send(message.clientSocket, $"Promoted {selectResult[0][1]} to secLvl {secLevel}");
 				}
@@ -279,6 +283,32 @@ namespace ChatTCP_Server.Data
 			{
 				CommandPacket.Send(message.clientSocket, $"You do not have permission to do this.");
 				return message;
+			}
+
+			Query selectUser = PreparedStatements.GetQuery(PreparedStatements.SELECT_USER_BY_USERNAME, args[1]); // get update query
+			object[][] selectResult = Server.database.Query(selectUser);
+
+			if (selectResult.Length > 0)
+			{
+				short secLevel = (short)selectResult[0][4];
+				secLevel--;
+
+				int userID = (int)selectResult[0][0];
+
+				if (secLevel >= 1)
+				{
+					Query updateUser = PreparedStatements.GetQuery(PreparedStatements.UPDATE_SET_SECLVL, (Int16)secLevel, (Int64)userID);
+					Server.database.Query(updateUser);
+					CommandPacket.Send(message.clientSocket, $"Demoted {selectResult[0][1]} to secLvl {secLevel}");
+				}
+				else
+				{
+					CommandPacket.Send(message.clientSocket, selectResult[0][1] + " is already at the minimum security level.");
+				}
+			}
+			else
+			{
+				CommandPacket.Send(message.clientSocket, "Invalid user");
 			}
 
 			return message;
@@ -340,11 +370,11 @@ namespace ChatTCP_Server.Data
 			string newName = args[1];
 
 			Query statQuery = PreparedStatements.GetQuery(PreparedStatements.UPDATE_USER_DISPLAYNAME, newName, (Int64)message.clientSocket.userID);
-
-			
-			message.clientSocket.displayName = newName;
 			Server.database.Query(statQuery);
-			CommandPacket.Send(message.clientSocket, result);
+
+			message.clientSocket.displayName = newName;
+			AuthPacket.Send(message.clientSocket, Packet.PacketSubType.AUTH_UPDATE, message.clientSocket.username, "");
+			CommandPacket.Send(message.clientSocket, "Changed display name to: " + newName);
 			return message;
 		}
 		public static CommandPacket Invite(CommandPacket message, string[] args)

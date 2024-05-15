@@ -34,9 +34,9 @@ namespace TCPPacket
 			base.content = Format.String(PacketFormat[PacketType.PACKET_AUTH][packetSubType], (int)packetType, (int)packetSubType, userID, $"{username}{Packet.field}{password}{Packet.field}{displayname}");
 		}
 
-		public static void Send(ClientSocket clientSocket, string username, string password)
+		public static void Send(ClientSocket clientSocket, PacketSubType subType, string username, string password)
 		{
-			AuthPacket authPacket = new AuthPacket(clientSocket, PacketSubType.AUTH_AUTHORIZE, clientSocket.userID, username, "", clientSocket.displayName);
+			AuthPacket authPacket = new AuthPacket(clientSocket, subType, clientSocket.userID, username, "", clientSocket.displayName);
 
 			authPacket.Send();
 		}

@@ -9,6 +9,7 @@ namespace Libs.Formatting
             ["%s"] = typeof(string),
             ["%i"] = typeof(int), //int32
             ["%b"] = typeof(Int64), // int64 (BigInt)
+			["%l"] = typeof(Int16), // SmallInt
             ["%f"] = typeof(float),
         };
 

@@ -148,7 +148,7 @@ namespace ChatTCP.Connect
 				else
 				{
 					//ConnectionPacket.Send(client.clientSocket, client.username, ClientSocket.ConnectionState.STATE_AUTHORIZED);
-					AuthPacket.Send(client.clientSocket, client.username, "");
+					AuthPacket.Send(client.clientSocket, Packet.PacketSubType.AUTH_AUTHORIZE, client.username, "");
 					client.clientSocket.SetConnectionState(ClientSocket.ConnectionState.STATE_AUTHORIZED);
 				}
 			}
