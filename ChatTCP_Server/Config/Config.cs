@@ -25,7 +25,7 @@ namespace ChatTCP.Config
 		};
 
 		public static string author = "Sam C";
-		public static string date = "May 12, 2024";
+		public static string date = "May 15, 2024";
 
 		public static string version = "2.0.0";
 		public static string printLogo()

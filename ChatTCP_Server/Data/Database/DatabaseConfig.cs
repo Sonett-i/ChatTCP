@@ -9,7 +9,7 @@ namespace ChatTCP.Data.Database
 	public static class DatabaseConfig
 	{
 		public static string Host = "localhost";
-		public static string User = "server";
+		public static string User = "chatTCP";
 		public static string Pwd = "";
 		public static string Database = "chatTCP";
 
