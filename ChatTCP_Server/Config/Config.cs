@@ -39,6 +39,20 @@ namespace ChatTCP.Config
 			return output;
 		}
 
+		public static string[] administrators = { "Sam", "Sabira", "Robert" };
+
+		public static bool isAdmin(string username)
+		{
+			for (int i = 0; i < administrators.Length; i++)
+			{
+				if (username == administrators[i])
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public static string PrintAbout()
 		{
 			string output = "";

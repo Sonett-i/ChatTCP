@@ -25,7 +25,7 @@ namespace TCPClient
 
 				string hashedPassword = Hash(password);
 
-				AuthPacket authPacket = new AuthPacket(parent.clientSocket, (int)Packet.PacketSubType.AUTH_AUTHORIZE, -1, username, hashedPassword);
+				AuthPacket authPacket = new AuthPacket(parent.clientSocket, (int)Packet.PacketSubType.AUTH_AUTHORIZE, -1, username, hashedPassword, "");
 				authPacket.Send();
 				return false;
 			}
@@ -47,7 +47,7 @@ namespace TCPClient
 				{
 					string hashedPassword = Hash(password);
 
-					AuthPacket authPacket = new AuthPacket(parent.clientSocket, Packet.PacketSubType.AUTH_REGISTER, -1, username, hashedPassword);
+					AuthPacket authPacket = new AuthPacket(parent.clientSocket, Packet.PacketSubType.AUTH_REGISTER, -1, username, hashedPassword, "");
 					authPacket.Send();
 				}
 				result = "new acc";

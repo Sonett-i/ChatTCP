@@ -18,7 +18,7 @@ namespace TCPPacket
 		{
 			base.packetType = PacketType.PACKET_MESSAGE;
 			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
-			this.username = clientSocket.displayName;
+			this.username = (clientSocket.displayName == null) ? clientSocket.username : clientSocket.displayName;
 			base.content = message;
 			this.message = GetMessage(message);
 			Serialize();

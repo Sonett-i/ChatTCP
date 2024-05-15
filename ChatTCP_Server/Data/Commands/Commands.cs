@@ -8,6 +8,7 @@ using TCPClientSocket;
 using TCPPacket;
 using ChatTCP.Data.Game;
 using ChatTCP.Data.Client;
+using ChatTCP.Data.Database;
 
 namespace ChatTCP_Server.Data
 {
@@ -82,16 +83,16 @@ namespace ChatTCP_Server.Data
 		public static Dictionary<ChatCommand, CommandDelegate> commands = new Dictionary<ChatCommand, CommandDelegate>()
 		{
 			[ChatCommand.COMMAND_WHO] = (message, args) => Who(message),
-			[ChatCommand.COMMAND_USERNAME] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_USERINFO] = (message, args) => Placeholder(message, args),
+			[ChatCommand.COMMAND_USERNAME] = (message, args) => ChangeName(message, args),
+			[ChatCommand.COMMAND_USERINFO] = (message, args) => UserInfo(message, args),
 			[ChatCommand.COMMAND_ABOUT] = (message, args) => About(message),
-			[ChatCommand.COMMAND_WHISPER] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_PROMOTE] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_DEMOTE] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_COMMANDS] = (message, args) => Placeholder(message),
+			[ChatCommand.COMMAND_WHISPER] = (message, args) => Whisper(message, args),
+			[ChatCommand.COMMAND_PROMOTE] = (message, args) => Promote(message, args),
+			[ChatCommand.COMMAND_DEMOTE] = (message, args) => Demote(message, args),
+			[ChatCommand.COMMAND_COMMANDS] = (message, args) => Help(message),
 			[ChatCommand.COMMAND_HELP] = (message, args) => Help(message),
-			[ChatCommand.COMMAND_KICK] = (message, args) => Placeholder(message, args),
-			[ChatCommand.COMMAND_MODS] = (message, args) => Placeholder(message),
+			[ChatCommand.COMMAND_KICK] = (message, args) => Kick(message, args),
+			[ChatCommand.COMMAND_MODS] = (message, args) => Mods(message),
 			[ChatCommand.COMMAND_INVITE] = (message, args) => Invite(message, args),
 			[ChatCommand.COMMAND_STOPGAME] = (message, args) => StopGame(message),
 			[ChatCommand.COMMAND_GAMESTATS] = (message, args) => GameStats(message),
@@ -184,6 +185,116 @@ namespace ChatTCP_Server.Data
 			return message;
 		}
 
+
+		public static CommandPacket UserInfo(CommandPacket message, string[] args)
+		{
+			string result = "Invalid User";
+			string arg = message.clientSocket.displayName;
+
+			if (args.Length > 1)
+			{
+				arg = args[1];
+			}
+
+			Query userQuery = PreparedStatements.GetQuery(PreparedStatements.SELECT_USER_BY_DISPLAYNAME, arg);
+			object[][] dbQuery = Server.database.Query(userQuery);
+
+			if (dbQuery.Length > 0)
+			{
+				result = $"User info for {arg}:" +
+					$"\n\tUserID: {dbQuery[0][0]}" +
+					$"\n\tUsername: {dbQuery[0][1]}" +
+					$"\n\tDisplay Name: {dbQuery[0][3]}" +
+					$"\n\tSecLevel: {dbQuery[0][4]}";
+			}
+
+			CommandPacket.Send(message.clientSocket, result);
+
+			return message;
+		}
+
+		public static CommandPacket Whisper(CommandPacket message, string[] args)
+		{
+			string recipient = args[1];
+
+			
+			ClientSocket client = Server.GetClientSocket(recipient);
+
+			if (client == null)
+			{
+				CommandPacket.Send(message.clientSocket, "User " + recipient + "is not available");
+			}
+			else
+			{
+				string whisperMessage = "";
+
+				for (int i = 2; i < args.Length; i++)
+				{
+					whisperMessage += args[i] + " ";
+				}
+
+				CommandPacket.Send(client, $"Whisper from [{message.clientSocket.displayName}]: {whisperMessage}");
+				CommandPacket.Send(message.clientSocket, $"Whisper to [{client.displayName}]: {whisperMessage}");
+
+			}
+
+			return message;
+		}
+
+		public static CommandPacket Promote(CommandPacket message, string[] args)
+		{
+			return message;
+		}
+
+		public static CommandPacket Demote(CommandPacket message, string[] args)
+		{
+			return message;
+		}
+
+		public static CommandPacket Kick(CommandPacket message, string[] args)
+		{
+			if (message.clientSocket.secLevel > 1)
+			{
+				Client client = Server.GetClient(Server.GetClientSocket(args[1]));
+
+				if (client != null)
+				{
+					CommandPacket.Send(client.clientSocket, $"You have been kicked from the server.");
+					CommandPacket.Send(message.clientSocket, $"{client.clientSocket.displayName} has been kicked from the server.");
+					client.clientSocket.isActive = false;
+					client.clientSocket.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+				}
+				else
+				{
+					CommandPacket.Send(message.clientSocket, $"Invalid user.");
+				}
+			}
+			else
+			{
+				CommandPacket.Send(message.clientSocket, "You do not have permission to do this.");
+			}
+			return message;
+		}
+
+		public static CommandPacket Mods(CommandPacket message)
+		{
+			return message;
+		}
+
+		public static CommandPacket ChangeName(CommandPacket message, string[] args)
+		{
+			string result = "";
+
+			string newName = args[1];
+
+			Query statQuery = PreparedStatements.GetQuery(PreparedStatements.UPDATE_USER_DISPLAYNAME, newName, (Int64)message.clientSocket.userID);
+
+			
+			message.clientSocket.displayName = newName;
+			Server.database.Query(statQuery);
+			CommandPacket.Send(message.clientSocket, result);
+			return message;
+		}
 		public static CommandPacket Invite(CommandPacket message, string[] args)
 		{
 			ClientSocket opponent = Server.GetClientSocket(args[1]);

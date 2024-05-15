@@ -11,7 +11,10 @@ namespace ChatTCP.Data.Database
 	public static class PreparedStatements
 	{
 		// SELECT
-		public static string SELECT_USER = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} WHERE username=\"%s\";";
+		public static string SELECT_USER_BY_USERNAME = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} WHERE username=\"%s\";";
+		public static string SELECT_USER_BY_DISPLAYNAME = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} WHERE displayname=\"%s\";";
+
+
 		public static string SELECT_USER_ALL = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]};";
 		public static string SELECT_COUNT_USERS = $"SELECT COUNT(*) FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]};";
 		public static string SELECT_USER_SCORES = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} WHERE user = %b;";
@@ -22,9 +25,7 @@ namespace ChatTCP.Data.Database
 		// UPDATE
 		
 		public static string UPDATE_USER_STATS = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} SET `wins`=%i,`losses`=%i,`draws`=%i WHERE `user`=%b;";
-		public static string UPDATE_USER_WIN = $"";
-		public static string UPDATE_USER_LOSS = $"";
-		public static string UPDATE_USER_DRAW = $"";
+		public static string UPDATE_USER_DISPLAYNAME = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} SET `displayname`=%s WHERE `userID`=%b;";
 		
 
 		public static Query GetQuery(string query, params object[] args)

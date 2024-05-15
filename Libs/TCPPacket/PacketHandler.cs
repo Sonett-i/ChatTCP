@@ -54,7 +54,7 @@ namespace TCPPacket
 		}
 		public static AuthPacket GetAuthPacket(ClientSocket clientSocket, string[] blob)
 		{
-			AuthPacket authPacket = new AuthPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4]);
+			AuthPacket authPacket = new AuthPacket(clientSocket, (Packet.PacketSubType)int.Parse(blob[1]), int.Parse(blob[2]), (string)blob[3], (string)blob[4], (string)blob[5]);
 
 
 			return authPacket;

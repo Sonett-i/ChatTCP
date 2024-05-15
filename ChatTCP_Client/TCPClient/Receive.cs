@@ -56,7 +56,11 @@ namespace TCPClient
 		public static void Receive(ClientSocket client, AuthPacket authPacket)
 		{
 			if (authPacket.packetSubType == Packet.PacketSubType.AUTH_AUTHORIZE)
+			{
 				client.username = authPacket.username;
+				client.displayName = authPacket.displayname;
+			}
+				
 
 			//AuthReceived.Invoke(client, authPacket);
 		}

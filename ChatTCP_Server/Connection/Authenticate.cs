@@ -16,7 +16,7 @@ namespace ChatTCP.Connect
 	{
 		public static bool UserExists(string username)
 		{
-			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER, username));
+			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER_BY_USERNAME, username));
 			object[] result = Server.database.Query(selectQuery);
 
 			return result.Length > 0;
@@ -56,7 +56,7 @@ namespace ChatTCP.Connect
 				return false;
 			}
 
-			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER, packet.username));
+			Query selectQuery = new Query(Format.String(PreparedStatements.SELECT_USER_BY_USERNAME, packet.username));
 
 			object[][] userData = Server.database.Query(selectQuery);
 
@@ -74,6 +74,7 @@ namespace ChatTCP.Connect
 					client.clientSocket.username = client.username;
 					client.clientSocket.displayName = client.displayName;
 					client.clientSocket.userID = client.ID;
+					client.clientSocket.secLevel = client.secLevel;
 					return true;
 				}
 			}
@@ -99,7 +100,14 @@ namespace ChatTCP.Connect
 				return false;
 			}
 
-			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, packet.username, (Int64)1));
+			int secLevel = 1;
+
+			if (ChatTCP.Config.ServerConfig.isAdmin(packet.username))
+			{
+				secLevel = 2;
+			}
+			
+			Query insertQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER, newID, packet.username, packet.password, packet.username, (Int64)secLevel));
 			Query playerScoresQuery = new Query(Format.String(PreparedStatements.INSERT_NEW_USER_SCORES, newID, 0, 0, 0));
 
 			Log.Event(Log.LogType.LOG_EVENT, $"{client.clientSocket.socket.RemoteEndPoint.ToString()} registered as new user: {packet.username}");
