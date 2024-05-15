@@ -100,7 +100,16 @@ namespace ChatTCP_Client.LoginForm
 			string username = usernameInput.Text;
 			string password = passwordInput.Text;
 
-
+			if (username == "")
+			{
+				loginResult.Content = "Username can't be blank!";
+				return;
+			}
+			if (password == "")
+			{
+				loginResult.Content = "Password can't be blank!";
+				return;
+			}
 
 			string authResult;
 			App.tcpClient.Authenticator.Authorize(username, password, out authResult);

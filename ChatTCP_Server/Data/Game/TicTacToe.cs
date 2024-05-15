@@ -143,6 +143,7 @@ namespace ChatTCP.Data.Game
 				return null;
 			}
 			int ID = Server.GetNewGameID();
+
 			Player a = new Player(playerA, Player.Check.Cross) { name = playerA.username, ID = 1};
 			Player b = new Player(playerB, Player.Check.Nought) { name = playerB.username, ID = 2};
 
@@ -202,6 +203,9 @@ namespace ChatTCP.Data.Game
 			SendOpponentInfo(playerA);
 			SendOpponentInfo(playerB);
 
+			CommandPacket.Send(playerA.clientSocket, "[TicTacToe] You have started a game with " + playerB.name);
+			CommandPacket.Send(playerB.clientSocket, "[TicTacToe] You have started a game with " + playerA.name);
+
 			int rand = new Random().Next(1, 2);
 
 			currentTurn = GetPlayer(rand);
@@ -212,6 +216,7 @@ namespace ChatTCP.Data.Game
 		public void BroadcastTurn()
 		{
 			GamePacket.Send(currentTurn.clientSocket, Packet.PacketSubType.GAME_TURN, gameID, "YOURS");
+			CommandPacket.Send(currentTurn.clientSocket, "[TicTacToe] It is your turn.");
 
 			if (playerA != currentTurn)
 			{

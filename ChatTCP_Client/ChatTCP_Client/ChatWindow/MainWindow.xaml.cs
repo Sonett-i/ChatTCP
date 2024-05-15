@@ -184,5 +184,19 @@ namespace ChatTCP_Client
 		{
 			game.Move(x, y);
 		}
+
+		private void messageSendButton_Click(object sender, RoutedEventArgs e)
+		{
+			string _message = messageInput.Text;
+
+			HandleInput(messageInput.Text);
+
+			MessagePacket message = new MessagePacket(App.tcpClient.clientSocket, App.tcpClient.clientSocket.userID, _message);
+
+			message.Send();
+
+			messageInput.Text = "";
+			messageInput.Focus();
+		}
 	}
 }
