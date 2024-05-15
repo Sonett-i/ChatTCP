@@ -23,6 +23,12 @@ namespace ChatTCP_Client.TicTacToe
 	}
 	public class Game
 	{
+		public static Dictionary<int, char> sprites = new Dictionary<int, char>()
+		{
+			[1] = 'X',
+			[2] = 'O',
+		};
+
 		public static char field = (char)32;
 		public static char record = (char)33;
 
@@ -61,6 +67,7 @@ namespace ChatTCP_Client.TicTacToe
 				opponent = gameInfo[0];
 				updateLabel(opponentLabel, gameInfo[0]);
 				updateLabel(gameLog, $"game started with {opponent}");
+				ResetBoard();
 				gamePlaying = true;
 			}
 
@@ -72,6 +79,12 @@ namespace ChatTCP_Client.TicTacToe
 				{
 					UpdateBoard();
 				}
+			}
+
+			if (subType == Packet.PacketSubType.GAME_RESULT)
+			{
+				updateLabel(gameLog, gameInfo[0]);
+				gamePlaying = false;
 			}
 		}
 
@@ -93,10 +106,7 @@ namespace ChatTCP_Client.TicTacToe
 
 			return null;
 		}
-		public void UpdateOpponent()
-		{
 
-		}
 
 		public void UpdateBoard()
 		{
@@ -109,7 +119,7 @@ namespace ChatTCP_Client.TicTacToe
 
 				if (player != 0)
 				{
-					updateButton(gameButtons[i], board[x, y].ToString());
+					updateButton(gameButtons[i], sprites[board[x, y]].ToString());
 				}
 			}
 		}
@@ -121,7 +131,10 @@ namespace ChatTCP_Client.TicTacToe
 
 		public void ResetBoard()
 		{
-
+			foreach (Button button in gameButtons)
+			{
+				updateButton(button, "");
+			}
 		}
 
 		public void Move(int x, int y)

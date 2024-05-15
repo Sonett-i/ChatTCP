@@ -14,12 +14,18 @@ namespace ChatTCP.Data.Database
 		public static string SELECT_USER = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]} WHERE username=\"%s\";";
 		public static string SELECT_USER_ALL = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]};";
 		public static string SELECT_COUNT_USERS = $"SELECT COUNT(*) FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]};";
-
-		// INSERT
-		public static string INSERT_NEW_USER = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]}(`userID`, `username`, `password`, `role`) VALUES (%b, \"%s\", \"%s\", %b)";
-		public static string INSERT_NEW_USER_SCORES = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]}(`user`, `wins`, `losses`, `draws`) VALUES (%b, \"%i\", \"%i\", %i)";
-
 		public static string SELECT_USER_SCORES = $"SELECT * FROM {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} WHERE user = %b;";
+		// INSERT
+		public static string INSERT_NEW_USER = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_USERS]}(`userID`, `username`, `password`, `role`) VALUES (%b, \"%s\", \"%s\", %b);";
+		public static string INSERT_NEW_USER_SCORES = $"INSERT INTO {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]}(`user`, `wins`, `losses`, `draws`) VALUES (%b, \"%i\", \"%i\", %i);";
+
+		// UPDATE
+		
+		public static string UPDATE_USER_STATS = $"UPDATE {DatabaseConfig.DatabaseTables[DatabaseConfig.DatabaseTable.TABLE_GAMESCORES]} SET `wins`=%i,`losses`=%i,`draws`=%i WHERE `user`=%b;";
+		public static string UPDATE_USER_WIN = $"";
+		public static string UPDATE_USER_LOSS = $"";
+		public static string UPDATE_USER_DRAW = $"";
+		
 
 		public static Query GetQuery(string query, params object[] args)
 		{
