@@ -43,3 +43,4 @@ Common errors include:
 
 ==Running Client==
 run \client\bin\ChatTCP_Client.exe
+

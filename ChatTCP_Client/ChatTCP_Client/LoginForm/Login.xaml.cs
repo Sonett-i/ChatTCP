@@ -43,6 +43,7 @@ namespace ChatTCP_Client.LoginForm
 			App.tcpClient.clientSocket.ClientAuthorized += ConState;
 
 			Client.CommandReceived += AuthUpdate;
+			usernameInput.Focus();
 			//App.tcpClient.clientSocket.ConnectionStateChanged += ChatTCP_Client.App.
 		}
 
@@ -92,13 +93,10 @@ namespace ChatTCP_Client.LoginForm
 			}
 		}
 
-		private void loginButton_Click(object sender, RoutedEventArgs e)
+		void login()
 		{
-			if (!App.tcpClient.socket.Connected)
-				Connect();
-
 			string username = usernameInput.Text;
-			string password = passwordInput.Text;
+			string password = passwordInput.Password;
 
 			if (username == "")
 			{
@@ -113,9 +111,17 @@ namespace ChatTCP_Client.LoginForm
 
 			string authResult;
 			App.tcpClient.Authenticator.Authorize(username, password, out authResult);
-			//Authorize(username, password);
 
 			loginResult.Content = authResult;
+		}
+
+		private void loginButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (!App.tcpClient.socket.Connected)
+				Connect();
+
+			login();
+			//Authorize(username, password);
 		}
 
 		private void registerButton_Click(object sender, RoutedEventArgs e)
@@ -124,12 +130,23 @@ namespace ChatTCP_Client.LoginForm
 				Connect();
 
 			string username = usernameInput.Text;
-			string password = passwordInput.Text;
+			string password = passwordInput.Password;
 
 			string authResult;
 			App.tcpClient.Authenticator.AuthorizeNew(username, password, out authResult);
 
 			loginResult.Content = authResult;
+		}
+
+		private void passwordInput_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				if (!App.tcpClient.socket.Connected)
+					Connect();
+
+				login();
+			}
 		}
 	}
 }

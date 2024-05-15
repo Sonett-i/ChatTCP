@@ -252,7 +252,7 @@ namespace ChatTCP.Data.Game
 				announcement = $"{playerB.clientSocket.displayName} beat {playerA.clientSocket.displayName} in a game of Tic Tac Toe!";
 			}
 
-			Server.Broadcast(announcement);
+			Server.Broadcast("[TicTacToe]: " + announcement);
 			GameStats.UpdateStats(playerA);
 			GameStats.UpdateStats(playerB);
 

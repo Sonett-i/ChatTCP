@@ -77,6 +77,10 @@ namespace ChatTCP.Connect
 					client.clientSocket.secLevel = client.secLevel;
 					return true;
 				}
+				else
+				{
+					CommandPacket.Send(client.clientSocket, "Incorrect password");
+				}
 			}
 
 			return false;
