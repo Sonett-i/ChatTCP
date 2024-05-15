@@ -36,17 +36,6 @@ namespace ChatTCP
 		public static List<TicTacToe> CurrentGames = new List<TicTacToe>();
 		#endregion
 
-		#region Classes
-
-		// Classes
-
-
-		// Connected Clients
-
-		// Connected Database
-		#endregion
-
-
 		#region Methods
 		private bool ConnectDatabase()
 		{

@@ -229,7 +229,7 @@ namespace ChatTCP.Data.Game
 			}
 		}
 
-		void EndGame(int result)
+		public void EndGame(int result)
 		{
 			string announcement = "";
 			if (result == -1)

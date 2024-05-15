@@ -140,16 +140,6 @@ namespace ChatTCP_Server.Data
 		}
 
 		// Commands
-		public static CommandPacket Placeholder(CommandPacket message, string[] args)
-		{
-			return message;
-		}
-
-		public static CommandPacket Placeholder(CommandPacket message)
-		{
-			return message;
-		}
-
 		public static CommandPacket About(CommandPacket message, string[] args)
 		{
 			if (args[1] == "1")
@@ -177,6 +167,7 @@ namespace ChatTCP_Server.Data
 			return message;
 		}
 
+		// Returns string of currently connected users.
 		public static CommandPacket Who(CommandPacket message)
 		{
 			string result = "Who";
@@ -221,7 +212,6 @@ namespace ChatTCP_Server.Data
 		{
 			string recipient = args[1];
 
-			
 			ClientSocket client = Server.GetClientSocket(recipient);
 
 			if (client == null)
@@ -374,8 +364,9 @@ namespace ChatTCP_Server.Data
 			string oldName = message.clientSocket.displayName;
 			string newName = args[1];
 
-			Query statQuery = PreparedStatements.GetQuery(PreparedStatements.UPDATE_USER_DISPLAYNAME, newName, (Int64)message.clientSocket.userID);
-			Server.database.Query(statQuery);
+			// Get update user displayname query.
+			Query userQuery = PreparedStatements.GetQuery(PreparedStatements.UPDATE_USER_DISPLAYNAME, newName, (Int64)message.clientSocket.userID);
+			Server.database.Query(userQuery);
 
 			message.clientSocket.displayName = newName;
 			AuthPacket.Send(message.clientSocket, Packet.PacketSubType.AUTH_UPDATE, message.clientSocket.username, "");
@@ -384,6 +375,8 @@ namespace ChatTCP_Server.Data
 			CommandPacket.Send(message.clientSocket, "Changed display name to: " + newName);
 			return message;
 		}
+
+		// TIC-TAC-TOE
 		public static CommandPacket Invite(CommandPacket message, string[] args)
 		{
 			ClientSocket opponent = Server.GetClientSocket(args[1]);
@@ -415,7 +408,14 @@ namespace ChatTCP_Server.Data
 
 		public static CommandPacket StopGame(CommandPacket message)
 		{
+			TicTacToe game = Server.GetGame(message.clientSocket);
+			if (game == null)
+			{
+				CommandPacket.Send(message.clientSocket, "You are not currently playing a game of tic-tac-toe!");
+				return message;
+			}
 
+			game.EndGame(-1);
 			return message;
 		}
 

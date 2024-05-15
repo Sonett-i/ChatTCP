@@ -52,10 +52,5 @@ namespace ChatTCP.Data.Database
 		{
 			this.command = command;
 		}
-
-		public void Post()
-		{
-
-		}
 	}
 }

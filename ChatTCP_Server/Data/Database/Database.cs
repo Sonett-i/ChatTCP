@@ -14,6 +14,7 @@ namespace ChatTCP.Data.Database
 	{
 		public string connectionString = "";
 
+		// connection factory for MySQL server.
 		MySqlConnection connection = new MySqlConnection();
 
 		public string host;
@@ -64,6 +65,7 @@ namespace ChatTCP.Data.Database
 			}
 		}
 
+		// Queries the database usinf input query, and returns an 2-Dimensional object of the retrieved data.
 		public object[][] Query(Query query)
 		{
 			List<object[]> results = new List<object[]>();
@@ -72,10 +74,12 @@ namespace ChatTCP.Data.Database
 			{
 				using (MySqlDataReader reader = command.ExecuteReader())
 				{
+					// for each row read:
 					while (reader.Read())
 					{
 						object[] record = new object[reader.FieldCount];
 
+						// Iterate through each records' heading and add to object record.
 						for (int i = 0; i < reader.FieldCount; i++)
 						{
 							record[i] = reader[i];
@@ -89,7 +93,7 @@ namespace ChatTCP.Data.Database
 			return results.ToArray();
 		}
 
-
+		// Tests if query returns information or not.
 		public bool Test(string query)
 		{
 			using (MySqlCommand command = new MySqlCommand(query, this.connection))

@@ -205,6 +205,13 @@ namespace ChatTCP
 
 		public static TicTacToe GetGame(ClientSocket client)
 		{
+			foreach (TicTacToe game in CurrentGames)
+			{
+				if (client == game.playerA.clientSocket || client == game.playerB.clientSocket)
+				{
+					return game;
+				}
+			}
 
 			return null;
 		}

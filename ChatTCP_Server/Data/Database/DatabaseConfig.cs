@@ -13,7 +13,6 @@ namespace ChatTCP.Data.Database
 		public static string Pwd = "";
 		public static string Database = "chatTCP";
 
-
 		public enum DatabaseTable
 		{
 			TABLE_USERS,
