@@ -49,7 +49,7 @@ namespace ChatTCP_Server.Data
 			["commands"] = ChatCommand.COMMAND_COMMANDS,
 			["help"] = ChatCommand.COMMAND_HELP,
 			["mods"] = ChatCommand.COMMAND_MODS,
-			["invite"] = ChatCommand.COMMAND_INVITE,
+			["play"] = ChatCommand.COMMAND_INVITE,
 			["stop"] = ChatCommand.COMMAND_STOPGAME,
 			["stats"] = ChatCommand.COMMAND_GAMESTATS,
 		};
@@ -85,7 +85,7 @@ namespace ChatTCP_Server.Data
 			[ChatCommand.COMMAND_WHO] = (message, args) => Who(message),
 			[ChatCommand.COMMAND_USERNAME] = (message, args) => ChangeName(message, args),
 			[ChatCommand.COMMAND_USERINFO] = (message, args) => UserInfo(message, args),
-			[ChatCommand.COMMAND_ABOUT] = (message, args) => About(message),
+			[ChatCommand.COMMAND_ABOUT] = (message, args) => About(message, args),
 			[ChatCommand.COMMAND_WHISPER] = (message, args) => Whisper(message, args),
 			[ChatCommand.COMMAND_PROMOTE] = (message, args) => Promote(message, args),
 			[ChatCommand.COMMAND_DEMOTE] = (message, args) => Demote(message, args),
@@ -150,8 +150,12 @@ namespace ChatTCP_Server.Data
 			return message;
 		}
 
-		public static CommandPacket About(CommandPacket message)
+		public static CommandPacket About(CommandPacket message, string[] args)
 		{
+			if (args[1] == "1")
+			{
+				Server.Joined(message.clientSocket);
+			}
 			string result = $"Welcome to ChatTCP, {message.clientSocket.username}. For help, type {Commands.CommandChar}help";
 			CommandPacket.Send(message.clientSocket, result);
 			return message;
@@ -367,6 +371,7 @@ namespace ChatTCP_Server.Data
 		{
 			string result = "";
 
+			string oldName = message.clientSocket.displayName;
 			string newName = args[1];
 
 			Query statQuery = PreparedStatements.GetQuery(PreparedStatements.UPDATE_USER_DISPLAYNAME, newName, (Int64)message.clientSocket.userID);
@@ -374,6 +379,8 @@ namespace ChatTCP_Server.Data
 
 			message.clientSocket.displayName = newName;
 			AuthPacket.Send(message.clientSocket, Packet.PacketSubType.AUTH_UPDATE, message.clientSocket.username, "");
+
+			Server.Broadcast(message, message.clientSocket, $"{oldName} has changed their name to {newName}");
 			CommandPacket.Send(message.clientSocket, "Changed display name to: " + newName);
 			return message;
 		}
@@ -382,8 +389,18 @@ namespace ChatTCP_Server.Data
 			ClientSocket opponent = Server.GetClientSocket(args[1]);
 
 			// if opponent is null, or opponent is the same player as inviter, do not proceed.
-			if (opponent == null || opponent.username == message.clientSocket.username)
+			if (opponent == null)
+			{
+				CommandPacket.Send(message.clientSocket, "Invalid Opponent");
 				return null;
+			}
+
+			if (opponent.username == message.clientSocket.username)
+			{
+				CommandPacket.Send(message.clientSocket, "You can't invite yourself!");
+				return null;
+			}
+				
 
 			TicTacToe game = TicTacToe.NewGame(message.clientSocket, opponent);
 

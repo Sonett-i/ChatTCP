@@ -63,7 +63,7 @@ namespace ChatTCP_Client
 
 			//Send Hi message
 
-			MessagePacket message = new MessagePacket(App.tcpClient.clientSocket, App.tcpClient.clientSocket.userID, "/about");
+			MessagePacket message = new MessagePacket(App.tcpClient.clientSocket, App.tcpClient.clientSocket.userID, "/about 1");
 
 			message.Send();
 		}
@@ -114,6 +114,7 @@ namespace ChatTCP_Client
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				chatEditBox.AppendText(text + "\n");
+				chatEditBox.ScrollToEnd();
 			});
 		}
 

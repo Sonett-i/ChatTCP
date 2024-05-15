@@ -28,22 +28,38 @@ namespace ChatTCP
 		public static void Broadcast(CommandPacket packet, ClientSocket sender, string message = "")
 		{
 			string broadcast = "";
-			if (message == "")
-			{
 
-			}
 			foreach (Client client in Server.ConnectedClients)
 			{
 				if (client.clientSocket != sender)
 				{
 					if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_AUTHORIZED)
 					{
-						CommandPacket.Send(client.clientSocket, packet);
-						Packet.Send(client.clientSocket, packet);
+						CommandPacket.Send(client.clientSocket, message);
 					}
 				}
-
 			}
+		}
+
+		public static void Broadcast(ClientSocket sender, string message)
+		{
+			string broadcast = "";
+
+			foreach (Client client in Server.ConnectedClients)
+			{
+				if (client.clientSocket != sender)
+				{
+					if (client.clientSocket.connectionState == ClientSocket.ConnectionState.STATE_AUTHORIZED)
+					{
+						CommandPacket.Send(client.clientSocket, message);
+					}
+				}
+			}
+		}
+
+		public static void Joined(ClientSocket socket)
+		{
+			Server.Broadcast(socket, $"{socket.displayName} has joined the server.");
 		}
 
 		public void ClientDisconnect(object packet, ClientSocket clientSocket)

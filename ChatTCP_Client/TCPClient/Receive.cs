@@ -47,7 +47,6 @@ namespace TCPClient
 			}
 		}
 
-
 		public static void Receive(ClientSocket client, AckPacket ackPacket)
 		{
 			//AckReceived.Invoke(client, ackPacket);

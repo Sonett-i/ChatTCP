@@ -12,13 +12,15 @@ namespace TCPPacket
 	{
 		public int userID;
 		public string username;
+		public string displayname;
 		public string message;
 
 		public MessagePacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 			base.packetType = PacketType.PACKET_MESSAGE;
 			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
-			this.username = (clientSocket.displayName == null) ? clientSocket.username : clientSocket.displayName;
+			this.username = clientSocket.username;
+			this.displayname = clientSocket.displayName;
 			base.content = message;
 			this.message = GetMessage(message);
 			Serialize();
@@ -29,6 +31,7 @@ namespace TCPPacket
 			base.packetType = PacketType.PACKET_MESSAGE;
 			base.packetSubType = PacketSubType.MESSAGE_MESAGE;
 			this.username = clientSocket.displayName;
+			this.displayname = username;
 			base.content = message;
 			this.message = GetMessage(message);
 			Serialize();
@@ -42,7 +45,7 @@ namespace TCPPacket
 		}
 		public string MessageFormat(string message)
 		{
-			return $"{username}{Packet.field}{message}";
+			return $"{displayname}{Packet.field}{message}";
 		}
 
 		void Serialize()
@@ -50,7 +53,7 @@ namespace TCPPacket
 			string serialized = Format.String(Packet.PacketFormat[packetType][packetSubType],
 				(int)packetType,
 				(int)packetSubType,
-				username,
+				this.displayname,
 				content);
 
 			content = serialized;
@@ -68,7 +71,7 @@ namespace TCPPacket
 
 		public string FormatMessage()
 		{
-			return $"[{this.username}]: {this.message}";
+			return $"[{this.displayname}]: {this.message}";
 		}
 	}
 }
