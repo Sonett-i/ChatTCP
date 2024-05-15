@@ -117,16 +117,13 @@ namespace ChatTCP_Server.Data
 		public static CommandPacket HandleCommand(MessagePacket message)
 		{
 			string[] args = GetCommandArgs(message.message);
+
 			ChatCommand command = CommandFromString(args[0]);
-
-
 			if (command != ChatCommand.COMMAND_INVALID)
 			{
 				CommandPacket _command = new CommandPacket(message.clientSocket, message.userID, "");
 
 				commands[command].Invoke(_command, args);
-
-				//Log.Event($"[{message.sender}] used the {commandStrings[command]} command.", Log.LogType.LOG_COMMAND);
 			}
 			else
 			{
@@ -174,6 +171,7 @@ namespace ChatTCP_Server.Data
 
 		public static CommandPacket StopGame(CommandPacket message)
 		{
+
 			return message;
 		}
 
