@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatTCP_Client.LoginForm"
         mc:Ignorable="d"
-        Title="Login" Height="200" Width="300
+        Title="ChatTCP: Login" Height="200" Width="300
         
         " ResizeMode="NoResize">
     <Grid>

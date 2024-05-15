@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatTCP_Client"
         mc:Ignorable="d"
-        Title="ChatTCP" Height="650" Width="800" WindowStyle="SingleBorderWindow" SnapsToDevicePixels="True" ResizeMode="CanMinimize">
+        Title="ChatTCP: Chat" Height="650" Width="800" WindowStyle="SingleBorderWindow" SnapsToDevicePixels="True" ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
