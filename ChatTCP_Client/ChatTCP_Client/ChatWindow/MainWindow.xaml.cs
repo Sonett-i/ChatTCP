@@ -36,6 +36,7 @@ namespace ChatTCP_Client
 			Packet.PacketReceived += RegisterPacket;
 			Client.MessageReceived += MessageEvents;
 			Client.GameStateReceived += GameEvents;
+			Client.CommandReceived += CommandEvents;
 
 			UsernameLabel.Content = App.tcpClient.clientSocket.username;
 
@@ -68,6 +69,11 @@ namespace ChatTCP_Client
 			{
 				//AddToChat(packet.content);
 			}
+		}
+
+		public void CommandEvents(object sender, CommandPacket packet)
+		{
+			AddToChat(packet.FormatString());
 		}
 
 		public void RegisterMessage(object sender, Message message)

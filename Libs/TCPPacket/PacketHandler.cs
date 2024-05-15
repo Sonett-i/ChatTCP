@@ -17,7 +17,8 @@ namespace TCPPacket
 			[Packet.PacketType.PACKET_ACK] = (clientSocket, args) => GetAckPacket(clientSocket, args),
 			[Packet.PacketType.PACKET_MESSAGE] = (clientSocket, args) => GetMessagePacket(clientSocket, args),
 			[Packet.PacketType.PACKET_CONNECTION] = (clientSocket, args) => GetConnectionPacket(clientSocket, args),
-			[Packet.PacketType.PACKET_GAME] = (clientSocket, args) => GetGamePacket(clientSocket, args)
+			[Packet.PacketType.PACKET_GAME] = (clientSocket, args) => GetGamePacket(clientSocket, args),
+			[Packet.PacketType.PACKET_COMMAND] = (clientSocket, args) => GetCommandPacket(clientSocket, args),
 		};
 
 		public static Packet FromBytes(ClientSocket clientSocket, byte[] buffer)
@@ -82,6 +83,17 @@ namespace TCPPacket
 				return gamePacket;
 			}
 			
+			return null;
+		}
+
+		public static CommandPacket GetCommandPacket(ClientSocket clientSocket, string[] blob)
+		{
+			if (blob.Length > 0)
+			{
+				CommandPacket commandPacket = new CommandPacket(clientSocket, -1, blob[2]);
+				return commandPacket;
+			}
+
 			return null;
 		}
 	}

@@ -14,6 +14,7 @@ namespace TCPClient
 
 		public static event EventHandler<MessagePacket> MessageReceived;
 		public static event EventHandler<GamePacket> GameStateReceived;
+		public static event EventHandler<CommandPacket> CommandReceived;
 
 
 		public static void Receive(ClientSocket client, Packet packet)
@@ -58,7 +59,7 @@ namespace TCPClient
 
 		public static void Receive(ClientSocket client, CommandPacket commandPacket)
 		{
-
+			CommandReceived.Invoke(client, commandPacket);
 		}
 
 		public static void Receive(ClientSocket client, ConnectionPacket connectionPacket)

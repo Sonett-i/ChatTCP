@@ -10,7 +10,7 @@ namespace TCPPacket
 {
 	public partial class CommandPacket : Packet
 	{
-		string result;
+		public string result;
 		public enum CommandType
 		{
 			COMMAND_RESULT,
@@ -20,7 +20,7 @@ namespace TCPPacket
 		public CommandPacket(ClientSocket clientSocket, int sender, string message) : base(clientSocket, sender)
 		{
 			base.packetType = PacketType.PACKET_COMMAND;
-			base.packetSubType = PacketSubType.MESSAGE_COMMAND;
+			base.packetSubType = PacketSubType.COMMAND_RESULT;
 			this.result = message;
 			this.Serialize();
 
@@ -40,6 +40,11 @@ namespace TCPPacket
 		{
 			CommandPacket commandPacket = new CommandPacket(clientSocket, 0, result);
 			commandPacket.Send();
+		}
+
+		public string FormatString()
+		{
+			return $"{result}";
 		}
 	}
 }
